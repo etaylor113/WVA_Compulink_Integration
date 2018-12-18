@@ -1,0 +1,236 @@
+﻿<UserControl x:Class="WVA_Compulink_Integration.Views.AddToOrderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WVA_Compulink_Integration.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" 
+             d:DesignWidth="800"
+             Background="LightBlue">
+
+    <UserControl.Resources>
+
+        <LinearGradientBrush x:Key="ExamsButtonGroup" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="LightSlateGray" Offset="0.02"/>
+            <GradientStop Color="WhiteSmoke" Offset="0.22"/>
+            <GradientStop Color="LightSlateGray" Offset=".53"/>
+        </LinearGradientBrush>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="{StaticResource ExamsButtonGroup}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Sitka Text"/>
+            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="Height" Value="34" />
+            <Setter Property="Width" Value="250" />
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+
+                        <Grid x:Name="grid">
+                            <Border x:Name="border" 
+                                    CornerRadius="3,3,3,3" 
+                                    BorderBrush="Black" 
+                                    BorderThickness="1.6,1.9,2.9,2.9">
+                                <Border.Background>
+                                    <RadialGradientBrush GradientOrigin="0.496,1.052">
+                                        <RadialGradientBrush.RelativeTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform CenterX="0.5" 
+                                                                CenterY="0.5" 
+                                                                ScaleX="1.5" 
+                                                                ScaleY="1.5"/>
+                                                <TranslateTransform X="0.02" Y="0.3"/>
+                                            </TransformGroup>
+                                        </RadialGradientBrush.RelativeTransform>
+                                        <GradientStop Offset="1" Color="#FF327EC3"/>
+                                        <GradientStop Offset="0.3" Color="#FF327EC3"/>
+                                    </RadialGradientBrush>
+                                </Border.Background>
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Center" 
+                                                  TextElement.FontWeight="Regular">
+                                </ContentPresenter>
+                            </Border>
+                        </Grid>
+
+                        <!-- TRIGGERS -->
+                        <ControlTemplate.Triggers>
+
+                            <!-- Mouse Over Trigger -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="Background" TargetName="border">
+                                    <Setter.Value>
+                                        <RadialGradientBrush GradientOrigin="0.496,1.052">
+                                            <RadialGradientBrush.RelativeTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterX="0.5" 
+                                                                    CenterY="0.5"
+                                                                    ScaleX="2" 
+                                                                    ScaleY="2"/>
+                                                    <TranslateTransform X="0.02" Y="0.9"/>
+                                                </TransformGroup>
+                                            </RadialGradientBrush.RelativeTransform>
+                                            <GradientStop Color="#FF327EC3" Offset="1"/>
+                                            <GradientStop Color="White" Offset="0.3"/>
+                                        </RadialGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <!-- Mouse Click Trigger -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="Background" TargetName="border">
+                                    <Setter.Value>
+                                        <RadialGradientBrush GradientOrigin="0.496,1.052">
+                                            <RadialGradientBrush.RelativeTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterX="0.5" 
+                                                                    CenterY="0.5" 
+                                                                    ScaleX="2" 
+                                                                    ScaleY="2"/>
+                                                    <TranslateTransform X="0.02" Y="0.9"/>
+                                                </TransformGroup>
+                                            </RadialGradientBrush.RelativeTransform>
+                                            <GradientStop Color="White" Offset="1"/>
+                                            <GradientStop Color="{StaticResource WVA_Blue_Color}" Offset="0.3"/>
+                                        </RadialGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <!-- Grid Trigger -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" 
+                                        TargetName="grid" 
+                                        Value="0.25"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="100" />
+        </Grid.RowDefinitions>
+
+        <Rectangle Name="HeadTopRect"
+                   Grid.Row="1"
+                   Fill="Black"
+                   HorizontalAlignment="Stretch"
+                   Height="3" />
+
+        <Label Name="PatienNameLabel"
+               Content="Prescription for : "
+               Grid.Row="2" 
+               FontSize="22"
+               Margin="10,0,0,0"
+               FontFamily="Sitka Text" 
+               VerticalAlignment="Center"/>
+
+        <Rectangle Name="HeadBottomRect"
+                   Grid.Row="3"
+                   Fill="Black"
+                   HorizontalAlignment="Stretch"
+                   Height="3" />
+
+        <DataGrid x:Name="PrescriptionDataGrid" 
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"  
+                  Grid.Row="4"
+                  Grid.Column="1"
+                  Grid.ColumnSpan="1"
+                  AutoGenerateColumns="False"
+                  CanUserResizeRows="False"
+                  CanUserAddRows="False"
+                  FontWeight="DemiBold"
+                  BorderThickness="1"
+                  ItemsSource="{Binding Prescription}"
+                  CanUserReorderColumns="False"
+                  CanUserSortColumns="False" 
+                  IsReadOnly="False" 
+                  Margin="20,20,20,20">
+
+            <!--
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridCell}">
+                 <EventSetter Event="MouseDoubleClick" Handler="ExamTableCell_DoubleClick" />
+                </Style>
+            </DataGrid.Resources>
+        -->
+
+            <DataGrid.OpacityMask>
+                <RadialGradientBrush>
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="White" Offset="1"/>
+                    <GradientStop Color="#FF040404"/>
+                </RadialGradientBrush>
+            </DataGrid.OpacityMask>
+
+            <DataGrid.Background>
+                <LinearGradientBrush EndPoint="1,1" MappingMode="RelativeToBoundingBox" StartPoint="0,1">
+                    <GradientStop Color="#FF327EC3" Offset="0.994"/>
+                    <GradientStop Color="White"/>
+                    <GradientStop Color="#FF4485C0" Offset="0.54"/>
+                    <GradientStop Color="#FF8FB6D9"/>
+                </LinearGradientBrush>
+            </DataGrid.Background>
+
+            <DataGrid.HorizontalGridLinesBrush>
+                <SolidColorBrush Color="Black"/>
+            </DataGrid.HorizontalGridLinesBrush>
+
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Width="30" Binding="{Binding Path=IsChecked}" Header="  +" MinWidth="30" MaxWidth="30" IsReadOnly="False"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Path=Date}" MaxWidth="56"  Header="Date"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Path=Eye}" MaxWidth="30" Header="Eye"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Path=Product}" Header="Product"/>
+                <DataGridTextColumn Width="65" Binding="{Binding Path=Quantity}" MinWidth="65" MaxWidth="65" Header="Quantity"/>
+                <DataGridTextColumn Width="70" Binding="{Binding Path=BaseCurve}" MinWidth="70" MaxWidth="70" Header="Base Curve"/>
+                <DataGridTextColumn Width="65" Binding="{Binding Path=Diameter}" MinWidth="65" MaxWidth="65" Header="Diameter"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Path=Sphere}"  Header="Sphere"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Path=Cylinder}" Header="Cylinder"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Path=Axis}" Header="Axis"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Path=Add}" Header="Add"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Path=Color}" Header="Color"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Path=Multifocal}" MinWidth="70" Header="Multifocal"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            
+            <Button Name="AddToSTOButton"
+                Content="Add to S.T.O. Order" 
+                    Margin="0,0,0,0" Click="AddToSTOButton_Click"/>
+
+            <Button Name="AddToSTPButton"
+                Content="Add to S.T.P. Order" 
+                    Margin="0,10,0,0" Click="AddToSTPButton_Click"/>
+            
+        </StackPanel>
+        
+
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,128 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using WVA_Compulink_Integration.Models.Exam;
+using WVA_Compulink_Integration.Models.Patient;
+using WVA_Compulink_Integration.ViewModels;
+using WVA_Compulink_Integration.ViewModels.Search;
+
+namespace WVA_Compulink_Integration.Views.Search
+{
+    /// <summary>
+    /// Interaction logic for SearchExamsView.xaml
+    /// </summary>
+
+    public partial class SearchExamsView : UserControl
+    {
+
+        DateTime date = DateTime.Now;
+        
+        
+
+        public SearchExamsView()
+        {
+            
+            InitializeComponent();
+            RunExamViewSetup();
+        }
+
+        private void RunExamViewSetup()
+        {
+            ResetUI();
+            SetUpExamDataGrid(date.ToString("yyyy-MM-dd"));
+        }
+
+        private void ResetUI()
+        {
+            ExamDataGrid.Items.Clear();
+        }
+
+        private async void SetUpExamDataGrid(string date)
+        {
+            // Spawn a loading window and change cursor to waiting cursor
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.Show();
+            Mouse.OverrideCursor = Cursors.Wait;
+
+            //Change DateLabel
+            DateLabel.Content = date;
+
+            // Reset DataGrid
+            ResetUI();
+
+            // Get exam data
+            List<Exam> listExams = await GetExamsData(date);
+
+            // Input DataGrid data
+            LoadDataGrid(listExams);
+
+            // Close loading window and change cursor back to default arrow cursor
+            loadingWindow.Close();
+            Mouse.OverrideCursor = Cursors.Arrow;
+        }
+
+        private async Task<List<Exam>> GetExamsData(string date)
+        {
+            string strExams = await Task.Run(() => SearchExamsViewModel.GetExamsAsync(date));
+            return JsonConvert.DeserializeObject<List<Exam>>(strExams);
+        } 
+
+        private void LoadDataGrid(List<Exam> listExams)
+        {
+            foreach (Exam exam in listExams)
+            {
+                ExamDataGrid.Items.Add(exam);
+            }
+        }
+
+        private void RefreshDataBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ResetUI();
+            SetUpExamDataGrid(date.ToString("yyyy-MM-dd"));
+        }
+
+        private void DataGridCell_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            IList rows = ExamDataGrid.SelectedItems;
+            Exam exam = (Exam)rows[0];
+
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window.GetType() == typeof(MainWindow))
+                {
+                    (window as MainWindow).MainContentControl.DataContext = new AddToOrderViewModel(exam);
+                    return;
+                }
+            }
+        }
+
+        private void PrevDayBtn_Click(object sender, RoutedEventArgs e)
+        {
+            // Set the DateTime object to previous day
+            date = date.AddDays(-1);
+            string prevDay = date.ToString("yyyy-MM-dd");
+            SetUpExamDataGrid(prevDay);
+        }
+
+        private void NextDayBtn_Click(object sender, RoutedEventArgs e)
+        {
+            // Set the DateTime object to next day
+            date = date.AddDays(1);
+            string nextDay = date.ToString("yyyy-MM-dd");
+            SetUpExamDataGrid(nextDay);
+        }
+    }
+}

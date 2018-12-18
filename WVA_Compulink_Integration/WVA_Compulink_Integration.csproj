@@ -1,0 +1,316 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5241BCD1-3A1E-4640-8972-6570888717A0}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>WVA_Compulink_Integration</RootNamespace>
+    <AssemblyName>WVA_Compulink_Integration</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="Misc\App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="MatchFinder\WVA_Products.cs" />
+    <Compile Include="Models\Order\ShippingTypes.cs" />
+    <Compile Include="Models\Prescription\Prescription.cs" />
+    <Compile Include="Models\ProductParameters\Children\Add.cs" />
+    <Compile Include="Models\ProductParameters\Children\Axis.cs" />
+    <Compile Include="Models\ProductParameters\Children\BaseCurve.cs" />
+    <Compile Include="Models\ProductParameters\Children\Color.cs" />
+    <Compile Include="Models\ProductParameters\Children\CustomerID.cs" />
+    <Compile Include="Models\ProductParameters\Children\Cylinder.cs" />
+    <Compile Include="Models\ProductParameters\Children\Diameter.cs" />
+    <Compile Include="Models\ProductParameters\Children\Help.cs" />
+    <Compile Include="Models\ProductParameters\Children\ID.cs" />
+    <Compile Include="Models\ProductParameters\Children\Multifocal.cs" />
+    <Compile Include="Models\ProductParameters\Children\ProductKey.cs" />
+    <Compile Include="Models\ProductParameters\Children\SKU.cs" />
+    <Compile Include="Models\ProductParameters\Children\Sphere.cs" />
+    <Compile Include="Models\ProductParameters\Children\UPC.cs" />
+    <Compile Include="Models\ProductParameters\Parent\Parameter.cs" />
+    <Compile Include="Models\Request\Out_Request.cs" />
+    <Compile Include="Utility\UI_Tools\DatagridTools.cs" />
+    <Compile Include="ViewModels\AddToOrderViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
+    <Compile Include="ViewModels\SettingsLoginViewModel.cs" />
+    <Compile Include="Views\AddToOrderView.xaml.cs">
+      <DependentUpon>AddToOrderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Login\ChangePasswordWindow.xaml.cs">
+      <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Login\ForgotPasswordWindow.xaml.cs">
+      <DependentUpon>ForgotPasswordWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsLogin.xaml.cs">
+      <DependentUpon>SettingsLogin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="_API\API.cs" />
+    <Compile Include="Error\ReportError.cs" />
+    <Compile Include="Error\ErrorOutput.cs" />
+    <Compile Include="MatchFinder\DescriptionMatcher.cs" />
+    <Compile Include="MatchFinder\MatchProduct.cs" />
+    <Compile Include="MatchFinder\ProductCrossRefDict.cs" />
+    <Compile Include="Memory\ListPatients.cs" />
+    <Compile Include="Models\Exam\Exam.cs" />
+    <Compile Include="Models\Patient\Patient.cs" />
+    <Compile Include="Models\Product\Product.cs" />
+    <Compile Include="Models\Product\ProductIn\ProductIn.cs" />
+    <Compile Include="Models\Product\ProductItem.cs" />
+    <Compile Include="Models\Product\ProductOut\ProductOut.cs" />
+    <Compile Include="Models\Product\ProductOut\RequestOut.cs" />
+    <Compile Include="Models\Response\Response.cs" />
+    <Compile Include="Models\User\User.cs" />
+    <Compile Include="Models\User\VerifyUser.cs" />
+    <Compile Include="Utility\File\Paths.cs" />
+    <Compile Include="ViewModels\HelpViewModel.cs" />
+    <Compile Include="ViewModels\OrdersViewModel.cs" />
+    <Compile Include="ViewModels\Orders\ShipToOfficeViewModel.cs" />
+    <Compile Include="ViewModels\Orders\ShipToPatientViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchExamsViewModel.cs" />
+    <Compile Include="ViewModels\Search\SearchPatientsViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Views\Error\ErrorWindow.xaml.cs">
+      <DependentUpon>ErrorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HelpView.xaml.cs">
+      <DependentUpon>HelpView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Login\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrdersView.xaml.cs">
+      <DependentUpon>OrdersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Registration\RegistrationWindow.xaml.cs">
+      <DependentUpon>RegistrationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoadingWindow.xaml.cs">
+      <DependentUpon>LoadingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Search\SearchExamsView.xaml.cs">
+      <DependentUpon>SearchExamsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Search\SearchPatientsView.xaml.cs">
+      <DependentUpon>SearchPatientsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchView.xaml.cs">
+      <DependentUpon>SearchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orders\ShipToOfficeView.xaml.cs">
+      <DependentUpon>ShipToOfficeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orders\ShipToPatientView.xaml.cs">
+      <DependentUpon>ShipToPatientView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\Error\ErrorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HelpView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Login\ChangePasswordWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Login\ForgotPasswordWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Login\LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Misc\App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Views\OrdersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddToOrderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Registration\RegistrationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ResourceDict\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoadingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Search\SearchExamsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Search\SearchPatientsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SearchView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsLogin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Orders\ShipToOfficeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Orders\ShipToPatientView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Misc\packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Misc\App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Update\" />
+    <Folder Include="Views\Help\" />
+    <Folder Include="Views\Settings\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons8-Minimize Window-64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons8-Multiply-64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons8-Aspect Ratio-64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons8-Reset-64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\WVA_Building.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\WarningSign.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\QuestionImg.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\WVA_Scan_Banner.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\logo-plain-vector-72-48x48.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\logo-plain-vector-72.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\CloseButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\logo-plain-vector-72-white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons8-ask-question-48.png" />
+    <Resource Include="Resources\icons8-help-48.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

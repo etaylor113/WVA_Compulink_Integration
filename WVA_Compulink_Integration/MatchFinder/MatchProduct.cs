@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WVA_Compulink_Integration.MatchFinder
+{
+    public class MatchProduct
+    {
+        public MatchProduct(string name, double matchScore)
+        {
+            Name = name;
+            MatchScore = matchScore;
+        }
+
+        public string Name { get; set; }
+        public double MatchScore { get; set; }
+        public string ProductKey { get; set; }
+    }
+}
