@@ -146,7 +146,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="200*"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
 
             <!-- Orders DataGrid -->
@@ -165,19 +165,20 @@
                       CanUserReorderColumns="False"
                       CanUserSortColumns="False" 
                       CanUserAddRows="False"
-                      IsReadOnly="False" SelectionChanged="STO_DataGrid_SelectionChanged">
+                      IsReadOnly="False"
+                      SelectionChanged="STO_DataGrid_SelectionChanged" 
+                      CellEditEnding="STO_DataGrid_CellEditEnding">
 
                 <DataGrid.ContextMenu>
-                    <ContextMenu Name="STP_ContextMenu">
+                    <ContextMenu Name="STO_ContextMenu">
                     </ContextMenu>
                 </DataGrid.ContextMenu>
 
-            <DataGrid.Resources>
+                <DataGrid.Resources>
                     <Style TargetType="{x:Type DataGridCell}">
-                        <!-- <EventSetter Event="Selected" Handler="DataGridCell_Selected"/> -->                        
+                        <!-- <EventSetter Event="Selected" Handler="DataGridCell_Selected"/> -->
                     </Style>
-            </DataGrid.Resources>
-
+                </DataGrid.Resources>
 
                 <DataGrid.OpacityMask>
                     <RadialGradientBrush>
@@ -201,23 +202,30 @@
                 </DataGrid.HorizontalGridLinesBrush>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Patient}" MinWidth="90" Header="Patient"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Eye}" Header="Eye"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Product}" Header="Product"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Quantity}" Header="Quantity"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=BaseCurve}" MinWidth="90" Header="BaseCurve"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Diameter}" Header="Diameter"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Sphere}" Header="Sphere"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Cylinder}" Header="Cylinder"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Axis}" Header="Axis"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Add}" Header="Add"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Color}" Header="Color"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Patient}"    MinWidth="90" Header="Patient"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Eye}"        Header="Eye" MinWidth="30" MaxWidth="30"/>
+                    <DataGridTemplateColumn Header=" " MinWidth="30" MaxWidth="30" IsReadOnly="True" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding Path=ProductImagePath}" Name="ProductStatusImage" MaxHeight="16"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Width="210" Binding="{Binding Path=Product}"  Header="Product" />
+                    <DataGridTextColumn Width="40" Binding="{Binding Path=Quantity}"  Header="Qty"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=BaseCurve}"  MinWidth="70" Header="BaseCurve"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Diameter}"   Header="Diameter"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Sphere}"     Header="Sphere"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Cylinder}"   Header="Cylinder"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Axis}"       Header="Axis"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Add}"        Header="Add"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Color}"      Header="Color"/>
                 </DataGrid.Columns>
-                
+
             </DataGrid>
 
             <!-- Verify Button -->
-                <Button Content="Verify" 
+            <Button Content="Verify" 
                     Grid.Column="1" 
                     HorizontalAlignment="Right"
                     Grid.Row="2"
@@ -227,8 +235,8 @@
                     Height="24" 
                     FontSize="16"/>
 
-                <!-- Refresh Button -->
-                <Button Content="Refresh" 
+            <!-- Refresh Button -->
+            <Button Content="Refresh" 
                     Grid.Column="1" 
                     HorizontalAlignment="Right"
                     Grid.Row="2"
@@ -236,6 +244,56 @@
                     Width="100"
                     Height="24"
                     FontSize="16"/>
+
+            <Label Content="Not finding matches? Adjust match percentage below."
+                   Grid.Column="1"
+                   Grid.Row="2"
+                   Width="400"
+                   FontFamily="Sitka Text"
+                   Margin="0,5,0,0"
+                   FontSize="12.4"
+                   HorizontalAlignment="Left">
+
+            </Label>
+
+            <Label Content="0"
+                   Grid.Column="1"
+                   Grid.Row="2"
+                   Margin="0,25,0,0"
+                   Width="20"
+                   HorizontalAlignment="Left">
+            </Label>
+
+            <Label Name="MatchPercentLabel"
+                   Content="Match Percent: 0%"
+                   Grid.Column="1"
+                   Grid.Row="2"
+                   Margin="215,25,0,0"
+                   Width="150"
+                   HorizontalAlignment="Left">
+            </Label>
+
+            <!-- Minimum Match Score Adjuster -->
+            <Slider Name="MinScoreAdjustSlider"
+                    Grid.Column="1"
+                    HorizontalAlignment="Left" 
+                    Margin="15,30,0,0" 
+                    Grid.Row="2"
+                    Maximum="100"
+                    Minimum="0"
+                    Value="70"
+                    VerticalAlignment="Top" 
+                    Width="158"
+                    Thumb.DragCompleted="MinScoreAdjustSlider_DragCompleted"
+                    SmallChange="1"/>
+
+            <Label Content="100"
+                   Grid.Column="1"
+                   Grid.Row="2"
+                   Margin="170,25,0,0"
+                   Width="30"
+                   HorizontalAlignment="Left">
+            </Label>
 
         </Grid>
 
@@ -366,8 +424,6 @@
                     Height="24"
                     FontSize="16"
                     Click="DeleteOrderButton_Click"/>
-
-        
 
         </Grid>
 

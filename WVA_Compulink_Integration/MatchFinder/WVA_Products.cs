@@ -18,8 +18,7 @@ namespace WVA_Compulink_Integration.MatchFinder
             ProductOut productOut = new ProductOut()
             {
                 Api_key = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
-                AccountID = "44"
-
+                AccountID = "44"           
             };
 
             Out_Request request = new Out_Request()

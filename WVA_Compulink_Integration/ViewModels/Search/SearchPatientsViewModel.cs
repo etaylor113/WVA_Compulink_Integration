@@ -12,11 +12,15 @@ namespace WVA_Compulink_Integration.ViewModels.Search
         public SearchPatientsViewModel()
         {
 
+
         }
 
         public static string GetPatientsAsync()
         {
-            string endpoint = "http://10.1.4.66:44354/api/patient/";
+            // http://localhost:56075/CompuClient/Patients
+            // http://10.1.4.66:44354/api/patient/
+
+            string endpoint = "http://localhost:56075/CompuClient/Patients";
             return API.Get(endpoint, out string httpStatus);
         }
     }

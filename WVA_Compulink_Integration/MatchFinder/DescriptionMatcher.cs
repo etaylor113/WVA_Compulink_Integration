@@ -54,25 +54,25 @@ namespace WVA_Compulink_Integration.MatchFinder
                 string stringToCompare = compareString;
 
                 // Changing the order of this can greatly affect the outcome of your matches
-                ourProduct = RemoveGarbage(ourProduct);
-                stringToCompare = RemoveGarbage(stringToCompare);
-                stringToCompare = AdjustQuantity(stringToCompare);
-                stringToCompare = AdjustProductName(stringToCompare);
-                ourProduct = AdjustSKUType(ourProduct);
-                stringToCompare = AdjustSKUType(stringToCompare);
-                stringToCompare = BoostDullProducts(stringToCompare);
+                ourProduct        =   RemoveGarbage(ourProduct);
+                stringToCompare   =   RemoveGarbage(stringToCompare);
+                stringToCompare   =   AdjustQuantity(stringToCompare);
+                stringToCompare   =   AdjustProductName(stringToCompare);
+                ourProduct        =   AdjustSKUType(ourProduct);
+                stringToCompare   =   AdjustSKUType(stringToCompare);
+                stringToCompare   =   BoostDullProducts(stringToCompare);
 
                 // Get product match score
-                double charDescScore = CompareDescriptionCharacters(ourProduct, stringToCompare);
-                double quantityScore = DoQuantitiesMatch(ourProduct, stringToCompare);
-                double skuTypeScore = DoSKUTypesMatch(ourProduct, stringToCompare);
-                double sameWordScore = CheckForSameWords(ourProduct, stringToCompare);
-                double totalScore = charDescScore + quantityScore + skuTypeScore + sameWordScore;
+                double charDescScore    =   CompareDescriptionCharacters(ourProduct, stringToCompare);
+                double quantityScore    =   DoQuantitiesMatch(ourProduct, stringToCompare);
+                double skuTypeScore     =   DoSKUTypesMatch(ourProduct, stringToCompare);
+                double sameWordScore    =   CheckForSameWords(ourProduct, stringToCompare);
+                double totalScore       =   charDescScore + quantityScore + skuTypeScore + sameWordScore;
 
                 // If the product score meets the minimum score defined by the caller, add it to list of possible matches
                 if (totalScore > minimumScore)
-                {
-                    if (ListMatchProducts.FindIndex(x => x.Name == ourProduct) < 0)
+                {            
+                    if (!ListMatchProducts.Exists(x => x.Name == product.Description))
                         ListMatchProducts.Add(new MatchProduct(product.Description, totalScore) { ProductKey = product.ProductKey });
                 }
             }
@@ -125,8 +125,10 @@ namespace WVA_Compulink_Integration.MatchFinder
                                            .Replace("1 d ", "1 day ")
                                            .Replace("1 da ", "1 day ")
                                            .Replace("1day ", "1 day ")
-                                           .Replace("pk", "pack ")
-                                           .Replace("pak", "pack ")
+                                           // Changed .Replace("pk","pack") with .Replace("pk",""). No longer correcting 'pack' just removing it from comparison
+                                           .Replace("pk", "")
+                                           .Replace("pak", "")
+                                           .Replace("pack", "")
                                            .Replace(" trail", " trial")
                                            .Replace("final", "")
                                            .Replace(" fina", "")

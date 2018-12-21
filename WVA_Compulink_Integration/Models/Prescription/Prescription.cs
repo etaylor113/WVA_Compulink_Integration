@@ -23,6 +23,7 @@ namespace WVA_Compulink_Integration.Models.Prescription
             set { patient = $"{FirstName} {LastName}"; }
         }
 
+        public string ProductImagePath { get; set; } 
         public bool IsChecked { get; set; } = false;
         public string ProductCode { get; set; }
         public string Date { get; set; }

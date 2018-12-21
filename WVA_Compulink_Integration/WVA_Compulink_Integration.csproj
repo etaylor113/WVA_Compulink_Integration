@@ -78,6 +78,7 @@
     <Compile Include="Models\ProductParameters\Children\Sphere.cs" />
     <Compile Include="Models\ProductParameters\Children\UPC.cs" />
     <Compile Include="Models\ProductParameters\Parent\Parameter.cs" />
+    <Compile Include="Models\Product\List_WVA_Products.cs" />
     <Compile Include="Models\Request\Out_Request.cs" />
     <Compile Include="Utility\UI_Tools\DatagridTools.cs" />
     <Compile Include="ViewModels\AddToOrderViewModel.cs" />
@@ -311,6 +312,15 @@
   <ItemGroup>
     <Resource Include="Resources\icons8-ask-question-48.png" />
     <Resource Include="Resources\icons8-help-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\YellowBubble.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\RedBubble.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\GreenBubble.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

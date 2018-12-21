@@ -259,7 +259,8 @@
                   ItemsSource="{Binding Patients}"
                   CanUserReorderColumns="False"
                   CanUserSortColumns="False" 
-                  IsReadOnly="True">
+                  IsReadOnly="True"
+                  CanUserAddRows="False">
 
             <DataGrid.Resources>
                 <Style TargetType="{x:Type DataGridCell}">

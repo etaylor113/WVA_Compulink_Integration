@@ -39,25 +39,24 @@ namespace WVA_Compulink_Integration.Views.Orders
         public List<string> ListWVA_Products = new List<string>();
 
         public ShipToOfficeView()
-        {
+        {        
             InitializeComponent();
             SetUpUI();
         }
 
         private void SetUpUI()
-        {
-            SetUpShippingComboBox();
+        {   
+            SetUpShippingComboBox();            
             SetUpSTO_DataGrid();
             SetContextMenuItems();
+            AddMenuItems();
+            MatchPercentLabel.Content = $"Match Percent: {MinScoreAdjustSlider.Value}%";
         }
 
         private void SetContextMenuItems()
         {
             // Reset list of matched products 
             ListMatchedProducts.Clear();
-
-            // Get WVA products   
-            ProductIn listProductsObject = JsonConvert.DeserializeObject<ProductIn>(WVA_Products.GetProducts());
 
             // Get product names in DataGrid
             List<Product> compulinkProducts = new List<Product>();
@@ -71,30 +70,95 @@ namespace WVA_Compulink_Integration.Views.Orders
             int index = 0;
             foreach (Product product in compulinkProducts)
             {
-                List<MatchProduct> matchProducts = DescriptionMatcher.FindMatch(product.Description, listProductsObject.Products, 80);
-                ListMatchedProducts.Add(matchProducts);
-                ShipToOfficeViewModel.ListPrescriptions[index].ProductCode = matchProducts[0].ProductKey;
+                List<MatchProduct> matchProducts = DescriptionMatcher.FindMatch(product.Description, List_WVA_Products.ListProducts, Convert.ToDouble(MinScoreAdjustSlider.Value));
+
+                if (matchProducts.Count > 0)
+                {
+                    ListMatchedProducts.Add(matchProducts);
+                    ShipToOfficeViewModel.ListPrescriptions[index].ProductCode = matchProducts[0].ProductKey;
+                }
+                else
+                {
+                    ListMatchedProducts.Add(new List<MatchProduct> { new MatchProduct("No Matches Found", 0) });
+                }
                 index++;
+            }
+        }  
+        
+        private void AddMenuItems()
+        {
+            try
+            {
+                // Reset the products ContextMenu
+                STO_ContextMenu.Items.Clear();
+
+                // Sets 'ClickedIndex' to the index of selected cell
+                if (STO_DataGrid.Items.IndexOf(STO_DataGrid.CurrentItem) > -1)
+                {
+                    ClickedIndex = STO_DataGrid.Items.IndexOf(STO_DataGrid.CurrentItem);
+                }
+               
+                foreach (MatchProduct match in ListMatchedProducts[ClickedIndex])
+                {
+                    MenuItem menuItem = new MenuItem() { Header = match.Name };
+                    menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                    STO_ContextMenu.Items.Add(menuItem);
+                }
+            }
+            catch (Exception x)
+            {
+
             }
         }
 
-        private void ContextMenu_Click(object sender, RoutedEventArgs e)
-        {                        
-            var item = sender as MenuItem;
-            string product = item.Header.ToString();
-
-            IList rows = STO_DataGrid.SelectedItems;
-            Prescription prescription = (Prescription)rows[0];
-
-            int row = STO_DataGrid.Items.IndexOf(STO_DataGrid.CurrentItem);
-            int column = STO_DataGrid.CurrentColumn.DisplayIndex;
-
-            // Only want to change 'Products' column 
-            if (column == 2)
+        private void EditColumn(int column, int row, string cellText)
+        {          
+            switch (column)
             {
-                STO_DataGrid.GetCell(row, column).Content = product;
-                ShipToOfficeViewModel.ListPrescriptions[row].Product = product;
+                case 0:
+                    ShipToOfficeViewModel.ListPrescriptions[row].Patient = cellText;
+                    break;
+                case 1:
+                    ShipToOfficeViewModel.ListPrescriptions[row].Eye = cellText;
+                    break;
+                //
+                // Skip image row
+                //
+                case 3:
+                    ShipToOfficeViewModel.ListPrescriptions[row].Product = cellText;
+                    break;
+                case 4:
+                    ShipToOfficeViewModel.ListPrescriptions[row].Quantity = Convert.ToInt32(cellText);
+                    break;
+                case 5:
+                    ShipToOfficeViewModel.ListPrescriptions[row].BaseCurve = cellText;
+                    break;
+                case 6:
+                    ShipToOfficeViewModel.ListPrescriptions[row].Diameter = cellText;
+                    break;
+                case 7:
+                    ShipToOfficeViewModel.ListPrescriptions[row].Sphere = cellText;
+                    break;
+                case 8:
+                    ShipToOfficeViewModel.ListPrescriptions[row].Cylinder = cellText;
+                    break;
+                case 9:
+                    ShipToOfficeViewModel.ListPrescriptions[row].Axis = cellText;
+                    break;
+                case 10:
+                    ShipToOfficeViewModel.ListPrescriptions[row].Add = cellText;
+                    break;
+                case 11:
+                    ShipToOfficeViewModel.ListPrescriptions[row].Color = cellText;
+                    break;
+                default:
+                    break;
             }
+        }
+
+        private void SetBubbleColor()
+        {
+            
         }
 
         private void SetUpShippingComboBox()
@@ -121,21 +185,102 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
         }
 
-        private void STO_DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ContextMenu_Click(object sender, RoutedEventArgs e)
         {
-            // Reset the products ContextMenu
-            STP_ContextMenu.Items.Clear();
-
-            // Sets 'ClickedIndex' to the index of selected cell
-            IList rows = STO_DataGrid.SelectedItems;
-            Prescription prescription = (Prescription)rows[0];
-            ClickedIndex = STO_DataGrid.Items.IndexOf(STO_DataGrid.CurrentItem);
-
-            foreach (MatchProduct match in ListMatchedProducts[ClickedIndex])
+            try
             {
-                MenuItem menuItem = new MenuItem() { Header = match.Name };
-                menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
-                STP_ContextMenu.Items.Add(menuItem);
+                int selectedIndex = 0;
+                MenuItem menuItem = sender as MenuItem;
+                string product = menuItem.Header.ToString();
+
+                // Get the selected menu item
+                for (int i = 0; i < STO_ContextMenu.Items.Count; i++)
+                {
+                    MenuItem item = (MenuItem)STO_ContextMenu.Items[i];
+                    
+                    if (item.Header.ToString() == product)
+                    {
+                        selectedIndex = i;
+                        break;
+                    }                                                                 
+                }
+
+                // Get selected prescription object in data grid
+                IList rows = STO_DataGrid.SelectedItems;
+                Prescription prescription = (Prescription)rows[0];
+
+                // Get selected row and column
+                int row = STO_DataGrid.Items.IndexOf(STO_DataGrid.CurrentItem);
+                int column = STO_DataGrid.CurrentColumn.DisplayIndex;
+
+                // Only want to change 'Products' column 
+                if (product != "No Matches Found" && column == 3)
+                {
+                    STO_DataGrid.GetCell(row, column).Content = product;
+                    ShipToOfficeViewModel.ListPrescriptions[row].Product = product;
+
+                    if (ListMatchedProducts[row][selectedIndex].MatchScore > 92)
+                    {
+                        ShipToOfficeViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\GreenBubble.png";
+                    }
+                    else if (ListMatchedProducts[row][selectedIndex].MatchScore > 75)
+                    {
+                        ShipToOfficeViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\YellowBubble.png";
+                    }
+                    else
+                    {
+                        ShipToOfficeViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\RedBubble.jpg";
+                    }
+
+                    STO_DataGrid.Items.Refresh();
+                }
+                else
+                {
+                    ShipToOfficeViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\RedBubble.jpg";
+                    STO_DataGrid.Items.Refresh();
+                }
+            }
+            catch (Exception x)
+            {
+
+            }
+        }
+      
+        private void STO_DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            try
+            {
+                if (e.EditAction == DataGridEditAction.Commit)
+                {
+                    int column = STO_DataGrid.CurrentColumn.DisplayIndex;
+                    int row = e.Row.GetIndex();
+                    var typedText = e.EditingElement as TextBox;
+                    string cellText = typedText.Text.Trim();
+
+                    EditColumn(column, row, cellText);                   
+                    SetContextMenuItems();
+                    AddMenuItems();
+                }
+            }
+            catch (Exception x)
+            {
+
+            }
+        }
+
+        private void STO_DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {          
+            SetContextMenuItems();
+            AddMenuItems();
+        }
+
+        private void MinScoreAdjustSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            if (STO_ContextMenu.Items.Count > 0)
+            {
+                MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
+                SetContextMenuItems();
+                AddMenuItems();
             }
         }
     }

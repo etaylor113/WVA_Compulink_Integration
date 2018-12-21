@@ -163,14 +163,15 @@
                       CanUserReorderColumns="False"
                       CanUserSortColumns="False" 
                       CanUserAddRows="False"
-                      IsReadOnly="False">
+                      IsReadOnly="False" 
+                      SelectionChanged="STP_DataGrid_SelectionChanged" 
+                      CellEditEnding="STP_DataGrid_CellEditEnding">
 
                 <DataGrid.ContextMenu>
                     <ContextMenu Name="STP_ContextMenu">
                     </ContextMenu>
                 </DataGrid.ContextMenu>
                 
-
         <!--              
             <DataGrid.Resources>
                 <Style TargetType="{x:Type DataGridCell}">

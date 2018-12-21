@@ -66,9 +66,12 @@ namespace WVA_Compulink_Integration.Views.Search
             // Get exam data
             List<Exam> listExams = await GetExamsData(date);
 
-            // Input DataGrid data
-            LoadDataGrid(listExams);
-
+            if (listExams[0].PatientID != "0" && listExams[0].FirstName != null)
+            {
+                // Input DataGrid data
+                LoadDataGrid(listExams);
+            }
+               
             // Close loading window and change cursor back to default arrow cursor
             loadingWindow.Close();
             Mouse.OverrideCursor = Cursors.Arrow;

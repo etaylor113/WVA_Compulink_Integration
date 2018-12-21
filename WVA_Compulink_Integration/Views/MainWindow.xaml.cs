@@ -12,7 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WVA_Compulink_Integration.Models.Product;
 using WVA_Compulink_Integration.ViewModels;
+using WVA_Compulink_Integration.Views.Search;
 
 namespace WVA_Compulink_Integration.Views
 {
@@ -24,12 +26,30 @@ namespace WVA_Compulink_Integration.Views
         public MainWindow()
         {
             InitializeComponent();
+            SetUpApp();
             MainContentControl.DataContext = new SearchViewModel();
         }
 
-        //  *** ACCESS VIEW CONTROL FROM ANOTHER VIEW *** 
-        //  Window window = new Window();
-        //  (window as MainWindow).MainContentControl.DataContext = new ViewModels.SearchViewModel();
+        private void SetUpApp()
+        {
+            Width += 200;
+            Height += 100;    
+            // Spawn a loading window and change cursor to waiting cursor
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.Show();
+            Mouse.OverrideCursor = Cursors.Wait;
+
+            LoadProductsList();
+
+            // Close loading window and change cursor back to default arrow cursor
+            loadingWindow.Close();
+            Mouse.OverrideCursor = Cursors.Arrow;
+        }
+
+        private async void LoadProductsList()
+        {
+            List_WVA_Products.LoadProducts();
+        }
 
         /// <summary>
         /// Side Tab Control Buttons For Changing Views

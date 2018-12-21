@@ -38,7 +38,7 @@ namespace WVA_Compulink_Integration.Views.Search
         private void RunSearchViewSetup()
         {
             ResetUI();
-            //SetUpPatientDataGrid();
+            SetUpPatientDataGrid();
         }
 
         private void ResetUI()

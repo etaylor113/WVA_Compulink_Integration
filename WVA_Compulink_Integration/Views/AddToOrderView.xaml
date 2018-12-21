@@ -203,8 +203,8 @@
                 <DataGridCheckBoxColumn Width="30" Binding="{Binding Path=IsChecked}" Header="  +" MinWidth="30" MaxWidth="30" IsReadOnly="False"/>
                 <DataGridTextColumn Width="*" Binding="{Binding Path=Date}" MaxWidth="56"  Header="Date"/>
                 <DataGridTextColumn Width="*" Binding="{Binding Path=Eye}" MaxWidth="30" Header="Eye"/>
-                <DataGridTextColumn Width="*" Binding="{Binding Path=Product}" Header="Product"/>
-                <DataGridTextColumn Width="65" Binding="{Binding Path=Quantity}" MinWidth="65" MaxWidth="65" Header="Quantity"/>
+                <DataGridTextColumn Width="170" Binding="{Binding Path=Product}" Header="Product"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Path=Quantity}" MinWidth="40" MaxWidth="40" Header="Qty"/>
                 <DataGridTextColumn Width="70" Binding="{Binding Path=BaseCurve}" MinWidth="70" MaxWidth="70" Header="Base Curve"/>
                 <DataGridTextColumn Width="65" Binding="{Binding Path=Diameter}" MinWidth="65" MaxWidth="65" Header="Diameter"/>
                 <DataGridTextColumn Width="*" Binding="{Binding Path=Sphere}"  Header="Sphere"/>
