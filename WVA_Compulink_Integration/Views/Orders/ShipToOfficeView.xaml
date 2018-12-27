@@ -176,7 +176,9 @@
 
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type DataGridCell}">
-                        <!-- <EventSetter Event="Selected" Handler="DataGridCell_Selected"/> -->
+                        <Style.Triggers>
+                          
+                        </Style.Triggers>
                     </Style>
                 </DataGrid.Resources>
 
@@ -202,8 +204,8 @@
                 </DataGrid.HorizontalGridLinesBrush>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Patient}"    MinWidth="90" Header="Patient"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Eye}"        Header="Eye" MinWidth="30" MaxWidth="30"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Patient}"  MinWidth="90" Header="Patient" />
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Eye}"      Header="Eye" MinWidth="30" MaxWidth="30"/>
                     <DataGridTemplateColumn Header=" " MinWidth="30" MaxWidth="30" IsReadOnly="True" >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -213,19 +215,149 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Width="210" Binding="{Binding Path=Product}"  Header="Product" />
                     <DataGridTextColumn Width="40" Binding="{Binding Path=Quantity}"  Header="Qty"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=BaseCurve}"  MinWidth="70" Header="BaseCurve"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Diameter}"   Header="Diameter"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Sphere}"     Header="Sphere"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Cylinder}"   Header="Cylinder"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Axis}"       Header="Axis"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Add}"        Header="Add"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Color}"      Header="Color"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=BaseCurve}"  MinWidth="70" Header="BaseCurve">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Green">
+                                        <Setter Property="Background" Value="LightGreen" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Red">
+                                        <Setter Property="Background" Value="#FFF03C3C" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="White">
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Diameter}"   Header="Diameter">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DiameterCellColor}" Value="Green">
+                                        <Setter Property="Background" Value="LightGreen" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DiameterCellColor}" Value="Red">
+                                        <Setter Property="Background" Value="#FFF03C3C" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DiameterCellColor}" Value="White">
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Sphere}"     Header="Sphere">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SphereCellColor}" Value="Green">
+                                        <Setter Property="Background" Value="LightGreen" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding SphereCellColor}" Value="Red">
+                                        <Setter Property="Background" Value="#FFF03C3C" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding SphereCellColor}" Value="White">
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Cylinder}"   Header="Cylinder">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CylinderCellColor}" Value="Green">
+                                        <Setter Property="Background" Value="LightGreen" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding CylinderCellColor}" Value="Red">
+                                        <Setter Property="Background" Value="#FFF03C3C" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding CylinderCellColor}" Value="White">
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Axis}"       Header="Axis">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding AxisCellColor}" Value="Green">
+                                        <Setter Property="Background" Value="LightGreen" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AxisCellColor}" Value="Red">
+                                        <Setter Property="Background" Value="#FFF03C3C" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AxisCellColor}" Value="White">
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Add}"        Header="Add">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding AddCellColor}" Value="Green">
+                                        <Setter Property="Background" Value="LightGreen" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AddCellColor}" Value="Red">
+                                        <Setter Property="Background" Value="#FFF03C3C" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding AddCellColor}" Value="White">
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Color}"      Header="Color">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ColorCellColor}" Value="Green">
+                                        <Setter Property="Background" Value="LightGreen" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ColorCellColor}" Value="Red">
+                                        <Setter Property="Background" Value="#FFF03C3C" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ColorCellColor}" Value="White">
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Multifocal}"      Header="MF">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding MultifocalCellColor}" Value="Green">
+                                        <Setter Property="Background" Value="LightGreen" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding MultifocalCellColor}" Value="Red">
+                                        <Setter Property="Background" Value="#FFF03C3C" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding MultifocalCellColor}" Value="White">
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
 
             </DataGrid>
 
             <!-- Verify Button -->
-            <Button Content="Verify" 
+            <Button Name="VerifyOrderButton"
+                    Content="Verify" 
                     Grid.Column="1" 
                     HorizontalAlignment="Right"
                     Grid.Row="2"
@@ -233,7 +365,8 @@
                     Width="100" 
                     Margin="0,0,120,0" 
                     Height="24" 
-                    FontSize="16"/>
+                    FontSize="16"
+                    Click="VerifyOrderButton_Click" />
 
             <!-- Refresh Button -->
             <Button Content="Refresh" 
@@ -253,7 +386,6 @@
                    Margin="0,5,0,0"
                    FontSize="12.4"
                    HorizontalAlignment="Left">
-
             </Label>
 
             <Label Content="0"

@@ -61,6 +61,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="MatchFinder\WVA_Products.cs" />
+    <Compile Include="Models\Order\ItemDetail.cs" />
+    <Compile Include="Models\Order\Out\Item.cs" />
+    <Compile Include="Models\Order\Out\Order.cs" />
+    <Compile Include="Models\Order\Out\OutOrder.cs" />
+    <Compile Include="Models\Order\Out\OutOrderWrapper.cs" />
     <Compile Include="Models\Order\ShippingTypes.cs" />
     <Compile Include="Models\Prescription\Prescription.cs" />
     <Compile Include="Models\ProductParameters\Children\Add.cs" />
@@ -80,6 +85,12 @@
     <Compile Include="Models\ProductParameters\Parent\Parameter.cs" />
     <Compile Include="Models\Product\List_WVA_Products.cs" />
     <Compile Include="Models\Request\Out_Request.cs" />
+    <Compile Include="Models\Validations\ProductValidation.cs" />
+    <Compile Include="Models\Validations\ValidationDetail.cs" />
+    <Compile Include="Models\Validations\ValidationProducts.cs" />
+    <Compile Include="Models\Validations\ValidationResponse.cs" />
+    <Compile Include="Models\Validations\ValidationWrapper.cs" />
+    <Compile Include="Models\Validations\Validator.cs" />
     <Compile Include="Utility\UI_Tools\DatagridTools.cs" />
     <Compile Include="ViewModels\AddToOrderViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />

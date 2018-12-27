@@ -261,6 +261,16 @@
                 <DataGridTextColumn Width="*" Binding="{Binding Path=Phone}" Header="Phone"/>
             </DataGrid.Columns>
         </DataGrid>
+        
+        <Label Name="NoExamsLabel"
+               Content="No exams found for this day" 
+               Margin="0,0,0,0" 
+               Grid.Row="1"
+               Grid.ColumnSpan="4"
+               FontFamily="Sitka Text"
+               FontSize="30"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"/>
 
     </Grid>
 </UserControl>

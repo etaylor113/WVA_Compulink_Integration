@@ -41,9 +41,9 @@ namespace WVA_Compulink_Integration.Views.Search
 
         private void RunExamViewSetup()
         {
-            ResetUI();
-            SetUpExamDataGrid(date.ToString("yyyy-MM-dd"));
+            SetUpExamDataGrid(date.ToString("yyyy-MM-dd"));         
         }
+
 
         private void ResetUI()
         {
@@ -71,7 +71,13 @@ namespace WVA_Compulink_Integration.Views.Search
                 // Input DataGrid data
                 LoadDataGrid(listExams);
             }
-               
+
+            // Notify user if there are no exams for the given day
+            if (ExamDataGrid.Items.Count > 0)
+                NoExamsLabel.Visibility = Visibility.Hidden;
+            else
+                NoExamsLabel.Visibility = Visibility.Visible;
+
             // Close loading window and change cursor back to default arrow cursor
             loadingWindow.Close();
             Mouse.OverrideCursor = Cursors.Arrow;

@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.MatchFinder;
 using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models.Order;
@@ -23,6 +24,8 @@ using WVA_Compulink_Integration.Models.Patient;
 using WVA_Compulink_Integration.Models.Prescription;
 using WVA_Compulink_Integration.Models.Product;
 using WVA_Compulink_Integration.Models.Product.ProductIn;
+using WVA_Compulink_Integration.Models.ProductParameters;
+using WVA_Compulink_Integration.Models.Validations;
 using WVA_Compulink_Integration.Utility.UI_Tools;
 using WVA_Compulink_Integration.ViewModels.Orders;
 
@@ -128,7 +131,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     ShipToOfficeViewModel.ListPrescriptions[row].Product = cellText;
                     break;
                 case 4:
-                    ShipToOfficeViewModel.ListPrescriptions[row].Quantity = Convert.ToInt32(cellText);
+                    ShipToOfficeViewModel.ListPrescriptions[row].Quantity = cellText;
                     break;
                 case 5:
                     ShipToOfficeViewModel.ListPrescriptions[row].BaseCurve = cellText;
@@ -282,6 +285,116 @@ namespace WVA_Compulink_Integration.Views.Orders
                 SetContextMenuItems();
                 AddMenuItems();
             }
+        }
+
+        private void VerifyOrderButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<ValidationDetail> listValidations = new List<ValidationDetail>();
+
+            IList rows = STO_DataGrid.Items;
+
+            for (int i=0; i<STO_DataGrid.Items.Count; i++)
+            {
+                Prescription prescription = (Prescription)rows[i];
+
+                listValidations.Add(new ValidationDetail()
+                {
+                    _PatientName = $"{prescription.Patient}" ,
+                    _Eye = prescription.Eye,
+                    _Quantity =  prescription.Quantity.ToString(),
+                    _Description = prescription.Product,
+                    _Vendor = "",
+                    _Price = "",
+                    _ID = new ID() { Value = "1"},
+                    _CustomerID = prescription._CustomerID,
+                    _SKU = new SKU() { Value = "" },
+                    _ProductKey = new ProductKey() { Value = prescription.ProductCode },
+                    _UPC = new UPC() { Value = "" },
+                    _BaseCurve = new BaseCurve() { Value = prescription.BaseCurve },
+                    _Diameter = new Diameter() { Value = prescription.Diameter },
+                    _Sphere = new Sphere() { Value = prescription.Sphere },
+                    _Cylinder = new Cylinder() { Value = prescription.Cylinder },
+                    _Axis = new Axis() { Value = prescription.Axis },
+                    _Add = new Add() { Value = prescription.Add },
+                    _Color = new Models.ProductParameters.Color() { Value = prescription.Color },
+                    _Multifocal = new Multifocal() { Value = prescription.Multifocal }                 
+                });
+            }
+
+            ValidationWrapper validationWrapper = new ValidationWrapper()
+            {
+                Request = new ProductValidation()
+                {
+                    // Assign user's key here 
+                    Key = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
+                    ProductsToValidate = new List<ItemDetail>()
+                }
+            };
+
+            foreach (ValidationDetail validationDetail in listValidations)
+            {
+                validationWrapper.Request.ProductsToValidate.Add(new ValidationDetail(validationDetail));
+            }
+
+            string endpoint = "https://orders-qa.wisvis.com/validations";
+            string strValidatedProducts = API.Post(endpoint, validationWrapper, out string httpStatus);
+            var validatedProducts = JsonConvert.DeserializeObject<ValidationResponse>(strValidatedProducts);
+            var prods = validatedProducts.Data.Products;
+
+            for (int i = 0; i < prods.Count(); i++)
+            {
+                // if product is null or invalid, keep old value, else change it to the new value from prods
+                Prescription prescription = new Prescription()
+                {
+                    // These properties don't need to be validated
+                    ProductImagePath    =       ShipToOfficeViewModel.ListPrescriptions[i].ProductImagePath,
+                    IsChecked           =       ShipToOfficeViewModel.ListPrescriptions[i].IsChecked,
+                    FirstName           =       ShipToOfficeViewModel.ListPrescriptions[i].FirstName,
+                    LastName            =       ShipToOfficeViewModel.ListPrescriptions[i].LastName,
+                    Patient             =       ShipToOfficeViewModel.ListPrescriptions[i].Patient,
+                    Eye                 =       ShipToOfficeViewModel.ListPrescriptions[i].Eye,
+                    Quantity            =       ShipToOfficeViewModel.ListPrescriptions[i].Quantity,
+                    Date                =       ShipToOfficeViewModel.ListPrescriptions[i].Date,
+                    _CustomerID         =       ShipToOfficeViewModel.ListPrescriptions[i]._CustomerID,
+
+                    // If prods[i].Property.Value == null change field to old value, else change to new value
+                    Product = prods[i]._Description                                 ??      ShipToOfficeViewModel.ListPrescriptions[i].Product,
+                    ProductCode = Validator.CheckIfValid(prods[i]._ProductKey)      ?       prods[i]._ProductKey?.Value : ShipToOfficeViewModel.ListPrescriptions[i].ProductCode,
+
+                    // NOTE: to help explain ternary statements below for cell colors
+                    // IF property IS null or IS blank AND errorMessage IS null THEN cell = White 
+                    // IF property isValid THEN cell = Green
+                    // IF property NOT isValid THEN cell = Red
+                    BaseCurve = Validator.CheckIfValid(prods[i]._BaseCurve)         ?       prods[i]._BaseCurve.Value : ShipToOfficeViewModel.ListPrescriptions[i].BaseCurve,
+                    BaseCurveCellColor = (prods[i]._BaseCurve?.Value == null || prods[i]._BaseCurve?.Value?.Trim() == "") && prods[i]._BaseCurve?.ErrorMessage == null ? "White" : prods[i]._BaseCurve.IsValid ? "Green" : "Red",
+
+                    Diameter = Validator.CheckIfValid(prods[i]._Diameter)           ?       prods[i]._Diameter.Value : ShipToOfficeViewModel.ListPrescriptions[i].Diameter,
+                    DiameterCellColor = (prods[i]._Diameter?.Value == null || prods[i]._Diameter?.Value?.Trim() == "") && prods[i]._Diameter?.ErrorMessage == null ? "White" : prods[i]._Diameter.IsValid ? "Green" : "Red",
+
+                    Sphere = Validator.CheckIfValid(prods[i]._Sphere)               ?       prods[i]._Sphere.Value : ShipToOfficeViewModel.ListPrescriptions[i].Sphere,
+                    SphereCellColor = (prods[i]._Sphere?.Value == null || prods[i]._Sphere?.Value?.Trim() == "") && prods[i]._Sphere?.ErrorMessage == null ? "White" : prods[i]._Sphere.IsValid                      ?       "Green" : "Red",
+
+                    Cylinder = Validator.CheckIfValid(prods[i]._Cylinder)           ?       prods[i]._Cylinder.Value : ShipToOfficeViewModel.ListPrescriptions[i].Cylinder,
+                    CylinderCellColor = (prods[i]._Cylinder?.Value == null || prods[i]._Cylinder?.Value?.Trim() == "") && prods[i]._Cylinder?.ErrorMessage == null ? "White" : prods[i]._Cylinder.IsValid                  ?       "Green" : "Red",
+
+                    Axis = Validator.CheckIfValid(prods[i]._Axis)                   ?       prods[i]._Axis.Value : ShipToOfficeViewModel.ListPrescriptions[i].Axis,
+                    AxisCellColor = (prods[i]._Axis?.Value == null || prods[i]._Axis?.Value?.Trim() == "") && prods[i]._Axis?.ErrorMessage == null ? "White" : prods[i]._Axis.IsValid                          ?       "Green" : "Red",
+
+                    Add = Validator.CheckIfValid(prods[i]._Add)                     ?       prods[i]._Add.Value : ShipToOfficeViewModel.ListPrescriptions[i].Add,
+                    AddCellColor = (prods[i]._Add?.Value == null || prods[i]._Add?.Value?.Trim() == "") && prods[i]._Add?.ErrorMessage == null ? "White" : prods[i]._Add.IsValid                            ?       "Green" : "Red",
+
+                    Color = Validator.CheckIfValid(prods[i]._Color)                 ?       prods[i]._Color.Value : ShipToOfficeViewModel.ListPrescriptions[i].Color,
+                    ColorCellColor = (prods[i]._Color?.Value == null || prods[i]._Color?.Value?.Trim() == "") && prods[i]._Color?.ErrorMessage == null ? "White" : prods[i]._Color.IsValid                        ?       "Green" : "Red",
+
+                    Multifocal = Validator.CheckIfValid(prods[i]._Multifocal)       ?       prods[i]._Multifocal.Value : ShipToOfficeViewModel.ListPrescriptions[i].Multifocal,
+                    MultifocalCellColor = (prods[i]._Multifocal?.Value == null || prods[i]._Multifocal?.Value?.Trim() == "") && prods[i]._Multifocal?.ErrorMessage == null ? "White" : prods[i]._Multifocal.IsValid              ?       "Green" : "Red",
+                };
+
+                ShipToOfficeViewModel.ListPrescriptions[i] = prescription;
+            }
+
+            STO_DataGrid.Items.Refresh();
+
         }
     }
 }
