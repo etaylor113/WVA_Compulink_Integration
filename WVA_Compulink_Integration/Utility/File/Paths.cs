@@ -10,6 +10,6 @@ namespace WVA_Compulink_Integration.Utility.File
     {
         public static string AppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         public static string Program_x86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-        public static string ErrorLog = (AppData + @"\CompulinkIntegration\ErrorLog\");
+        public static string ErrorLog = (@"C:\Program Files (x86)\WVA_Compulink_Integration\Errors\");
     }
 }

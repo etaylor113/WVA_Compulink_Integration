@@ -10,7 +10,7 @@ namespace WVA_Compulink_Integration.Models.Order.Out
     class Item
     {
         [JsonProperty("id")]
-        public int ID { get; set; }
+        public string ID { get; set; }
 
         [JsonProperty("patient_firstname")]
         public string FirstName { get; set; }
@@ -19,18 +19,18 @@ namespace WVA_Compulink_Integration.Models.Order.Out
         public string LastName { get; set; }
 
         [JsonProperty("patient_id")]
-        public int PatientID { get; set; }
+        public string PatientID { get; set; }
 
         [JsonProperty("eye")]
         public string Eye { get; set; }
 
         [JsonProperty("quantity")]
-        public int Quantity { get; set; }
+        public string Quantity { get; set; }
 
         [JsonProperty("item_retail_price")]
-        public double ItemRetailPrice { get; set; }
+        public string ItemRetailPrice { get; set; }
 
         [JsonProperty("product")]
-        public ItemDetail ItemDetail { get; set; }
+        public OrderDetail OrderDetail { get; set; }
     }
 }

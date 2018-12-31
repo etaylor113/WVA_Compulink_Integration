@@ -532,7 +532,8 @@
                       Text="Select Shipping Type"/>
 
             <!-- Submit Order Button -->
-            <Button Content="Submit" 
+            <Button Name="SubmitOrderButton"
+                    Content="Submit" 
                     Grid.Column="3" 
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
@@ -541,7 +542,8 @@
                     Grid.Row="5" 
                     Grid.RowSpan="1" 
                     Height="24"
-                    FontSize="16"/>
+                    FontSize="16"
+                    Click="SubmitOrderButton_Click"/>
 
             <!-- Delete Order Button -->
             <Button Name="DeleteOrderButton" 

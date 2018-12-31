@@ -30,7 +30,7 @@ namespace WVA_Compulink_Integration.Views.Registration
             }
             catch (Exception x)
             {
-                new ReportError(x);
+                AppError.PrintToLog(x);
             }
         }
 
@@ -68,7 +68,7 @@ namespace WVA_Compulink_Integration.Views.Registration
             }
             catch (Exception x)
             {
-                new ReportError(x);
+                AppError.PrintToLog(x);
             }
         }
 
@@ -80,7 +80,7 @@ namespace WVA_Compulink_Integration.Views.Registration
             }
             catch (Exception x)
             {
-                new ReportError(x);
+                AppError.PrintToLog(x);
             }
         }
 

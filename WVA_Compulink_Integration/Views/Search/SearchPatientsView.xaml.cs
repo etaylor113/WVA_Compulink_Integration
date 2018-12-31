@@ -181,7 +181,7 @@ namespace WVA_Compulink_Integration.Views.Search
             }
             catch (Exception x)
             {
-                ReportError error = new ReportError(x);
+                AppError.PrintToLog(x);
             }
         }
 

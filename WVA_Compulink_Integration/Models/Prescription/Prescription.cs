@@ -14,6 +14,10 @@ namespace WVA_Compulink_Integration.Models.Prescription
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ProductCode { get; set; }
+        public string SKU { get; set; }
+        public string UPC { get; set; }
+        public string Price { get; set; }
+        public string ID { get; set; }
 
         // These properties are visible to the client in the data grid
         private string patient;      

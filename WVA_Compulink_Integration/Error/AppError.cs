@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,24 +12,8 @@ using WVA_Compulink_Integration.Utility.File;
 
 namespace WVA_Compulink_Integration.Error
 {
-    class ReportError
+    class AppError
     {
-        public ReportError(Exception exception)
-        {
-            ReportTheError(exception.Message);
-        }
-
-        private bool ShouldWriteError { get; set; }
-
-        private void ReportTheError(string error)
-        {
-            Report(error);
-            if (ShouldWriteError)
-            {
-                PrintToLog(error);
-            }
-        }
-
         private void Report(string error)
         {
             try
@@ -63,12 +48,11 @@ namespace WVA_Compulink_Integration.Error
 
                     if (jsonResponse.Status == "SUCCESS")
                     {
-                        ShouldWriteError = false;
+
                     }
                     else if (jsonResponse.Message == "FAIL")
                     {
-                        ShouldWriteError = true;
-                        PrintToLog(jsonResponse.Message);
+                        PrintToLog(new Exception("An attempt was made to report an error but a failed response was encountered."));
                     }
                     else
                     {
@@ -85,11 +69,11 @@ namespace WVA_Compulink_Integration.Error
             }
             catch (Exception e)
             {
-                PrintToLog(e.ToString());
+                PrintToLog(e);
             }
         }
 
-        private void PrintToLog(string error)
+        public static void PrintToLog(Exception exception)
         {
             try
             {
@@ -103,13 +87,15 @@ namespace WVA_Compulink_Integration.Error
                     var file = File.Create(Paths.ErrorLog + @"\Error_" + time + ".txt");
                     file.Close();
                 }
-
+              
                 using (System.IO.StreamWriter writer = new System.IO.StreamWriter((Paths.ErrorLog + @"\ErrorLog.txt"), true))
                 {
                     writer.WriteLine("-----------------------------------------------------------------------------------");
                     writer.WriteLine("");
-                    writer.WriteLine("(TIME: " + time + ")");
-                    writer.WriteLine("(ERROR:" + error + ")");
+                    writer.WriteLine($"(ERROR.TIME_ENCOUNTERED: {time})");
+                    writer.WriteLine($"(ERROR.MESSAGE: {exception.Message})");
+                    writer.WriteLine($"(ERROR.INNER_EXCEPTION: {exception.InnerException})");
+                    writer.WriteLine($"(ERROR.SOURCE: {exception.Source})");
                     writer.WriteLine("");
                     writer.WriteLine("-----------------------------------------------------------------------------------");
                     writer.Close();
@@ -117,7 +103,7 @@ namespace WVA_Compulink_Integration.Error
             }
             catch (Exception x)
             {
-                new ReportError(x);
+                Trace.WriteLine(x.Message);
             };
         }
     }

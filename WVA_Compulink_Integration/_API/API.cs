@@ -16,10 +16,10 @@ namespace WVA_Compulink_Integration._API
         {
             try
             {
-                string targetResponse;
+                string targetResponse = null;
                 string json = JsonConvert.SerializeObject(jsonObject);
 
-                System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+                UTF8Encoding encoding = new UTF8Encoding();
                 byte[] byteArray = encoding.GetBytes(json);
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(endpoint);
@@ -39,13 +39,13 @@ namespace WVA_Compulink_Integration._API
                     targetResponse = reader.ReadToEnd();
                     reader.Close();
                 }
-                httpStatus = (((HttpWebResponse)webResponse).StatusDescription).ToString();
+                httpStatus = ((HttpWebResponse)webResponse).StatusDescription.ToString();
 
                 return targetResponse;
             }
             catch (Exception x)
             {
-                new ReportError(x);
+                AppError.PrintToLog(x);
                 httpStatus = null;
                 return "ERROR: " + x.Message;
             }
@@ -71,7 +71,7 @@ namespace WVA_Compulink_Integration._API
             }
             catch (Exception x)
             {
-                new ReportError(x);
+                AppError.PrintToLog(x);
                 httpStatus = null;
                 return "ERROR: " + x.Message;
             }

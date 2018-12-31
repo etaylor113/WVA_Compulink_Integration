@@ -14,10 +14,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Models.Exam;
 using WVA_Compulink_Integration.Models.Patient;
 using WVA_Compulink_Integration.ViewModels;
 using WVA_Compulink_Integration.ViewModels.Search;
+using WVA_Compulink_Integration.Views.Error;
 
 namespace WVA_Compulink_Integration.Views.Search
 {
@@ -57,36 +59,57 @@ namespace WVA_Compulink_Integration.Views.Search
             loadingWindow.Show();
             Mouse.OverrideCursor = Cursors.Wait;
 
-            //Change DateLabel
-            DateLabel.Content = date;
+            try
+            {             
+                //Change DateLabel
+                DateLabel.Content = date;
 
-            // Reset DataGrid
-            ResetUI();
+                // Reset DataGrid
+                ResetUI();
 
-            // Get exam data
-            List<Exam> listExams = await GetExamsData(date);
+                // Get exam data
+                List<Exam> listExams = await GetExamsData(date);
 
-            if (listExams[0].PatientID != "0" && listExams[0].FirstName != null)
-            {
-                // Input DataGrid data
-                LoadDataGrid(listExams);
+                if (listExams[0].PatientID != "0" && listExams[0].FirstName != null)
+                {
+                    // Input DataGrid data
+                    LoadDataGrid(listExams);
+                }
+
+                // Notify user if there are no exams for the given day
+                if (ExamDataGrid.Items.Count > 0)
+                    NoExamsLabel.Visibility = Visibility.Hidden;
+                else
+                    NoExamsLabel.Visibility = Visibility.Visible;
+
+                // Close loading window and change cursor back to default arrow cursor
+                loadingWindow.Close();
+                Mouse.OverrideCursor = Cursors.Arrow;
             }
-
-            // Notify user if there are no exams for the given day
-            if (ExamDataGrid.Items.Count > 0)
-                NoExamsLabel.Visibility = Visibility.Hidden;
-            else
-                NoExamsLabel.Visibility = Visibility.Visible;
-
-            // Close loading window and change cursor back to default arrow cursor
-            loadingWindow.Close();
-            Mouse.OverrideCursor = Cursors.Arrow;
+            catch(Exception x)
+            {
+                AppError.PrintToLog(x);
+                ErrorWindow errorWindow = new ErrorWindow("An error was encountered while attempting to find exams. \nSee error log.");
+                errorWindow.Show();             
+            }
+            finally
+            {
+                loadingWindow.Close();
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
         }
 
         private async Task<List<Exam>> GetExamsData(string date)
         {
-            string strExams = await Task.Run(() => SearchExamsViewModel.GetExamsAsync(date));
-            return JsonConvert.DeserializeObject<List<Exam>>(strExams);
+            try
+            {
+                string strExams = await Task.Run(() => SearchExamsViewModel.GetExamsAsync(date));
+                return JsonConvert.DeserializeObject<List<Exam>>(strExams);
+            }
+            catch(Exception x)
+            {              
+                return null;
+            }
         } 
 
         private void LoadDataGrid(List<Exam> listExams)

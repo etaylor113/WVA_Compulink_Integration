@@ -10,10 +10,10 @@ namespace WVA_Compulink_Integration.Models.Order.Out
     class Order
     {
         [JsonProperty("customer_id")]
-        public int CustomerID { get; set; }
+        public string CustomerID { get; set; }
 
         [JsonProperty("id")]
-        public int ID { get; set; }
+        public string ID { get; set; }
 
         [JsonProperty("dob")]
         public string DoB { get; set; }

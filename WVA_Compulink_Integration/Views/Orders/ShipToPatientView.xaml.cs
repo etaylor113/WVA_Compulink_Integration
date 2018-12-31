@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.MatchFinder;
 using WVA_Compulink_Integration.Models.Order;
+using WVA_Compulink_Integration.Models.Order.Out;
 using WVA_Compulink_Integration.Models.Patient;
 using WVA_Compulink_Integration.Models.Prescription;
 using WVA_Compulink_Integration.Models.Product;
@@ -113,50 +114,50 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
         }
 
-        private void EditColumn(int column, int row, string cellText)
-        {
-            switch (column)
-            {
-                case 0:
-                    ShipToPatientViewModel.ListPrescriptions[row].Patient = cellText;
-                    break;
-                case 1:
-                    ShipToPatientViewModel.ListPrescriptions[row].Eye = cellText;
-                    break;
-                //
-                // Skip image row
-                //
-                case 3:
-                    ShipToPatientViewModel.ListPrescriptions[row].Product = cellText;
-                    break;
-                case 4:
-                    ShipToPatientViewModel.ListPrescriptions[row].Quantity = cellText;
-                    break;
-                case 5:
-                    ShipToPatientViewModel.ListPrescriptions[row].BaseCurve = cellText;
-                    break;
-                case 6:
-                    ShipToPatientViewModel.ListPrescriptions[row].Diameter = cellText;
-                    break;
-                case 7:
-                    ShipToPatientViewModel.ListPrescriptions[row].Sphere = cellText;
-                    break;
-                case 8:
-                    ShipToPatientViewModel.ListPrescriptions[row].Cylinder = cellText;
-                    break;
-                case 9:
-                    ShipToPatientViewModel.ListPrescriptions[row].Axis = cellText;
-                    break;
-                case 10:
-                    ShipToPatientViewModel.ListPrescriptions[row].Add = cellText;
-                    break;
-                case 11:
-                    ShipToPatientViewModel.ListPrescriptions[row].Color = cellText;
-                    break;
-                default:
-                    break;
-            }
-        }
+        //private void EditColumn(int column, int row, string cellText)
+        //{
+        //    switch (column)
+        //    {
+        //        case 0:
+        //            ShipToPatientViewModel.ListPrescriptions[row].Patient = cellText;
+        //            break;
+        //        case 1:
+        //            ShipToPatientViewModel.ListPrescriptions[row].Eye = cellText;
+        //            break;
+        //        //
+        //        // Skip image row
+        //        //
+        //        case 3:
+        //            ShipToPatientViewModel.ListPrescriptions[row].Product = cellText;
+        //            break;
+        //        case 4:
+        //            ShipToPatientViewModel.ListPrescriptions[row].Quantity = cellText;
+        //            break;
+        //        case 5:
+        //            ShipToPatientViewModel.ListPrescriptions[row].BaseCurve = cellText;
+        //            break;
+        //        case 6:
+        //            ShipToPatientViewModel.ListPrescriptions[row].Diameter = cellText;
+        //            break;
+        //        case 7:
+        //            ShipToPatientViewModel.ListPrescriptions[row].Sphere = cellText;
+        //            break;
+        //        case 8:
+        //            ShipToPatientViewModel.ListPrescriptions[row].Cylinder = cellText;
+        //            break;
+        //        case 9:
+        //            ShipToPatientViewModel.ListPrescriptions[row].Axis = cellText;
+        //            break;
+        //        case 10:
+        //            ShipToPatientViewModel.ListPrescriptions[row].Add = cellText;
+        //            break;
+        //        case 11:
+        //            ShipToPatientViewModel.ListPrescriptions[row].Color = cellText;
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
 
         private void SetUpShippingComboBox()
         {
@@ -170,18 +171,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             STP_DataGrid.ItemsSource = ShipToPatientViewModel.ListPrescriptions;
         }
-
-        private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult result = MessageBox.Show("Are you sure you want to clear your cart?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (result.ToString() == "Yes")
-            {
-                ShipToPatientViewModel.ListPrescriptions.Clear();
-                STP_DataGrid.Items.Refresh();
-            }
-        }
-
+      
         private void ContextMenu_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -249,12 +239,14 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 if (e.EditAction == DataGridEditAction.Commit)
                 {
-                    int column = STP_DataGrid.CurrentColumn.DisplayIndex;
+                    //int column = STP_DataGrid.CurrentColumn.DisplayIndex;
                     int row = e.Row.GetIndex();
-                    var typedText = e.EditingElement as TextBox;
-                    string cellText = typedText.Text.Trim();
+                    //var typedText = e.EditingElement as TextBox;
+                    //string cellText = typedText.Text.Trim();
 
-                    EditColumn(column, row, cellText);
+                    ShipToOfficeViewModel.ListPrescriptions[row] = (Prescription)STP_DataGrid.Items[row];
+                   
+                    //EditColumn(column, row, cellText);
                     SetContextMenuItems();
                     AddMenuItems();
                 }
@@ -385,6 +377,84 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
 
             STP_DataGrid.Items.Refresh();
+        }
+
+        private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to clear your cart?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result.ToString() == "Yes")
+            {
+                ShipToPatientViewModel.ListPrescriptions.Clear();
+                STP_DataGrid.Items.Refresh();
+            }
+        }
+
+        private void SubmitOrderButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<Item> listItems = new List<Item>();
+            IList rows = STP_DataGrid.Items;
+
+            for (int i = 0; i < STP_DataGrid.Items.Count; i++)
+            {
+                Prescription prescription = (Prescription)rows[i];
+                listItems.Add(new Item()
+                {
+                    ID = prescription.ID,
+                    FirstName = prescription.FirstName,
+                    LastName = prescription.LastName,
+                    PatientID = prescription._CustomerID?.Value,
+                    Eye = prescription.Eye,
+                    Quantity = prescription.Quantity,
+                    ItemRetailPrice = prescription.Price,
+                    OrderDetail = new OrderDetail()
+                    {
+                        _SKU = new SKU() { Value = prescription.SKU },
+                        _ProductKey = new ProductKey() { Value = prescription.ProductCode },
+                        _UPC = new UPC() { Value = prescription.UPC },
+                        _BaseCurve = new BaseCurve() { Value = prescription.BaseCurve },
+                        _Diameter = new Diameter() { Value = prescription.Diameter },
+                        _Sphere = new Sphere() { Value = prescription.Sphere },
+                        _Cylinder = new Cylinder() { Value = prescription.Cylinder },
+                        _Axis = new Axis() { Value = prescription.Axis },
+                        _Add = new Add() { Value = prescription.Add },
+                        _Color = new Models.ProductParameters.Color() { Value = prescription.Color },
+                        _Multifocal = new Multifocal() { Value = prescription.Multifocal },
+                    }
+                });
+            }
+
+            OutOrderWrapper outOrderWrapper = new OutOrderWrapper()
+            {
+                OutOrder = new OutOrder()
+                {
+                    ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
+                    PatientOrder = new Order()
+                    {
+                        CustomerID = "",
+                        ID = "",
+                        DoB = "",
+                        Name_1 = "",
+                        Name_2 = "",
+                        StreetAddr_1 = "",
+                        StreetAddr_2 = "",
+                        City = "",
+                        Zip = "",
+                        ShipToAccount = "",
+                        OfficeName = "",
+                        OrderedBy = "",
+                        PoNumber = "",
+                        ShippingMethod = ShippingTypeComboBox.Text,
+                        ShipToPatient = "Y",
+                        Freight = "",
+                        Tax = "",
+                        Discount = "",
+                        InvoiceTotal = "",
+                        Email = "",
+                        Items = listItems
+                    }
+                }
+            };
         }
     }
 }

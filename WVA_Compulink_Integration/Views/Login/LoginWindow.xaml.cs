@@ -69,10 +69,8 @@ namespace WVA_Compulink_Integration.Views.Login
 
                 if (tempUser.ToString().Contains("ERROR"))
                 {
-                    ErrorWindow errorWindow = new ErrorWindow();
-                    errorWindow.Show();
-                    errorWindow.MessagesTextBox.Document.Blocks.Add(new Paragraph(new Run($"{tempUser}")));
-
+                    ErrorWindow errorWindow = new ErrorWindow("An error was encountered during login. ");
+                    errorWindow.Show();                 
                     return;
                 }
 
@@ -109,7 +107,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception x)
             {
-                new ReportError(x);
+                AppError.PrintToLog(x);
             }
         }
 
@@ -135,7 +133,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception x)
             {
-                new ReportError(x);
+                AppError.PrintToLog(x);
             }
         }
 
@@ -147,7 +145,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception x)
             {
-                new ReportError(x);
+                AppError.PrintToLog(x);
             }
         }
 

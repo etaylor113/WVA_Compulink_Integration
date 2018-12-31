@@ -64,6 +64,7 @@
     <Compile Include="Models\Order\ItemDetail.cs" />
     <Compile Include="Models\Order\Out\Item.cs" />
     <Compile Include="Models\Order\Out\Order.cs" />
+    <Compile Include="Models\Order\Out\OrderDetail.cs" />
     <Compile Include="Models\Order\Out\OutOrder.cs" />
     <Compile Include="Models\Order\Out\OutOrderWrapper.cs" />
     <Compile Include="Models\Order\ShippingTypes.cs" />
@@ -108,7 +109,7 @@
       <DependentUpon>SettingsLogin.xaml</DependentUpon>
     </Compile>
     <Compile Include="_API\API.cs" />
-    <Compile Include="Error\ReportError.cs" />
+    <Compile Include="Error\AppError.cs" />
     <Compile Include="Error\ErrorOutput.cs" />
     <Compile Include="MatchFinder\DescriptionMatcher.cs" />
     <Compile Include="MatchFinder\MatchProduct.cs" />

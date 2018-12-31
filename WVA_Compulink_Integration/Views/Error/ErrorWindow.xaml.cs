@@ -21,10 +21,20 @@ namespace WVA_Compulink_Integration.Views.Error
     /// </summary>
     public partial class ErrorWindow : Window
     {
-        public ErrorWindow()
+        public string Error { get; set; }
+
+        public ErrorWindow(string error)
         {
+            Error = error;
             InitializeComponent();
+            SetUp();
         }
+
+        private void SetUp()
+        {
+            MessagesTextBox.Document.Blocks.Add(new Paragraph(new Run(Error)));
+        }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -41,7 +51,7 @@ namespace WVA_Compulink_Integration.Views.Error
             }
             catch (Exception x)
             {
-                new ReportError(x);
+                AppError.PrintToLog(x);
             }
         }
 

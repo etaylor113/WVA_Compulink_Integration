@@ -168,7 +168,8 @@
                   CanUserReorderColumns="False"
                   CanUserSortColumns="False" 
                   IsReadOnly="False" 
-                  Margin="20,20,20,20">
+                  Margin="20,20,20,20" 
+                  SelectedCellsChanged="PrescriptionDataGrid_SelectedCellsChanged">
 
             <!--
             <DataGrid.Resources>
