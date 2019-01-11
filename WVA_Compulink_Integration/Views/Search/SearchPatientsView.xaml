@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450"
              d:DesignWidth="800">
-   
+
     <UserControl.Resources>
 
         <LinearGradientBrush x:Key="ExamsButtonGroup" StartPoint="0,0" EndPoint="1,1">
@@ -114,7 +114,7 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    
+
     <!-- Background -->
     <UserControl.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -124,143 +124,90 @@
     </UserControl.Background>
 
     <!-- Base Grid -->
-    <Grid Margin="20,0,20,20">
+    <Grid Margin="0,0,0,0">
 
-
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="23*"/>
-            <ColumnDefinition Width="53*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="250"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Seach Type Label -->
-        <Label Name="SearchTypeLabel"
-               Content="Search Type" 
-               HorizontalAlignment="Left"
-               Margin="0,0,0,0" 
-               FontSize="13"
-               VerticalAlignment="Center"
-               Height="28"
-               Width="78"/>
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+            
+            <!-- Search Text Box -->
+            <TextBox Name="SearchTextBox" 
+                     HorizontalAlignment="Center" 
+                     Height="35" 
+                     Margin="0,0,0,0" 
+                     VerticalAlignment="Center" 
+                     FontSize="22"
+                     Width="300"
+                     Text=""
+                     TextWrapping="NoWrap"                 
+                     TextChanged="SearchTextBox_TextChanged" 
+                     Grid.Row="0"
+                     Focusable="True"
+                     TabIndex="0"/>
 
-        <!-- Patient Filter Combo Box -->
-        <ComboBox x:Name="PatientFilterComboBox"  
-                  HorizontalAlignment="Stretch" 
-                  VerticalAlignment="Center"
-                  Margin="78,14,10,14"   
-                  Height="22" 
-                  FontSize="12"
-                  SelectedValuePath="Content" 
-                  SelectedIndex="0">
+            <!-- Patient Filter Combo Box -->
+            <ComboBox Name="PatientFilterComboBox"  
+                      HorizontalAlignment="Center" 
+                      VerticalAlignment="Center"
+                      Margin="10,0,0,0"   
+                      Height="35" 
+                      Width="100"
+                      FontSize="18"
+                      TabIndex="1"
+                      SelectedValuePath="Content" 
+                      SelectedIndex="1"
+                      Grid.Row="0">
 
-            <ComboBoxItem>
-                <TextBlock>Patient ID</TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock>Name</TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock>Street</TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock>City</TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock>State</TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock>Zip</TextBlock>
-            </ComboBoxItem>
-            <ComboBoxItem>
-                <TextBlock>Phone</TextBlock>
-            </ComboBoxItem>
-        </ComboBox>
-
-        <!-- Search Label -->
-        <Label x:Name="SearchLabel"
-               Content="Search" 
-               HorizontalAlignment="Left"
-               Margin="0,0,0,0" 
-               VerticalAlignment="Center"
-               Height="28" 
-               Grid.Column="1" 
-               FontSize="13" 
-               Width="50"/>
-
-        <!-- Search Text Box -->
-        <TextBox x:Name="SearchTextBox"
-                 Grid.Column="1" 
-                 HorizontalAlignment="Stretch" 
-                 Height="22" 
-                 Margin="50,14,285,14" 
-                 TextWrapping="Wrap"
-                 VerticalAlignment="Center" 
-                 FontSize="13" TextChanged="SearchTextBox_TextChanged" />
-
-        <!-- Quick Search Check Box -->
-        <CheckBox x:Name="QuickSearchCheckBox"
-                  Content="Quick Search" 
-                  Grid.Column="1" 
-                  FontSize="13"
-                  HorizontalAlignment="Right" 
-                  Margin="0,0,174,0" 
-                  VerticalAlignment="Center"
-                  Height="14" 
-                  Width="94" 
-                  IsChecked="true"/>
-
-        <!-- Search Button -->
-        <Button x:Name="SearchButton"
-                Content="Search" 
-                Grid.Column="1" 
-                HorizontalAlignment="Right" 
-                Margin="0,0,85,0" 
-                VerticalAlignment="Center" 
-                Width="75" 
-                Height="24"
-                FontSize="13" 
-                Click="SearchButton_Click"/>
-
-        <!-- Refresh Data Button -->
-        <Button x:Name="RefreshButton"
-                Content="Refresh" 
-                Grid.Column="1" 
-                HorizontalAlignment="Right" 
-                Margin="0,0,0,0" 
-                VerticalAlignment="Center" 
-                Width="75"
-                Height="24" 
-                FontSize="13" 
-                Click="RefreshButton_Click"/>
-
-        <!-- Divider Line -->
-        <Rectangle Name="TopDividerLine"
-                   Fill="Black"
-                   VerticalAlignment="Bottom"
-                   HorizontalAlignment="Stretch"
-                   Height="3" 
-                   Grid.ColumnSpan="2"/>
+                <ComboBoxItem>
+                    <TextBlock>Patient ID</TextBlock>
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <TextBlock>Name</TextBlock>
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <TextBlock>Street</TextBlock>
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <TextBlock>City</TextBlock>
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <TextBlock>State</TextBlock>
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <TextBlock>Zip</TextBlock>
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    <TextBlock>Phone</TextBlock>
+                </ComboBoxItem>
+            </ComboBox>
+            
+        </StackPanel>
 
         <!-- Patient DataGrid -->
         <DataGrid x:Name="PatientDataGrid" 
                   HorizontalAlignment="Stretch"
-                  Margin="0,10,0,0" 
+                  Margin="50,0,50,30" 
                   VerticalAlignment="Stretch"  
                   Grid.Row="1"
-                  Grid.ColumnSpan="5"
+                  Grid.ColumnSpan="2"
                   AutoGenerateColumns="False"
-                  CanUserResizeRows="False"
+                  CanUserResizeRows="False"                  
                   FontWeight="DemiBold"
                   BorderThickness="1"
                   ItemsSource="{Binding Patients}"
                   CanUserReorderColumns="False"
                   CanUserSortColumns="False" 
                   IsReadOnly="True"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  Background="Transparent"
+                  TabIndex="2"
+                  HeadersVisibility="Column" 
+                  BorderBrush="Transparent">
 
             <DataGrid.Resources>
                 <Style TargetType="{x:Type DataGridCell}">
@@ -269,6 +216,7 @@
                 </Style>
             </DataGrid.Resources>
 
+            
 
             <DataGrid.OpacityMask>
                 <RadialGradientBrush>
@@ -278,6 +226,7 @@
                 </RadialGradientBrush>
             </DataGrid.OpacityMask>
 
+            <!--
             <DataGrid.Background>
                 <LinearGradientBrush EndPoint="1,1" MappingMode="RelativeToBoundingBox" StartPoint="0,1">
                     <GradientStop Color="#FF327EC3" Offset="0.994"/>
@@ -285,12 +234,16 @@
                     <GradientStop Color="#FF4485C0" Offset="0.54"/>
                     <GradientStop Color="#FF8FB6D9"/>
                 </LinearGradientBrush>
-            </DataGrid.Background>
-
-            <DataGrid.HorizontalGridLinesBrush>
-                <SolidColorBrush Color="Black"/>
-            </DataGrid.HorizontalGridLinesBrush>
+            </DataGrid.Background>          
             -->
+
+             <!-- Grid lines color -->
+            <DataGrid.HorizontalGridLinesBrush>
+                <SolidColorBrush Color="Transparent"/>
+            </DataGrid.HorizontalGridLinesBrush>
+            <DataGrid.VerticalGridLinesBrush>
+                <SolidColorBrush Color="Transparent"/>
+            </DataGrid.VerticalGridLinesBrush>
 
             <DataGrid.Columns>
                 <DataGridTextColumn Width="*" Binding="{Binding Path=PatientID}" Header="Patient ID"/>

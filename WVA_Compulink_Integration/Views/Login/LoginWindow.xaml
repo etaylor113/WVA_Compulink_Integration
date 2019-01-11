@@ -151,7 +151,8 @@
                      Height="30" 
                      Width="231" 
                      FontSize="16" 
-                     TabIndex="2"/>
+                     TabIndex="2"
+                     PasswordChanged="PasswordTextBox_PasswordChanged"/>
 
         <Label Content="Password" 
                HorizontalAlignment="Left" 
@@ -183,7 +184,8 @@
                  VerticalAlignment="Top"
                  Width="231" 
                  FontSize="18" 
-                 TabIndex="1"/>
+                 TabIndex="1"
+                 TextChanged="UsernameTextBox_TextChanged"/>
 
         <Label  Content="Username" 
                 HorizontalAlignment="Left" 
@@ -195,9 +197,11 @@
                 TabIndex="0"/>
 
         <TextBlock x:Name="CreateAccountLink" 
-                   Margin="384,300,0,0"                  
+                   Margin="0,0,5,5"                  
                    FontSize="14" 
-                   PreviewMouseLeftButtonDown="CreateAccountLink_PreviewMouseLeftButtonDown">             
+                   PreviewMouseLeftButtonDown="CreateAccountLink_PreviewMouseLeftButtonDown"
+                   VerticalAlignment="Bottom"
+                   HorizontalAlignment="Right">             
             <Hyperlink Foreground="#FF062B7C" 
                        NavigateUri="http://search.msn.com"> 
                        Create an account
@@ -205,33 +209,41 @@
         </TextBlock>
 
         <TextBlock x:Name="ForgotPasswordLink" 
-                   Margin="0,300,380,0"                  
+                   Margin="5,0,0,5"                  
                    FontSize="14"
                    Focusable="False"
                    Width="110"
-                   PreviewMouseLeftButtonDown="ForgotPasswordLink_PreviewMouseLeftButtonDown" >           
+                   PreviewMouseLeftButtonDown="ForgotPasswordLink_PreviewMouseLeftButtonDown" 
+                   VerticalAlignment="Bottom"
+                   HorizontalAlignment="Left">           
                    <Hyperlink Foreground="#FF062B7C" >
                          <Run Text="Forgot Password"/>
                    </Hyperlink>
         </TextBlock>
 
-        <Label x:Name="NotifyLabel" 
-               Content="" 
-               HorizontalAlignment="Left"
-               Margin="143,270,0,0" 
+        <TextBlock x:Name="NotifyLabel" 
+               Text="" 
+               HorizontalAlignment="Center"
+               Margin="0,260,0,0" 
                VerticalAlignment="Top" 
-               FontSize="18" 
-               Width="230"
+               FontSize="15" 
+               MaxWidth="260"
+               Height="70"
+               TextWrapping="Wrap"
                Visibility="Hidden"
                Focusable="False"/>
 
         <Button Style="{StaticResource ImageButtonStyle}" 
                 Click="CloseButton_Click" 
-                Name="CloseButton">
+                Name="CloseButton"
+                Width="30"
+                Height="30"
+                HorizontalAlignment="Right"
+                   VerticalAlignment="Top">
 
             <Image Source="/Resources/CloseButton.png" 
-                   Margin="470,5,5,295"
-                   Height="25"
+                   Margin="0,0,0,0"
+                   Height="25"                 
                    Width="25"/>
         </Button>
 

@@ -60,7 +60,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Cryptography\Crypto.cs" />
     <Compile Include="MatchFinder\WVA_Products.cs" />
+    <Compile Include="Memory\UserData.cs" />
     <Compile Include="Models\Order\ItemDetail.cs" />
     <Compile Include="Models\Order\Out\Item.cs" />
     <Compile Include="Models\Order\Out\Order.cs" />
@@ -76,7 +78,6 @@
     <Compile Include="Models\ProductParameters\Children\CustomerID.cs" />
     <Compile Include="Models\ProductParameters\Children\Cylinder.cs" />
     <Compile Include="Models\ProductParameters\Children\Diameter.cs" />
-    <Compile Include="Models\ProductParameters\Children\Help.cs" />
     <Compile Include="Models\ProductParameters\Children\ID.cs" />
     <Compile Include="Models\ProductParameters\Children\Multifocal.cs" />
     <Compile Include="Models\ProductParameters\Children\ProductKey.cs" />

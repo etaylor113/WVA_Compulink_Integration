@@ -138,14 +138,6 @@ namespace WVA_Compulink_Integration.Models.Validations
             else
                 return false;
         }
-
-        public static bool CheckIfValid(Help help)
-        {
-            // If help is null, we don't want to overwrite the old value with null or it won't be shown in F8 help window
-            if (help == null)
-                return false;
-            else
-                return true;
-        }
+  
     }
 }

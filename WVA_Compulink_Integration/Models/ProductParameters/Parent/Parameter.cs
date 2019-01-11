@@ -18,6 +18,9 @@ namespace WVA_Compulink_Integration.Models.ProductParameters.Parent
         [JsonProperty("error_message")]
         public string ErrorMessage;
 
+        [JsonProperty("valid_items")]
+        public List<string> ValidItems { get; set; }
+
         [JsonProperty("is_valid")]
         public bool IsValid
         {

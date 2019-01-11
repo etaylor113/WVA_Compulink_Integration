@@ -17,6 +17,8 @@ using WVA_Compulink_Integration.Error;
 using Newtonsoft.Json;
 using WVA_Compulink_Integration.Views.Error;
 using WVA_Compulink_Integration.Views.Registration;
+using WVA_Compulink_Integration.Memory;
+using WVA_Compulink_Integration.Cryptography;
 
 namespace WVA_Compulink_Integration.Views.Login
 {
@@ -28,35 +30,48 @@ namespace WVA_Compulink_Integration.Views.Login
         public LoginWindow()
         {
             InitializeComponent();
-            SetUpUser();
+            SetUp();           
+        }
 
+        private void SetUp()
+        {
             UsernameTextBox.Focus();
         }
-
-        public void SetUpUser()
-        {
-            User.UserName = "evant123";
-            User.ApiKey = "123456789";
-        }
-
-        public string VerifyUser()
+  
+        private User LoginUser()
         {
             try
             {
-                string endpoint = "http://localhost:56075/CompuClient/User/Verify/" + UsernameTextBox.Text + "?key=" + User.ApiKey + "&pass=" + PasswordTextBox.Password.ToString();
-                return API.Get(endpoint, out string httpStatus);
+                User user = new User()
+                {
+                    UserName = UsernameTextBox.Text,
+                    Password = Crypto.ConvertToHash(PasswordTextBox.Password)           
+                };
+
+                string endpoint = "http://localhost:56075/CompuClient/User/login";
+                string loginResponse = API.Post(endpoint, user, out string httpStatus);
+                User userLoginResponse = JsonConvert.DeserializeObject<User>(loginResponse);
+                           
+                return userLoginResponse;
             }
-            catch (Exception e)
+            catch (Exception x)
             {
-                return $"ERROR: {e.Message}";
+                AppError.PrintToLog(x);
+                return null;
             }
+        }
+
+        private void ResetTextBoxes()
+        {
+            UsernameTextBox.Focus();
+            UsernameTextBox.Clear();
+            PasswordTextBox.Clear();
         }
 
         // ===========================================================================================================================
         // Form events called from LoginWindow 
         // ===========================================================================================================================
-
-
+    
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -65,49 +80,34 @@ namespace WVA_Compulink_Integration.Views.Login
                 NotifyLabel.Visibility = Visibility.Visible;
 
                 // Verify user's credentials through the api and return verifiedUser object. 
-                var tempUser = VerifyUser();
+                User loginUserResponse = LoginUser();             
 
-                if (tempUser.ToString().Contains("ERROR"))
+                // Check login credentials                 
+                if (loginUserResponse.Status == "ERROR" || loginUserResponse.Status == "FAIL")
                 {
-                    ErrorWindow errorWindow = new ErrorWindow("An error was encountered during login. ");
-                    errorWindow.Show();                 
+                    NotifyLabel.Visibility = Visibility.Visible;
+                    NotifyLabel.Text = $"{loginUserResponse.Message}";
                     return;
-                }
+                }               
+                else if (loginUserResponse.Status == "OK")
+                {
+                    // Set user data in memory to response items
+                    UserData._User = loginUserResponse;
 
-                var verifiedUser = JsonConvert.DeserializeObject<VerifyUser>(tempUser);
-
-                // Smart Verify. Will clear and place cursor on the incorrect field and give user a status. 
-                if (verifiedUser.UserName != "OK")
-                {
-                    UsernameTextBox.Focus();
-                    UsernameTextBox.Clear();
-                    PasswordTextBox.Clear();
-                    NotifyLabel.Content = "Invalid Username/Password.";
-                }
-                else if (verifiedUser.PassWord != "OK")
-                {
-                    UsernameTextBox.Focus();
-                    UsernameTextBox.Clear();
-                    PasswordTextBox.Clear();
-                    NotifyLabel.Content = "Invalid Username/Password.";
-                }
-                else if (verifiedUser.ApiKey != "OK")
-                {
-                    NotifyLabel.Content = "Invalid Key. Contact IT.";
-                }
-                else if (verifiedUser.UserName == "ERROR")
-                {
-                    NotifyLabel.Content = "An error has occurred.";
+                    // Let user continue into application
+                    new MainWindow().Show();
+                    Close();
                 }
                 else
                 {
-                    new MainWindow().Show();
-                    Close();
+                    throw new Exception("Server was unable to provide a sufficient response.");
                 }
             }
             catch (Exception x)
             {
                 AppError.PrintToLog(x);
+                NotifyLabel.Visibility = Visibility.Visible;
+                NotifyLabel.Text = "An error has occurred. If the problem persists, please contact IT.";
             }
         }
 
@@ -154,6 +154,15 @@ namespace WVA_Compulink_Integration.Views.Login
             new RegistrationWindow().Show();
             Close();
         }
-        
+
+        private void UsernameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            NotifyLabel.Visibility = Visibility.Hidden;
+        }
+
+        private void PasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            NotifyLabel.Visibility = Visibility.Hidden;
+        }
     }
 }

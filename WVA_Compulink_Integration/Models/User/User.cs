@@ -10,21 +10,14 @@ namespace WVA_Compulink_Integration.Models.User
 {
     class User
     {
-        public static string UserName { get; set; }
-        public static string PassWord { get; set; }
-        public static string ApiKey { get; set; }
-
-        public static string GetUserName()
-        {
-            try
-            {
-                string userName = File.ReadLines(Paths.AppData + @"\WVA Data Import\User\UserName.txt").Skip(0).Take(1).First();      
-                return userName;
-            }
-            catch
-            {
-                return "";
-            }
-        }
+        public int ID { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }        
+        public string Location { get; set; }
+        public string Email { get; set; }
+        public string Account { get; set; }
+        public string ApiKey { get; set; }
+        public string Status { get; set; }  
+        public string Message { get; set; }
     }
 }

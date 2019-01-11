@@ -152,9 +152,8 @@
             <!-- Orders DataGrid -->
             <DataGrid x:Name="STO_DataGrid" 
                       HorizontalAlignment="Stretch"
-                      Margin="0,0,0,0" 
-                      VerticalAlignment="Stretch"  
-                      Grid.Row="1"
+                      Margin="0,10" 
+                      VerticalAlignment="Stretch"
                       Grid.Column="1"
                       Grid.ColumnSpan="1"
                       AutoGenerateColumns="False"
@@ -167,17 +166,17 @@
                       CanUserAddRows="False"
                       IsReadOnly="False"
                       SelectionChanged="STO_DataGrid_SelectionChanged" 
-                      CellEditEnding="STO_DataGrid_CellEditEnding">
+                      CellEditEnding="STO_DataGrid_CellEditEnding" 
+                      Grid.RowSpan="2">
 
                 <DataGrid.ContextMenu>
-                    <ContextMenu Name="STO_ContextMenu">
-                    </ContextMenu>
+                    <ContextMenu Name="STO_ProductContextMenu"/>
                 </DataGrid.ContextMenu>
 
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type DataGridCell}">
                         <Style.Triggers>
-                          
+
                         </Style.Triggers>
                     </Style>
                 </DataGrid.Resources>
@@ -228,6 +227,9 @@
                                     <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
+                                        <Setter Property="Background" Value="Yellow" />
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTextColumn.CellStyle>
@@ -244,6 +246,9 @@
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding DiameterCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
+                                        <Setter Property="Background" Value="Yellow" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -262,6 +267,9 @@
                                     <DataTrigger Binding="{Binding SphereCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
+                                        <Setter Property="Background" Value="Yellow" />
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTextColumn.CellStyle>
@@ -278,6 +286,9 @@
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding CylinderCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
+                                        <Setter Property="Background" Value="Yellow" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -296,6 +307,9 @@
                                     <DataTrigger Binding="{Binding AxisCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
+                                        <Setter Property="Background" Value="Yellow" />
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTextColumn.CellStyle>
@@ -312,6 +326,9 @@
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding AddCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
+                                        <Setter Property="Background" Value="Yellow" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -330,6 +347,9 @@
                                     <DataTrigger Binding="{Binding ColorCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
+                                        <Setter Property="Background" Value="Yellow" />
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTextColumn.CellStyle>
@@ -346,6 +366,9 @@
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding MultifocalCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
+                                        <Setter Property="Background" Value="Yellow" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>

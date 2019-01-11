@@ -79,9 +79,11 @@ namespace WVA_Compulink_Integration.Error
             {
                 string time = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
 
-                if (!Directory.Exists(Paths.ErrorLog)) { }
-                Directory.CreateDirectory(Paths.ErrorLog);
-
+                if (!Directory.Exists(Paths.ErrorLog))
+                {
+                    Directory.CreateDirectory(Paths.ErrorLog);
+                }
+                 
                 if (!File.Exists(Paths.ErrorLog + @"\Error_" + time + ".txt"))
                 {
                     var file = File.Create(Paths.ErrorLog + @"\Error_" + time + ".txt");

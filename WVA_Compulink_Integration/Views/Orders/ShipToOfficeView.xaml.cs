@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WVA_Compulink_Integration._API;
+using WVA_Compulink_Integration.Cryptography;
 using WVA_Compulink_Integration.MatchFinder;
 using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models.Order;
@@ -38,12 +39,13 @@ namespace WVA_Compulink_Integration.Views.Orders
     public partial class ShipToOfficeView : UserControl
     {
         // Keeps track of what product in DataGrid user has clicked on
-        public int ClickedIndex { get; set; }
+        public int SelectedRow { get; set; }
+        public int SelectedColumn { get; set; }
         public List<List<MatchProduct>> ListMatchedProducts = new List<List<MatchProduct>>();
         public List<string> ListWVA_Products = new List<string>();
 
         public ShipToOfficeView()
-        {        
+        {                 
             InitializeComponent();
             SetUpUI();
         }
@@ -52,12 +54,12 @@ namespace WVA_Compulink_Integration.Views.Orders
         {   
             SetUpShippingComboBox();            
             SetUpSTO_DataGrid();
-            SetContextMenuItems();
-            AddMenuItems();
+            FindProductMatches();
+            SetMenuItems();
             MatchPercentLabel.Content = $"Match Percent: {MinScoreAdjustSlider.Value}%";
         }
 
-        private void SetContextMenuItems()
+        private void FindProductMatches()
         {
             // Reset list of matched products 
             ListMatchedProducts.Clear();
@@ -89,24 +91,253 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
         }  
         
-        private void AddMenuItems()
+        private void SetMenuItems()
         {
             try
             {
                 // Reset the products ContextMenu
-                STO_ContextMenu.Items.Clear();
+                STO_ProductContextMenu.Items.Clear();
 
                 // Sets 'ClickedIndex' to the index of selected cell
                 if (STO_DataGrid.Items.IndexOf(STO_DataGrid.CurrentItem) > -1)
                 {
-                    ClickedIndex = STO_DataGrid.Items.IndexOf(STO_DataGrid.CurrentItem);
+                    SelectedRow = STO_DataGrid.Items.IndexOf(STO_DataGrid.CurrentItem);
+                    SelectedColumn = STO_DataGrid.CurrentColumn.DisplayIndex;
                 }
-               
-                foreach (MatchProduct match in ListMatchedProducts[ClickedIndex])
+
+                // If column IS 'BaseCurve'
+                if (SelectedColumn == 5)
                 {
-                    MenuItem menuItem = new MenuItem() { Header = match.Name };
-                    menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
-                    STO_ContextMenu.Items.Add(menuItem);
+                    try
+                    {
+                        int ValidItemsCount = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].BaseCurveValidItems.Count;
+
+                        if (ValidItemsCount > 0)
+                        {
+                            for (int i = 0; i < ValidItemsCount; i++)
+                            {
+                                MenuItem menuItem = new MenuItem() { Header = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].BaseCurveValidItems[i] };
+                                menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                                STO_ProductContextMenu.Items.Add(menuItem);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("No Valid Items");
+                        }
+                    }
+                    catch (Exception x)
+                    {
+                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
+                        menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                        STO_ProductContextMenu.Items.Add(menuItem);
+                    }                                              
+                }
+                // If column IS 'Diameter'
+                else if (SelectedColumn == 6)
+                {
+                    try
+                    {
+                        int ValidItemsCount = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].DiameterValidItems.Count;
+
+                        if (ValidItemsCount > 0)
+                        {
+                            for (int i = 0; i < ValidItemsCount; i++)
+                            {
+                                MenuItem menuItem = new MenuItem() { Header = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].DiameterValidItems[i] };
+                                menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                                STO_ProductContextMenu.Items.Add(menuItem);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("No Valid Items");
+                        }
+                    }
+                    catch (Exception x)
+                    {
+                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
+                        menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                        STO_ProductContextMenu.Items.Add(menuItem);
+                    }
+                }
+                // If column IS 'Sphere'
+                else if (SelectedColumn == 7)
+                {
+                    try
+                    {
+                        int ValidItemsCount = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].SphereValidItems.Count;
+
+                        if (ValidItemsCount > 0)
+                        {
+                            for (int i = 0; i < ValidItemsCount; i++)
+                            {
+                                MenuItem menuItem = new MenuItem() { Header = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].SphereValidItems[i] };
+                                menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                                STO_ProductContextMenu.Items.Add(menuItem);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("No Valid Items");
+                        }
+                    }
+                    catch (Exception x)
+                    {
+                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
+                        menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                        STO_ProductContextMenu.Items.Add(menuItem);
+                    }
+                }
+                // If column IS 'Cylinder'
+                else if (SelectedColumn == 8)
+                {
+                    try
+                    {
+                        int ValidItemsCount = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].CylinderValidItems.Count;
+
+                        if (ValidItemsCount > 0)
+                        {
+                            for (int i = 0; i < ValidItemsCount; i++)
+                            {
+                                MenuItem menuItem = new MenuItem() { Header = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].CylinderValidItems[i] };
+                                menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                                STO_ProductContextMenu.Items.Add(menuItem);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("No Valid Items");
+                        }
+                    }
+                    catch (Exception x)
+                    {
+                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
+                        menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                        STO_ProductContextMenu.Items.Add(menuItem);
+                    }
+                }
+                // If column IS 'Axis'
+                else if (SelectedColumn == 9)
+                {
+                    try
+                    {
+                        int ValidItemsCount = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].AxisValidItems.Count;
+
+                        if (ValidItemsCount > 0)
+                        {
+                            for (int i = 0; i < ValidItemsCount; i++)
+                            {
+                                MenuItem menuItem = new MenuItem() { Header = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].AxisValidItems[i] };
+                                menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                                STO_ProductContextMenu.Items.Add(menuItem);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("No Valid Items");
+                        }
+                    }
+                    catch (Exception x)
+                    {
+                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
+                        menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                        STO_ProductContextMenu.Items.Add(menuItem);
+                    }
+                }
+                // If column IS 'Add'
+                else if (SelectedColumn == 10)
+                {
+                    try
+                    {
+                        int ValidItemsCount = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].AddValidItems.Count;
+
+                        if (ValidItemsCount > 0)
+                        {
+                            for (int i = 0; i < ValidItemsCount; i++)
+                            {
+                                MenuItem menuItem = new MenuItem() { Header = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].AddValidItems[i] };
+                                menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                                STO_ProductContextMenu.Items.Add(menuItem);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("No Valid Items");
+                        }
+                    }
+                    catch (Exception x)
+                    {
+                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
+                        menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                        STO_ProductContextMenu.Items.Add(menuItem);
+                    }
+                }
+                // If column IS 'Color'
+                else if (SelectedColumn == 11)
+                {
+                    try
+                    {
+                        int ValidItemsCount = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].ColorValidItems.Count;
+
+                        if (ValidItemsCount > 0)
+                        {
+                            for (int i = 0; i < ValidItemsCount; i++)
+                            {
+                                MenuItem menuItem = new MenuItem() { Header = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].ColorValidItems[i] };
+                                menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                                STO_ProductContextMenu.Items.Add(menuItem);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("No Valid Items");
+                        }
+                    }
+                    catch (Exception x)
+                    {
+                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
+                        menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                        STO_ProductContextMenu.Items.Add(menuItem);
+                    }
+                }
+                // If column IS 'Multifocal'
+                else if (SelectedColumn == 12)
+                {
+                    try
+                    {
+                        int ValidItemsCount = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].MultifocalValidItems.Count;
+
+                        if (ValidItemsCount > 0)
+                        {
+                            for (int i = 0; i < ValidItemsCount; i++)
+                            {
+                                MenuItem menuItem = new MenuItem() { Header = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].MultifocalValidItems[i] };
+                                menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                                STO_ProductContextMenu.Items.Add(menuItem);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("No Valid Items");
+                        }
+                    }
+                    catch (Exception x)
+                    {
+                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
+                        menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                        STO_ProductContextMenu.Items.Add(menuItem);
+                    }
+                }              
+                // Normal match product list
+                else
+                {
+                    foreach (MatchProduct match in ListMatchedProducts[SelectedRow])
+                    {
+                        MenuItem menuItem = new MenuItem() { Header = match.Name };
+                        menuItem.Click += new RoutedEventHandler(ContextMenu_Click);
+                        STO_ProductContextMenu.Items.Add(menuItem);
+                    }
                 }
             }
             catch (Exception x)
@@ -114,51 +345,6 @@ namespace WVA_Compulink_Integration.Views.Orders
 
             }
         }
-
-        //private void EditColumn(int column, int row, string cellText)
-        //{          
-        //    switch (column)
-        //    {
-        //        case 0:
-        //            ShipToOfficeViewModel.ListPrescriptions[row].Patient = cellText;
-        //            break;
-        //        case 1:
-        //            ShipToOfficeViewModel.ListPrescriptions[row].Eye = cellText;
-        //            break;
-        //        //
-        //        // Skip image row
-        //        //
-        //        case 3:
-        //            ShipToOfficeViewModel.ListPrescriptions[row].Product = cellText;
-        //            break;
-        //        case 4:
-        //            ShipToOfficeViewModel.ListPrescriptions[row].Quantity = cellText;
-        //            break;
-        //        case 5:
-        //            ShipToOfficeViewModel.ListPrescriptions[row].BaseCurve = cellText;
-        //            break;
-        //        case 6:
-        //            ShipToOfficeViewModel.ListPrescriptions[row].Diameter = cellText;
-        //            break;
-        //        case 7:
-        //            ShipToOfficeViewModel.ListPrescriptions[row].Sphere = cellText;
-        //            break;
-        //        case 8:
-        //            ShipToOfficeViewModel.ListPrescriptions[row].Cylinder = cellText;
-        //            break;
-        //        case 9:
-        //            ShipToOfficeViewModel.ListPrescriptions[row].Axis = cellText;
-        //            break;
-        //        case 10:
-        //            ShipToOfficeViewModel.ListPrescriptions[row].Add = cellText;
-        //            break;
-        //        case 11:
-        //            ShipToOfficeViewModel.ListPrescriptions[row].Color = cellText;
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //}
 
         private void SetUpShippingComboBox()
         {
@@ -171,7 +357,27 @@ namespace WVA_Compulink_Integration.Views.Orders
         private void SetUpSTO_DataGrid()
         {
             STO_DataGrid.ItemsSource = ShipToOfficeViewModel.ListPrescriptions;          
-        }       
+        } 
+        
+        private string AssignCellColor(string prodValue, bool isValid, string errorMessage, bool canBeValidated)
+        {      
+            if (prodValue == null || prodValue == "" && errorMessage == null)
+            {
+                return "White";
+            }
+            else if (!canBeValidated)
+            {
+                return "Yellow";
+            }
+            else if (isValid)
+            {
+                return "Green";
+            }
+            else
+            {
+                return "Red";
+            }
+        }
 
         private void ContextMenu_Click(object sender, RoutedEventArgs e)
         {
@@ -179,14 +385,14 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 int selectedIndex = 0;
                 MenuItem menuItem = sender as MenuItem;
-                string product = menuItem.Header.ToString();
+                string selectedItem = menuItem.Header.ToString();
 
                 // Get the selected menu item
-                for (int i = 0; i < STO_ContextMenu.Items.Count; i++)
+                for (int i = 0; i < STO_ProductContextMenu.Items.Count; i++)
                 {
-                    MenuItem item = (MenuItem)STO_ContextMenu.Items[i];
+                    MenuItem item = (MenuItem)STO_ProductContextMenu.Items[i];
                     
-                    if (item.Header.ToString() == product)
+                    if (item.Header.ToString() == selectedItem)
                     {
                         selectedIndex = i;
                         break;
@@ -202,31 +408,63 @@ namespace WVA_Compulink_Integration.Views.Orders
                 int column = STO_DataGrid.CurrentColumn.DisplayIndex;
 
                 // Only want to change 'Products' column 
-                if (product != "No Matches Found" && column == 3)
+                if (selectedItem != "No Matches Found" && selectedItem != "Not Available")
                 {
-                    STO_DataGrid.GetCell(row, column).Content = product;
-                    ShipToOfficeViewModel.ListPrescriptions[row].Product = product;
+                    STO_DataGrid.GetCell(row, column).Content = selectedItem;
 
-                    if (ListMatchedProducts[row][selectedIndex].MatchScore > 92)
+                    if (column <= 4)
                     {
-                        ShipToOfficeViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\GreenBubble.png";
+                        ShipToOfficeViewModel.ListPrescriptions[row].Product = selectedItem;
+
+                        if (ListMatchedProducts[row][selectedIndex].MatchScore > 92)
+                        {
+                            ShipToOfficeViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\GreenBubble.png";
+                        }
+                        else if (ListMatchedProducts[row][selectedIndex].MatchScore > 75)
+                        {
+                            ShipToOfficeViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\YellowBubble.png";
+                        }
+                        else
+                        {
+                            ShipToOfficeViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\RedBubble.jpg";
+                        }
                     }
-                    else if (ListMatchedProducts[row][selectedIndex].MatchScore > 75)
+
+                    if (column == 5)
                     {
-                        ShipToOfficeViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\YellowBubble.png";
+                        ShipToOfficeViewModel.ListPrescriptions[row].BaseCurve = selectedItem;
                     }
-                    else
+                    if (column == 6)
                     {
-                        ShipToOfficeViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\RedBubble.jpg";
+                        ShipToOfficeViewModel.ListPrescriptions[row].Diameter = selectedItem;
+                    }
+                    if (column == 7)
+                    {
+                        ShipToOfficeViewModel.ListPrescriptions[row].Sphere = selectedItem;
+                    }
+                    if (column == 8)
+                    {
+                        ShipToOfficeViewModel.ListPrescriptions[row].Cylinder = selectedItem;
+                    }
+                    if (column == 9)
+                    {
+                        ShipToOfficeViewModel.ListPrescriptions[row].Axis = selectedItem;
+                    }
+                    if (column == 10)
+                    {
+                        ShipToOfficeViewModel.ListPrescriptions[row].Add = selectedItem;
+                    }
+                    if (column == 11)
+                    {
+                        ShipToOfficeViewModel.ListPrescriptions[row].Color = selectedItem;
+                    }
+                    if (column == 12)
+                    {
+                        ShipToOfficeViewModel.ListPrescriptions[row].Multifocal = selectedItem;
                     }
 
                     STO_DataGrid.Items.Refresh();
-                }
-                else
-                {
-                    ShipToOfficeViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\RedBubble.jpg";
-                    STO_DataGrid.Items.Refresh();
-                }
+                }              
             }
             catch (Exception x)
             {
@@ -241,15 +479,9 @@ namespace WVA_Compulink_Integration.Views.Orders
                 if (e.EditAction == DataGridEditAction.Commit)
                 {                  
                     int row = e.Row.GetIndex();
-                    //int column = STO_DataGrid.CurrentColumn.DisplayIndex;
-                    //var typedText = e.EditingElement as TextBox;
-                    //string cellText = typedText.Text.Trim();
-
-                    //ShipToOfficeViewModel.ListPrescriptions[row] = (Prescription)STO_DataGrid.Items[row];                  
-
-                    //EditColumn(column, row, cellText);                   
-                    SetContextMenuItems();
-                    AddMenuItems();
+                 
+                    FindProductMatches();
+                    SetMenuItems();
                 }
             }
             catch (Exception x)
@@ -260,17 +492,17 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void STO_DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {          
-            SetContextMenuItems();
-            AddMenuItems();
+            FindProductMatches();
+            SetMenuItems();
         }
 
         private void MinScoreAdjustSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            if (STO_ContextMenu.Items.Count > 0)
+            if (STO_ProductContextMenu.Items.Count > 0)
             {
                 MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
-                SetContextMenuItems();
-                AddMenuItems();
+                FindProductMatches();
+                SetMenuItems();
             }
         }
 
@@ -304,7 +536,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     _Axis = new Axis() { Value = prescription.Axis },
                     _Add = new Add() { Value = prescription.Add },
                     _Color = new Models.ProductParameters.Color() { Value = prescription.Color },
-                    _Multifocal = new Multifocal() { Value = prescription.Multifocal }                 
+                    _Multifocal = new Multifocal() { Value = prescription.Multifocal },            
                 });
             }
 
@@ -333,47 +565,56 @@ namespace WVA_Compulink_Integration.Views.Orders
                 Prescription prescription = new Prescription()
                 {
                     // These properties don't need to be validated
-                    ProductImagePath    =       ShipToOfficeViewModel.ListPrescriptions[i].ProductImagePath,
-                    IsChecked           =       ShipToOfficeViewModel.ListPrescriptions[i].IsChecked,
-                    FirstName           =       ShipToOfficeViewModel.ListPrescriptions[i].FirstName,
-                    LastName            =       ShipToOfficeViewModel.ListPrescriptions[i].LastName,
-                    Patient             =       ShipToOfficeViewModel.ListPrescriptions[i].Patient,
-                    Eye                 =       ShipToOfficeViewModel.ListPrescriptions[i].Eye,
-                    Quantity            =       ShipToOfficeViewModel.ListPrescriptions[i].Quantity,
-                    Date                =       ShipToOfficeViewModel.ListPrescriptions[i].Date,
-                    _CustomerID         =       ShipToOfficeViewModel.ListPrescriptions[i]._CustomerID,
+                    ProductImagePath    =   ShipToOfficeViewModel.ListPrescriptions[i].ProductImagePath,
+                    IsChecked           =   ShipToOfficeViewModel.ListPrescriptions[i].IsChecked,
+                    FirstName           =   ShipToOfficeViewModel.ListPrescriptions[i].FirstName,
+                    LastName            =   ShipToOfficeViewModel.ListPrescriptions[i].LastName,
+                    Patient             =   ShipToOfficeViewModel.ListPrescriptions[i].Patient,
+                    Eye                 =   ShipToOfficeViewModel.ListPrescriptions[i].Eye,
+                    Quantity            =   ShipToOfficeViewModel.ListPrescriptions[i].Quantity,
+                    Date                =   ShipToOfficeViewModel.ListPrescriptions[i].Date,
+                    _CustomerID         =   ShipToOfficeViewModel.ListPrescriptions[i]._CustomerID,
 
                     // If prods[i].Property.Value == null change field to old value, else change to new value
-                    Product = prods[i]._Description                                 ??      ShipToOfficeViewModel.ListPrescriptions[i].Product,
-                    ProductCode = Validator.CheckIfValid(prods[i]._ProductKey)      ?       prods[i]._ProductKey?.Value : ShipToOfficeViewModel.ListPrescriptions[i].ProductCode,
+                    CanBeValidated      =   prods[i].CanBeValidated,
+                    Product             =   prods[i]._Description ?? ShipToOfficeViewModel.ListPrescriptions[i].Product,
+                    ProductCode         =   Validator.CheckIfValid(prods[i]._ProductKey) ? prods[i]._ProductKey?.Value : ShipToOfficeViewModel.ListPrescriptions[i].ProductCode,
 
                     // NOTE: to help explain ternary statements below for cell colors
                     // IF property IS null or IS blank AND errorMessage IS null THEN cell = White 
                     // IF property isValid THEN cell = Green
                     // IF property NOT isValid THEN cell = Red
-                    BaseCurve = Validator.CheckIfValid(prods[i]._BaseCurve)         ?       prods[i]._BaseCurve.Value : ShipToOfficeViewModel.ListPrescriptions[i].BaseCurve,
-                    BaseCurveCellColor = (prods[i]._BaseCurve?.Value == null || prods[i]._BaseCurve?.Value?.Trim() == "") && prods[i]._BaseCurve?.ErrorMessage == null ? "White" : prods[i]._BaseCurve.IsValid ? "Green" : "Red",
+                    BaseCurveValidItems = prods[i]._BaseCurve.ValidItems,
+                    BaseCurve = Validator.CheckIfValid(prods[i]._BaseCurve)         ?       prods[i]._BaseCurve.Value : ShipToOfficeViewModel.ListPrescriptions[i].BaseCurve,                   
+                    BaseCurveCellColor = AssignCellColor(prodValue: prods[i]._BaseCurve?.Value?.Trim(), isValid: prods[i]._BaseCurve.IsValid, errorMessage: prods[i]._BaseCurve.ErrorMessage, canBeValidated: prods[i].CanBeValidated), 
 
+                    DiameterValidItems = prods[i]._Diameter.ValidItems,
                     Diameter = Validator.CheckIfValid(prods[i]._Diameter)           ?       prods[i]._Diameter.Value : ShipToOfficeViewModel.ListPrescriptions[i].Diameter,
-                    DiameterCellColor = (prods[i]._Diameter?.Value == null || prods[i]._Diameter?.Value?.Trim() == "") && prods[i]._Diameter?.ErrorMessage == null ? "White" : prods[i]._Diameter.IsValid ? "Green" : "Red",
+                    DiameterCellColor = AssignCellColor(prodValue: prods[i]._Diameter?.Value?.Trim(), isValid: prods[i]._Diameter.IsValid, errorMessage: prods[i]._Diameter.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
+                    SphereValidItems = prods[i]._Sphere.ValidItems,
                     Sphere = Validator.CheckIfValid(prods[i]._Sphere)               ?       prods[i]._Sphere.Value : ShipToOfficeViewModel.ListPrescriptions[i].Sphere,
-                    SphereCellColor = (prods[i]._Sphere?.Value == null || prods[i]._Sphere?.Value?.Trim() == "") && prods[i]._Sphere?.ErrorMessage == null ? "White" : prods[i]._Sphere.IsValid                      ?       "Green" : "Red",
+                    SphereCellColor = AssignCellColor(prodValue: prods[i]._Sphere?.Value?.Trim(), isValid: prods[i]._Sphere.IsValid, errorMessage: prods[i]._Sphere.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
+                    CylinderValidItems = prods[i]._Cylinder.ValidItems,
                     Cylinder = Validator.CheckIfValid(prods[i]._Cylinder)           ?       prods[i]._Cylinder.Value : ShipToOfficeViewModel.ListPrescriptions[i].Cylinder,
-                    CylinderCellColor = (prods[i]._Cylinder?.Value == null || prods[i]._Cylinder?.Value?.Trim() == "") && prods[i]._Cylinder?.ErrorMessage == null ? "White" : prods[i]._Cylinder.IsValid                  ?       "Green" : "Red",
+                    CylinderCellColor = AssignCellColor(prodValue: prods[i]._Cylinder?.Value?.Trim(), isValid: prods[i]._Cylinder.IsValid, errorMessage: prods[i]._Cylinder.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
+                    AxisValidItems = prods[i]._Axis.ValidItems,
                     Axis = Validator.CheckIfValid(prods[i]._Axis)                   ?       prods[i]._Axis.Value : ShipToOfficeViewModel.ListPrescriptions[i].Axis,
-                    AxisCellColor = (prods[i]._Axis?.Value == null || prods[i]._Axis?.Value?.Trim() == "") && prods[i]._Axis?.ErrorMessage == null ? "White" : prods[i]._Axis.IsValid                          ?       "Green" : "Red",
+                    AxisCellColor = AssignCellColor(prodValue: prods[i]._Axis?.Value?.Trim(), isValid: prods[i]._Axis.IsValid, errorMessage: prods[i]._Axis.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
+                    AddValidItems = prods[i]._Add.ValidItems,
                     Add = Validator.CheckIfValid(prods[i]._Add)                     ?       prods[i]._Add.Value : ShipToOfficeViewModel.ListPrescriptions[i].Add,
-                    AddCellColor = (prods[i]._Add?.Value == null || prods[i]._Add?.Value?.Trim() == "") && prods[i]._Add?.ErrorMessage == null ? "White" : prods[i]._Add.IsValid                            ?       "Green" : "Red",
+                    AddCellColor = AssignCellColor(prodValue: prods[i]._Add?.Value?.Trim(), isValid: prods[i]._Add.IsValid, errorMessage: prods[i]._Add.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
+                    ColorValidItems = prods[i]._Color.ValidItems,
                     Color = Validator.CheckIfValid(prods[i]._Color)                 ?       prods[i]._Color.Value : ShipToOfficeViewModel.ListPrescriptions[i].Color,
-                    ColorCellColor = (prods[i]._Color?.Value == null || prods[i]._Color?.Value?.Trim() == "") && prods[i]._Color?.ErrorMessage == null ? "White" : prods[i]._Color.IsValid                        ?       "Green" : "Red",
+                    ColorCellColor = AssignCellColor(prodValue: prods[i]._Color?.Value?.Trim(), isValid: prods[i]._Color.IsValid, errorMessage: prods[i]._Color.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
+                    MultifocalValidItems = prods[i]._Multifocal.ValidItems,
                     Multifocal = Validator.CheckIfValid(prods[i]._Multifocal)       ?       prods[i]._Multifocal.Value : ShipToOfficeViewModel.ListPrescriptions[i].Multifocal,
-                    MultifocalCellColor = (prods[i]._Multifocal?.Value == null || prods[i]._Multifocal?.Value?.Trim() == "") && prods[i]._Multifocal?.ErrorMessage == null ? "White" : prods[i]._Multifocal.IsValid              ?       "Green" : "Red",
+                    MultifocalCellColor = AssignCellColor(prodValue: prods[i]._Multifocal?.Value?.Trim(), isValid: prods[i]._Multifocal.IsValid, errorMessage: prods[i]._Multifocal.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
                 };
 
                 ShipToOfficeViewModel.ListPrescriptions[i] = prescription;

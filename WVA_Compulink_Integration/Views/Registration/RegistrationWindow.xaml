@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:WVA_Compulink_Integration.Views.Registration"
         mc:Ignorable="d"
         Title="CreateAccountWindow" 
-        Height="470"
+        Height="360"
         Width="500"
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
-    
+
     <Window.Resources>
         <LinearGradientBrush x:Key="ExamsButtonGroup" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="LightSlateGray" Offset="0.02"/>
@@ -138,12 +138,11 @@
             <RowDefinition Height="60"/>
             <RowDefinition Height="60"/>
             <RowDefinition Height="60"/>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
 
-        <!-- First Name -->        
+        <!-- First Name -->
         <Label Content="Register" 
                HorizontalAlignment="Center"
                Grid.Row="0"
@@ -159,49 +158,11 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Bottom"
                    Margin="0,0,0,18"/>
-
-        <!-- First Name -->
-        <Label Content="WVA Account Number" 
-               HorizontalAlignment="Center"
-               Grid.Row="1"
-               Margin="0,0,45,0"
-               VerticalAlignment="Top" 
-               FontSize="18"/>
-
-        <TextBox x:Name="ActNumTextBox" 
-                 MaxLength="20"
-                 HorizontalAlignment="Center" 
-                 Height="28" 
-                 Grid.Row="1"
-                 Margin="0,0,0,0" 
-                 TextWrapping="Wrap"
-                 VerticalAlignment="Bottom"
-                 Width="233" 
-                 FontSize="16"/>
-
-        <!-- First Name -->
-        <Label Content="Username" 
-               HorizontalAlignment="Center"
-               Grid.Row="2"
-               Margin="0,0,140,0"
-               VerticalAlignment="Top" 
-               FontSize="18"/>
-        
-        <TextBox x:Name="FirstNameTextBox" 
-                 MaxLength="20"
-                 HorizontalAlignment="Center" 
-                 Height="28" 
-                 Grid.Row="2"
-                 Margin="0,0,0,0" 
-                 TextWrapping="Wrap"
-                 VerticalAlignment="Bottom"
-                 Width="233" 
-                 FontSize="16"/>
-
+     
         <!-- Email -->
         <Label Content="Email" 
                HorizontalAlignment="Center"
-               Grid.Row="3"
+               Grid.Row="1"
                Margin="0,0,135,0"
                VerticalAlignment="Top" 
                Width="100" 
@@ -211,19 +172,40 @@
                  MaxLength="20"
                  HorizontalAlignment="Center" 
                  Height="28" 
-                 Grid.Row="3"
+                 Grid.Row="1"
                  Margin="0,0,0,0" 
                  TextWrapping="Wrap"
                  VerticalAlignment="Bottom"
                  Width="233" 
-                 FontSize="16"/>
+                 FontSize="16"
+                 TextChanged="EmailTextBox_TextChanged"/>
+    
+        <!-- UserName -->
+        <Label Content="Username" 
+               HorizontalAlignment="Center"
+               Grid.Row="2"
+               Margin="0,0,140,0"
+               VerticalAlignment="Top" 
+               FontSize="18"/>
 
-        <!-- Password -->  
+        <TextBox x:Name="UserNameTextBox" 
+                 MaxLength="20"
+                 HorizontalAlignment="Center" 
+                 Height="28" 
+                 Grid.Row="2"
+                 Margin="0,0,0,0" 
+                 TextWrapping="Wrap"
+                 VerticalAlignment="Bottom"
+                 Width="233" 
+                 FontSize="16"
+                 TextChanged="UserNameTextBox_TextChanged"/>
+
+        <!-- Password -->
         <Label Content="Password" 
                HorizontalAlignment="Center" 
                Margin="0,0,150,0" 
                VerticalAlignment="Top" 
-               Grid.Row="4"
+               Grid.Row="3"
                FontSize="18"/>
 
         <PasswordBox Name="PasswordTextBox"
@@ -231,34 +213,36 @@
                      HorizontalAlignment="Center"
                      Margin="0,0,0,0"
                      VerticalAlignment="Bottom"
-                     Grid.Row="4"
+                     Grid.Row="3"
                      Height="28" 
-                     Width="233"/>
-        
+                     Width="233"
+                     PasswordChanged="PasswordTextBox_PasswordChanged"/>
+
         <!-- Confirm Password -->
         <Label Content="Confirm Password"
                HorizontalAlignment="Center"
                Margin="0,0,85,0" 
-               Grid.Row="5"
+               Grid.Row="4"
                VerticalAlignment="Top" 
                FontSize="18"/>
-      
+
         <PasswordBox x:Name="ConfirmPasswordTextBox"
                      MaxLength="20"
                      HorizontalAlignment="Center"
                      Margin="0,0,0,0"             
-                     Grid.Row="5"
+                     Grid.Row="4"
                      VerticalAlignment="Bottom" 
                      Height="28"
-                     Width="233"/>
+                     Width="233"
+                     PasswordChanged="ConfirmPasswordTextBox_PasswordChanged"/>
 
         <!-- Submit -->
         <Button x:Name="SubmitButton"
                 Content="Submit" 
                 HorizontalAlignment="Center" 
-                Margin="0,0,0,0" 
-                VerticalAlignment="Center"
-                Grid.Row="6"
+                Margin="0,20,0,0" 
+                VerticalAlignment="Top"
+                Grid.Row="5"
                 Width="95"
                 Height="30" 
                 FontSize="18"
@@ -266,28 +250,32 @@
 
         <!-- Back to login link -->
         <TextBlock x:Name="BackToLoginLink" 
-                   Margin="0,0,5,-5"                  
+                   Margin="0,0,5,5"                  
                    FontSize="14"
-                   Grid.Row="7"
+                   Grid.Row="5"
                    HorizontalAlignment="Right"
                    VerticalAlignment="Bottom"
                    Focusable="False"
                    PreviewMouseLeftButtonDown="BackToLoginLink_PreviewMouseLeftButtonDown" >           
-                   <Hyperlink Foreground="#FF062B7C" 
-                              NavigateUri="http://search.msn.com">
+                   <Hyperlink Foreground="#FF062B7C">
                          <Run Text="Back to login"/>
                    </Hyperlink>
         </TextBlock>
 
         <!-- Notify -->
-        <Label Name="NotifyLabel"
-               Content=""
-               HorizontalAlignment="Center"
-               Margin="0,0,0,15" 
-               Grid.Row="7"
-               VerticalAlignment="Center" 
-               FontSize="18" 
-               Visibility="Hidden"/>
+        <TextBlock Name="NotifyLabel"
+                   HorizontalAlignment="Center"
+                   Text=""
+                   Margin="-0,0,0,0" 
+                   Grid.Row="7"
+                   VerticalAlignment="Bottom" 
+                   FontSize="15" 
+                   Visibility="Hidden" 
+                   Height="60"
+                   TextWrapping="Wrap"
+                   MaxWidth="300">            
+        </TextBlock>
+
 
     </Grid>
 </Window>

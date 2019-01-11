@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models.Patient;
@@ -39,12 +40,27 @@ namespace WVA_Compulink_Integration.Views.Search
         {
             ResetUI();
             SetUpPatientDataGrid();
+            IsVisibleChanged += new DependencyPropertyChangedEventHandler(LoginControl_IsVisibleChanged);
         }
 
         private void ResetUI()
         {
             SearchTextBox.Clear();
             PatientDataGrid.Items.Clear();           
+        }
+
+        // Allow SearchTextBox to get focus
+        void LoginControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if ((bool)e.NewValue == true)
+            {
+                Dispatcher.BeginInvoke(
+                DispatcherPriority.ContextIdle,
+                new Action(delegate ()
+                {
+                    SearchTextBox.Focus();
+                }));
+            }
         }
 
         /// <summary>
@@ -95,12 +111,8 @@ namespace WVA_Compulink_Integration.Views.Search
         /// </summary>
         
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Filter DataGrid every time a keystroke is detected in SearchTextBox
-            if (QuickSearchCheckBox.IsChecked ?? false)
-            {
-                SearchPatients(PatientFilterComboBox.SelectedIndex, SearchTextBox.Text);
-            }
+        {          
+            SearchPatients(PatientFilterComboBox.SelectedIndex, SearchTextBox.Text);        
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
@@ -135,9 +147,9 @@ namespace WVA_Compulink_Integration.Views.Search
                             break;
                         // Name
                         case 1:
-                            string CompleteName = $"{ListPatients.CopyListPatients[i].FirstName} {ListPatients.CopyListPatients[i].LastName}";
+                            string CompleteName = $"{ListPatients.CopyListPatients[i].LastName} {ListPatients.CopyListPatients[i].FirstName}";
                             
-                            if (!CompleteName.StartsWith(searchBoxText))
+                            if (!CompleteName.ToLower().StartsWith(searchBoxText.ToLower().Replace(",","")))
                                 ListPatients.CopyListPatients.RemoveAt(i);                        
                             break;                 
                         // Street

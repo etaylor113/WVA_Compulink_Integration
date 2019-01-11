@@ -14,8 +14,8 @@ namespace WVA_Compulink_Integration.Models.Validations
         [JsonProperty("status")]
         public string Status { get; set; }
 
-        [JsonProperty("help")]
-        public Help _Help { get; set; }
+        [JsonProperty("can_be_validated")]
+        public bool CanBeValidated { get; set; } = true;
 
         // Standard instantiation. Creates a blank ValidationDetail object
         public ValidationDetail()
@@ -282,12 +282,7 @@ namespace WVA_Compulink_Integration.Models.Validations
                 {
                     Status = checkDetail.Status;
                 }
-
-                // _Help
-                if (checkDetail._Help != null)
-                {
-                    _Help = checkDetail._Help;
-                }
+              
             }
             catch (Exception x)
             {

@@ -124,13 +124,8 @@ namespace WVA_Compulink_Integration.Views
         private void PrescriptionDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
             Prescription prescription = (Prescription)PrescriptionDataGrid.SelectedItem;
-
-            if (prescription.IsChecked)
-                prescription.IsChecked = false;
-            else
-                prescription.IsChecked = true;
-
-            PrescriptionDataGrid.Items.Refresh();
+       
+            //PrescriptionDataGrid.Items.Refresh();
         }
     }
 }

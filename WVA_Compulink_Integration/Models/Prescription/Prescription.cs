@@ -18,6 +18,9 @@ namespace WVA_Compulink_Integration.Models.Prescription
         public string UPC { get; set; }
         public string Price { get; set; }
         public string ID { get; set; }
+        
+        // Determines if 
+        public bool CanBeValidated { get; set; } = true;
 
         // These properties are visible to the client in the data grid
         private string patient;      
@@ -42,6 +45,9 @@ namespace WVA_Compulink_Integration.Models.Prescription
         // This is the property that controls the value of the row's check box 
         public bool IsChecked { get; set; } = false;
 
+        // This is the property that determines if an order is a STO or STP
+        public bool IsShipToPatient { get; set; } = false;
+
         // Change this string to the path of the Red, Yellow, or Green bubble image to change a row's product match status 
         public string ProductImagePath { get; set; }
 
@@ -54,5 +60,15 @@ namespace WVA_Compulink_Integration.Models.Prescription
         public string AddCellColor { get; set; }
         public string ColorCellColor { get; set; }
         public string MultifocalCellColor { get; set; }
+
+        // These are suggested products for a given parameter
+        public List<string> BaseCurveValidItems { get; set; }
+        public List<string> DiameterValidItems { get; set; }
+        public List<string> SphereValidItems { get; set; }
+        public List<string> CylinderValidItems { get; set; }
+        public List<string> AxisValidItems { get; set; }
+        public List<string> AddValidItems { get; set; }
+        public List<string> ColorValidItems { get; set; }
+        public List<string> MultifocalValidItems { get; set; }
     }
 }

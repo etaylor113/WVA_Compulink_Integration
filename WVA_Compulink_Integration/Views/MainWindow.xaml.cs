@@ -72,7 +72,7 @@ namespace WVA_Compulink_Integration.Views
 
         private void TabSettings_Click(object sender, RoutedEventArgs e)
         {
-            MainContentControl.DataContext = new SettingsLoginViewModel();
+            MainContentControl.DataContext = new SettingsView();
         }
 
         private void TabHelp_Click(object sender, RoutedEventArgs e)
