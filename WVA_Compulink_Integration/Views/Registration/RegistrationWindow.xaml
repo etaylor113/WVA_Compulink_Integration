@@ -169,7 +169,7 @@
                FontSize="18"/>
 
         <TextBox x:Name="EmailTextBox" 
-                 MaxLength="20"
+                 MaxLength="30"
                  HorizontalAlignment="Center" 
                  Height="28" 
                  Grid.Row="1"
@@ -189,7 +189,7 @@
                FontSize="18"/>
 
         <TextBox x:Name="UserNameTextBox" 
-                 MaxLength="20"
+                 MaxLength="25"
                  HorizontalAlignment="Center" 
                  Height="28" 
                  Grid.Row="2"

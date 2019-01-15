@@ -92,7 +92,7 @@ namespace WVA_Compulink_Integration.Views
             {
                 if (window.GetType() == typeof(MainWindow))
                 {
-                    (window as MainWindow).MainContentControl.DataContext = new OrdersViewModel("STO", prescriptions);
+                    (window as MainWindow).MainContentControl.DataContext = new OrdersViewModel("LabOrders", prescriptions);
                 }
             }                
         }
@@ -116,7 +116,7 @@ namespace WVA_Compulink_Integration.Views
             {
                 if (window.GetType() == typeof(MainWindow))
                 {
-                    (window as MainWindow).MainContentControl.DataContext = new OrdersViewModel("STP", prescriptions);
+                    (window as MainWindow).MainContentControl.DataContext = new OrdersViewModel("WVA_Orders", prescriptions);
                 }
             }
         }
@@ -126,6 +126,11 @@ namespace WVA_Compulink_Integration.Views
             Prescription prescription = (Prescription)PrescriptionDataGrid.SelectedItem;
        
             //PrescriptionDataGrid.Items.Refresh();
+        }
+
+        private void AddToOrderButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

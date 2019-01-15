@@ -18,9 +18,6 @@ using WVA_Compulink_Integration.ViewModels.Orders;
 
 namespace WVA_Compulink_Integration.Views
 {
-    /// <summary>
-    /// Interaction logic for OrdersView.xaml
-    /// </summary>
     public partial class OrdersView : UserControl
     {
         public OrdersView()
@@ -31,44 +28,44 @@ namespace WVA_Compulink_Integration.Views
 
         public void DetermineView()
         {           
-            if (OrdersViewModel.SelectedView == "STO")
+            if (OrdersViewModel.SelectedView == "LabOrders")
             {
-                // Navigate to STO View with listPatients data
-                SetUpShipToOfficeView();
-                OrdersContentControl.DataContext = new ShipToOfficeViewModel(OrdersViewModel.ListPrescriptions);
+                // Navigate to Lab Orders View
+                SetUpLabOrdersView();
+                // OrdersContentControl
             }
-            else if (OrdersViewModel.SelectedView == "STP")
+            else if (OrdersViewModel.SelectedView == "WVA_Orders")
             {
-                // Navigate to STP View         
-                SetUpShipToPatientView();
-                OrdersContentControl.DataContext = new ShipToPatientViewModel(OrdersViewModel.ListPrescriptions);
+                // Navigate to WVA Orders View         
+                SetUpWVA_OrdersView();
+                OrdersContentControl.DataContext = new WVA_OrderViewModel(OrdersViewModel.ListPrescriptions);
             }
             else
             {
                 // Navigate to STO View with no data with listPatients data
-                OrdersContentControl.DataContext = new ShipToOfficeViewModel();
+                //OrdersContentControl.DataContext = new ShipToOfficeViewModel();
             }
 
             // Reset SelectedView string
             OrdersViewModel.SelectedView = "";
         }
 
-        private void ShipToOfficeButton_Click(object sender, RoutedEventArgs e)
+        private void LabOrdersButton_Click(object sender, RoutedEventArgs e)
         {
-            SetUpShipToOfficeView();
-            OrdersContentControl.DataContext = new ShipToOfficeViewModel();
+            SetUpLabOrdersView();
+            //OrdersContentControl.DataContext = new WVA_OrderViewModel();
         }
 
-        private void ShipToPatientButton_Click(object sender, RoutedEventArgs e)
+        private void WVA_OrdersButton_Click(object sender, RoutedEventArgs e)
         {
-            SetUpShipToPatientView();
-            OrdersContentControl.DataContext = new ShipToPatientViewModel();
+            SetUpWVA_OrdersView();
+            OrdersContentControl.DataContext = new WVA_OrderViewModel();
         }
 
-        private void SetUpShipToOfficeView()
+        private void SetUpLabOrdersView()
         {
             // Update header to show user they are in STP view
-            TabLabel.Content = "Orders - S.T.O";
+            TabLabel.Content = "Lab Orders";
 
             Color blue = (Color)ColorConverter.ConvertFromString("#FF327EC3");
             SolidColorBrush blueBrush = new SolidColorBrush(blue);
@@ -79,10 +76,10 @@ namespace WVA_Compulink_Integration.Views
             STP_Rect.Fill = whiteBrush;
         }
 
-        private void SetUpShipToPatientView()
+        private void SetUpWVA_OrdersView()
         {
             // Update header to show user they are in STP view
-            TabLabel.Content = "Orders - S.T.P";
+            TabLabel.Content = "WVA Orders";
 
             Color blue = (Color)ColorConverter.ConvertFromString("#FF327EC3");
             SolidColorBrush blueBrush = new SolidColorBrush(blue);

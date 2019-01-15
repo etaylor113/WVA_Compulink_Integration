@@ -21,9 +21,9 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontFamily" Value="Sitka Text"/>
-            <Setter Property="FontSize" Value="25"/>
-            <Setter Property="Height" Value="34" />
-            <Setter Property="Width" Value="250" />
+            <Setter Property="FontSize" Value="27"/>
+            <Setter Property="Height" Value="43" />
+            <Setter Property="Width" Value="180" />
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="1"/>
             <Setter Property="Template">
@@ -249,16 +249,11 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
             
-            <Button Name="AddToSTOButton"
-                    Content="Add to S.T.O. Order" 
+            <Button Name="AddToOrderButton"
+                    Content="Add to Order" 
                     Margin="0,0,0,0" 
-                    Click="AddToSTOButton_Click"/>
-
-            <Button Name="AddToSTPButton"
-                    Content="Add to S.T.P. Order" 
-                    Margin="0,10,0,0" 
-                    Click="AddToSTPButton_Click"/>
-           
+                    Click="AddToOrderButton_Click"/>
+                  
         </StackPanel>
         
     </Grid>

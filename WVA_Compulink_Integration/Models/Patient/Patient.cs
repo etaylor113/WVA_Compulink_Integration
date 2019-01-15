@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace WVA_Compulink_Integration.Models.Patient
 {
@@ -17,7 +18,7 @@ namespace WVA_Compulink_Integration.Models.Patient
 
         [JsonProperty("lastName")]
         public string LastName { get; set; }
-
+   
         [JsonProperty("street")]
         public string Street { get; set; }
 
@@ -35,5 +36,16 @@ namespace WVA_Compulink_Integration.Models.Patient
 
         [JsonProperty("location")]
         public string Location { get; set; }
+
+        private string fullName;
+
+        public string FullName
+        {
+            get {
+                return $"{LastName} {FirstName}";
+            }
+            set { fullName = value; }
+        }
+
     }
 }

@@ -125,6 +125,12 @@
             <views:ShipToPatientView DataContext="{Binding ElementName=shipToPatientViewTemplate}"/>
         </DataTemplate>
 
+        
+
+        <DataTemplate x:Name="WVA_OrderViewTemplate" DataType="{x:Type viewmodels:WVA_OrderViewModel}">
+            <views:WVA_OrderView DataContext="{Binding ElementName=wva_OrderViewTemplate}"/>
+        </DataTemplate>
+
     </UserControl.Resources>
 
     <!-- Main Grid -->
@@ -150,18 +156,19 @@
 
             <!-- Column Definitions -->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="225"/>
-                <ColumnDefinition Width="225"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- Search Patients Tab -->
             <StackPanel Grid.Row="0" VerticalAlignment="Center">
                 <Button x:Name="ShipToOfficeButton" 
-                        Content="Ship To Office" 
+                        Content="Open Lab Orders" 
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center" 
-                        Click="ShipToOfficeButton_Click" />
+                        Width="190"
+                        Click="LabOrdersButton_Click" />
             </StackPanel>
 
             <Rectangle Name="STO_Rect"
@@ -177,10 +184,11 @@
             <Button x:Name="ShipToPatientButton" 
                     Grid.Column="1"
                     Grid.Row="0"
-                    Content="Ship To Patient" 
+                    Content="Open WVA Orders" 
                     VerticalAlignment="Center"
+                    Width="190"
                     HorizontalAlignment="Center" 
-                    Click="ShipToPatientButton_Click" />
+                    Click="WVA_OrdersButton_Click" />
 
             <Rectangle Name="STP_Rect"
                        Grid.Column="1" 
@@ -192,12 +200,13 @@
                        Fill="White" />
 
             <Label Name="TabLabel"
-                   Content="Orders - S.T.O"
+                   Content="Lab Orders"
                    FontSize="30"
                    Grid.Column="2"
                    Margin="0,0,10,0"
                    VerticalAlignment="Center"
-                   HorizontalAlignment="Right" FontFamily="Sylfaen"/>
+                   HorizontalAlignment="Right" 
+                   FontFamily="Sylfaen"/>
             
         </Grid>
 

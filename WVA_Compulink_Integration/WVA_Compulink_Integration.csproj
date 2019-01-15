@@ -95,6 +95,7 @@
     <Compile Include="Models\Validations\Validator.cs" />
     <Compile Include="Utility\UI_Tools\DatagridTools.cs" />
     <Compile Include="ViewModels\AddToOrderViewModel.cs" />
+    <Compile Include="ViewModels\Orders\WVA_OrderViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SettingsLoginViewModel.cs" />
     <Compile Include="Views\AddToOrderView.xaml.cs">
@@ -105,6 +106,9 @@
     </Compile>
     <Compile Include="Views\Login\ForgotPasswordWindow.xaml.cs">
       <DependentUpon>ForgotPasswordWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orders\WVA_OrderView.xaml.cs">
+      <DependentUpon>WVA_OrderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsLogin.xaml.cs">
       <DependentUpon>SettingsLogin.xaml</DependentUpon>
@@ -207,6 +211,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddToOrderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Orders\WVA_OrderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

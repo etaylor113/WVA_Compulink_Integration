@@ -28,6 +28,7 @@ namespace WVA_Compulink_Integration.Views.Search
     /// <summary>
     /// Interaction logic for SearchPatientsView.xaml
     /// </summary>
+   
     public partial class SearchPatientsView : UserControl
     {
         public SearchPatientsView()
@@ -40,6 +41,7 @@ namespace WVA_Compulink_Integration.Views.Search
         {
             ResetUI();
             SetUpPatientDataGrid();
+            HideOrShowDataGrid();
             IsVisibleChanged += new DependencyPropertyChangedEventHandler(LoginControl_IsVisibleChanged);
         }
 
@@ -48,6 +50,29 @@ namespace WVA_Compulink_Integration.Views.Search
             SearchTextBox.Clear();
             PatientDataGrid.Items.Clear();           
         }
+
+        private void HideOrShowDataGrid()
+        {         
+            if (PatientDataGrid.Items.Count == 0)
+            {
+                // Hide datagrid 
+
+                PatientDataGrid.Visibility = Visibility.Hidden;
+                
+                // hide no results label if they haven't searched for anything yet
+                if (SearchTextBox.Text == "")             
+                    NoResultsLabel.Visibility = Visibility.Hidden;   
+                else
+                    NoResultsLabel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                // Show datagrid and hide no results label
+                PatientDataGrid.Visibility = Visibility.Visible;
+                NoResultsLabel.Visibility = Visibility.Hidden;
+            }          
+        }
+
 
         // Allow SearchTextBox to get focus
         void LoginControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -99,7 +124,7 @@ namespace WVA_Compulink_Integration.Views.Search
                 PatientDataGrid.Items.Add(patient);
             }
         }
-
+      
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             ResetUI();
@@ -112,7 +137,8 @@ namespace WVA_Compulink_Integration.Views.Search
         
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {          
-            SearchPatients(PatientFilterComboBox.SelectedIndex, SearchTextBox.Text);        
+            SearchPatients(PatientFilterComboBox.SelectedIndex, SearchTextBox.Text);
+            HideOrShowDataGrid();
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
@@ -121,75 +147,53 @@ namespace WVA_Compulink_Integration.Views.Search
             SearchPatients(PatientFilterComboBox.SelectedIndex, SearchTextBox.Text);
         }  
 
-        private void SearchPatients(int index, string searchBoxText)
+        private void SearchPatients(int index, string searchString)
         {
             try
-            {                  
-                // Clear copied list of Patients 
-                ListPatients.CopyListPatients.Clear();
-
-                // Populate table with original list of patients that are loaded from api call
-                foreach (Patient patient in ListPatients.OrigListPatients)
-                {
-                    PatientDataGrid.Items.Add(patient);
-                    ListPatients.CopyListPatients.Add(patient);
-                }
-
-                for (int i = ListPatients.CopyListPatients.Count - 1; i >= 0; i--)
-                {
-                    // Based on the index selected in the combobox, iterate over a different part of the copied list of patients
-                    switch (index)
-                    {
-                        // PatientID
-                        case 0:                           
-                            if (!ListPatients.CopyListPatients[i].PatientID.ToString().StartsWith(searchBoxText))                            
-                                ListPatients.CopyListPatients.RemoveAt(i);                                                       
-                            break;
-                        // Name
-                        case 1:
-                            string CompleteName = $"{ListPatients.CopyListPatients[i].LastName} {ListPatients.CopyListPatients[i].FirstName}";
-                            
-                            if (!CompleteName.ToLower().StartsWith(searchBoxText.ToLower().Replace(",","")))
-                                ListPatients.CopyListPatients.RemoveAt(i);                        
-                            break;                 
-                        // Street
-                        case 2:                           
-                            if (!ListPatients.CopyListPatients[i].Street.StartsWith(searchBoxText))
-                                ListPatients.CopyListPatients.RemoveAt(i);                         
-                            break;
-                        // City
-                        case 3:                           
-                            if (!ListPatients.CopyListPatients[i].City.StartsWith(searchBoxText))
-                                ListPatients.CopyListPatients.RemoveAt(i);                          
-                            break;
-                        // State
-                        case 4:                            
-                            if (!ListPatients.CopyListPatients[i].State.StartsWith(searchBoxText))
-                                ListPatients.CopyListPatients.RemoveAt(i);                         
-                            break;
-                        // Zip
-                        case 5:                            
-                            if (!ListPatients.CopyListPatients[i].Zip.StartsWith(searchBoxText))
-                                ListPatients.CopyListPatients.RemoveAt(i);                       
-                            break;
-                        // Phone
-                        case 6:                           
-                            if (!ListPatients.CopyListPatients[i].Phone.StartsWith(searchBoxText))
-                                ListPatients.CopyListPatients.RemoveAt(i);                           
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                // Clear table items
+            {
                 PatientDataGrid.Items.Clear();
 
-                // Populate table with updated list of patients based on search criteria
-                foreach (Patient patient in ListPatients.CopyListPatients)
+                if (searchString == "")             
+                    return;
+
+                List<Patient> tempList = new List<Patient>();
+           
+                switch (index)
                 {
-                    PatientDataGrid.Items.Add(patient);
+                    // PatientID
+                    case 0:
+                        tempList = ListPatients.OrigListPatients.Where(x => x.PatientID.StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
+                        break;
+                    // Name
+                    case 1:
+                        tempList = ListPatients.OrigListPatients.Where(x => x.FullName.ToLower().StartsWith(searchString.ToLower().Replace(",",""))).ToList();                                            
+                        break;
+                    // Street
+                    case 2:
+                        tempList = ListPatients.OrigListPatients.Where(x => x.Street.StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
+                        break;
+                    // City
+                    case 3:
+                        tempList = ListPatients.OrigListPatients.Where(x => x.City.StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
+                        break;
+                    // State
+                    case 4:
+                        tempList = ListPatients.OrigListPatients.Where(x => x.State.StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
+                        break;
+                    // Zip
+                    case 5:
+                        tempList = ListPatients.OrigListPatients.Where(x => x.Zip.StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
+                        break;
+                    // Phone
+                    case 6:
+                        tempList = ListPatients.OrigListPatients.Where(x => x.Phone.StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
+                        break;
+                    default:
+                        break;
                 }
+
+                foreach (Patient patient in tempList)
+                    PatientDataGrid.Items.Add(patient);
             }
             catch (Exception x)
             {

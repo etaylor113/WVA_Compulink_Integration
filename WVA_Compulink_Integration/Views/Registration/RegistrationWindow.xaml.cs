@@ -56,6 +56,19 @@ namespace WVA_Compulink_Integration.Views.Registration
             Height = 420;
         }
 
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private void BackToLogin()
         {
             new LoginWindow().Show();
@@ -69,7 +82,11 @@ namespace WVA_Compulink_Integration.Views.Registration
                 //
                 // Pre API reponse check
                 //
-
+                if (!IsValidEmail(EmailTextBox.Text))
+                {
+                    MessageSetup("Email is not valid!");
+                    return;
+                }
                 // Make sure password length isn't to short 
                 if (PasswordTextBox.Password.ToString().Length < 6)
                 {
