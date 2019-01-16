@@ -18,9 +18,13 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
 
         public WVA_OrderViewModel(List<Prescription> prescriptions)
         {
-            // Here you would post this data to db as well and synch the list with their cart
-
             ListPrescriptions.AddRange(prescriptions);
         }
+
+        public static void SaveOrders()
+        {
+            // Push order (item detail items) to database with the order ID
+        }
+
     }
 }

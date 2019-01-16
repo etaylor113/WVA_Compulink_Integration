@@ -8,14 +8,12 @@ FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Inte
 FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\MainWindow.xaml;;
 FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\OrdersView.xaml;;
 FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\AddToOrderView.xaml;;
-FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Orders\WVA_OrderView.xaml;;
+FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Orders\CompulinkOrders.xaml;;
+FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Orders\OrderCreationView.xaml;;
+FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Orders\WVAOrders.xaml;;
 FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Registration\RegistrationWindow.xaml;;
 FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\ResourceDict\Styles.xaml;;
 FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\LoadingWindow.xaml;;
 FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Search\SearchExamsView.xaml;;
-FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Search\SearchPatientsView.xaml;;
-FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\SearchView.xaml;;
-FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\SettingsLogin.xaml;;
 FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\SettingsView.xaml;;
-FC:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Orders\ShipToOfficeView.xaml;;
 

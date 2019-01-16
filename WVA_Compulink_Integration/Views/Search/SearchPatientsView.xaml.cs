@@ -162,7 +162,7 @@ namespace WVA_Compulink_Integration.Views.Search
                 {
                     // PatientID
                     case 0:
-                        tempList = ListPatients.OrigListPatients.Where(x => x.PatientID.StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
+                        tempList = ListPatients.OrigListPatients.Where(x => x.PatientID.ToLower().StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
                         break;
                     // Name
                     case 1:
@@ -170,19 +170,19 @@ namespace WVA_Compulink_Integration.Views.Search
                         break;
                     // Street
                     case 2:
-                        tempList = ListPatients.OrigListPatients.Where(x => x.Street.StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
+                         tempList = ListPatients.OrigListPatients.Where(x => x.Street.ToLower().StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
                         break;
                     // City
                     case 3:
-                        tempList = ListPatients.OrigListPatients.Where(x => x.City.StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
+                        tempList = ListPatients.OrigListPatients.Where(x => x.City.ToLower().StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
                         break;
                     // State
                     case 4:
-                        tempList = ListPatients.OrigListPatients.Where(x => x.State.StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
+                        tempList = ListPatients.OrigListPatients.Where(x => x.State.ToLower().StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
                         break;
                     // Zip
                     case 5:
-                        tempList = ListPatients.OrigListPatients.Where(x => x.Zip.StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
+                        tempList = ListPatients.OrigListPatients.Where(x => x.Zip.ToLower().StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
                         break;
                     // Phone
                     case 6:

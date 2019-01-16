@@ -14,7 +14,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WVA_Compulink_Integration.Models.Product;
 using WVA_Compulink_Integration.ViewModels;
+using WVA_Compulink_Integration.ViewModels.Orders;
 using WVA_Compulink_Integration.Views.Search;
+using WVA_Compulink_Integration.Views;
 
 namespace WVA_Compulink_Integration.Views
 {
@@ -27,7 +29,7 @@ namespace WVA_Compulink_Integration.Views
         {
             InitializeComponent();
             SetUpApp();
-            MainContentControl.DataContext = new SearchViewModel();
+            MainContentControl.DataContext = new OrdersViewModel();
         }
 
         private void SetUpApp()
@@ -59,12 +61,7 @@ namespace WVA_Compulink_Integration.Views
         {
             WindowState = WindowState.Minimized;
         }
-
-        private void TabSearch_Click(object sender, RoutedEventArgs e)
-        {
-            MainContentControl.DataContext = new SearchViewModel();
-        }
-
+   
         private void TabOrders_Click(object sender, RoutedEventArgs e)
         {
             MainContentControl.DataContext = new OrdersViewModel();
@@ -80,6 +77,9 @@ namespace WVA_Compulink_Integration.Views
             MainContentControl.DataContext = new HelpViewModel();
         }
 
-        
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            WVA_OrderViewModel.SaveOrders();
+        }      
     }
 }

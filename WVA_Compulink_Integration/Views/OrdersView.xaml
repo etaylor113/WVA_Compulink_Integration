@@ -21,9 +21,9 @@
             <Setter Property="Background" Value="{StaticResource ExamsButtonGroup}"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontSize" Value="25"/>
             <Setter Property="FontFamily" Value="Sitka Text"/>
-            <Setter Property="Width" Value="175"/>
+            <Setter Property="Width" Value="170"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="1"/>
             <Setter Property="Template">
@@ -117,18 +117,12 @@
             </Setter>
         </Style>
 
-        <DataTemplate x:Name="shipToOfficeViewTemplate" DataType="{x:Type viewmodels:ShipToOfficeViewModel}">
-            <views:ShipToOfficeView DataContext="{Binding ElementName=shipToOfficeViewTemplate}"/>
+        <DataTemplate x:Name="CompulinkOrdersViewTemplate" DataType="{x:Type viewmodels:CompulinkOrdersViewModel}">
+            <views:CompulinkOrders DataContext="{Binding ElementName=compulinkOrdersViewTemplate}"/>
         </DataTemplate>
 
-        <DataTemplate x:Name="shipToPatientViewTemplate" DataType="{x:Type viewmodels:ShipToPatientViewModel}">
-            <views:ShipToPatientView DataContext="{Binding ElementName=shipToPatientViewTemplate}"/>
-        </DataTemplate>
-
-        
-
-        <DataTemplate x:Name="WVA_OrderViewTemplate" DataType="{x:Type viewmodels:WVA_OrderViewModel}">
-            <views:WVA_OrderView DataContext="{Binding ElementName=wva_OrderViewTemplate}"/>
+        <DataTemplate x:Name="WVAOrdersViewTemplate" DataType="{x:Type viewmodels:WVAOrdersViewModel}">
+            <views:WVAOrders DataContext="{Binding ElementName=wvaOrdersViewTemplate}"/>
         </DataTemplate>
 
     </UserControl.Resources>
@@ -163,15 +157,14 @@
 
             <!-- Search Patients Tab -->
             <StackPanel Grid.Row="0" VerticalAlignment="Center">
-                <Button x:Name="ShipToOfficeButton" 
-                        Content="Open Lab Orders" 
+                <Button x:Name="CompulinkOrdersButton" 
+                        Content="Compulink" 
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center" 
-                        Width="190"
-                        Click="LabOrdersButton_Click" />
+                        Click="CompulinkOrdersButton_Click" />
             </StackPanel>
 
-            <Rectangle Name="STO_Rect"
+            <Rectangle Name="Rect_1"
                        Grid.Column="0" 
                        Grid.Row="1"
                        HorizontalAlignment="Left" 
@@ -184,13 +177,12 @@
             <Button x:Name="ShipToPatientButton" 
                     Grid.Column="1"
                     Grid.Row="0"
-                    Content="Open WVA Orders" 
+                    Content="WVA Orders" 
                     VerticalAlignment="Center"
-                    Width="190"
                     HorizontalAlignment="Center" 
                     Click="WVA_OrdersButton_Click" />
 
-            <Rectangle Name="STP_Rect"
+            <Rectangle Name="Rect_2"
                        Grid.Column="1" 
                        Grid.Row="1"
                        HorizontalAlignment="Left" 
@@ -200,7 +192,7 @@
                        Fill="White" />
 
             <Label Name="TabLabel"
-                   Content="Lab Orders"
+                   Content="Compulink Orders"
                    FontSize="30"
                    Grid.Column="2"
                    Margin="0,0,10,0"

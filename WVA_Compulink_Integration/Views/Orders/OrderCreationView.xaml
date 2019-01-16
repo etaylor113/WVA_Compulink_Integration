@@ -1,13 +1,13 @@
-﻿<UserControl x:Class="WVA_Compulink_Integration.Views.Orders.ShipToOfficeView"
+﻿<UserControl x:Class="WVA_Compulink_Integration.Views.Orders.OrderCreationView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WVA_Compulink_Integration.Views"
+             xmlns:local="clr-namespace:WVA_Compulink_Integration.Views.Orders"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
              d:DesignWidth="800">
-
+    
     <UserControl.Resources>
 
         <LinearGradientBrush x:Key="ExamsButtonGroup" StartPoint="0,0" EndPoint="1,1">
@@ -150,10 +150,10 @@
             </Grid.RowDefinitions>
 
             <!-- Orders DataGrid -->
-            <DataGrid x:Name="STO_DataGrid" 
-                      HorizontalAlignment="Stretch"
-                      Margin="0,10" 
-                      VerticalAlignment="Stretch"
+            <DataGrid x:Name="OrdersDataGrid" 
+                      HorizontalAlignment="Stretch" 
+                      VerticalAlignment="Stretch"  
+                      Grid.Row="1"
                       Grid.Column="1"
                       Grid.ColumnSpan="1"
                       AutoGenerateColumns="False"
@@ -164,20 +164,18 @@
                       CanUserReorderColumns="False"
                       CanUserSortColumns="False" 
                       CanUserAddRows="False"
-                      IsReadOnly="False"
-                      SelectionChanged="STO_DataGrid_SelectionChanged" 
-                      CellEditEnding="STO_DataGrid_CellEditEnding" 
-                      Grid.RowSpan="2">
+                      IsReadOnly="False" 
+                      SelectionChanged="OrdersDataGrid_SelectionChanged" 
+                      CellEditEnding="OrdersDataGrid_CellEditEnding">
 
                 <DataGrid.ContextMenu>
-                    <ContextMenu Name="STO_ProductContextMenu"/>
+                    <ContextMenu Name="WVA_OrdersContextMenu">
+                    </ContextMenu>
                 </DataGrid.ContextMenu>
 
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type DataGridCell}">
-                        <Style.Triggers>
-
-                        </Style.Triggers>
+                        <!--<EventSetter Event="MouseDoubleClick" Handler="DataGridCell_MouseDoubleClick" /> -->
                     </Style>
                 </DataGrid.Resources>
 
@@ -227,9 +225,6 @@
                                     <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
-                                        <Setter Property="Background" Value="Yellow" />
-                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTextColumn.CellStyle>
@@ -246,9 +241,6 @@
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding DiameterCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
-                                        <Setter Property="Background" Value="Yellow" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -267,9 +259,6 @@
                                     <DataTrigger Binding="{Binding SphereCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
-                                        <Setter Property="Background" Value="Yellow" />
-                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTextColumn.CellStyle>
@@ -286,9 +275,6 @@
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding CylinderCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
-                                        <Setter Property="Background" Value="Yellow" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -307,9 +293,6 @@
                                     <DataTrigger Binding="{Binding AxisCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
-                                        <Setter Property="Background" Value="Yellow" />
-                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTextColumn.CellStyle>
@@ -326,9 +309,6 @@
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding AddCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
-                                        <Setter Property="Background" Value="Yellow" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -347,9 +327,6 @@
                                     <DataTrigger Binding="{Binding ColorCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
-                                        <Setter Property="Background" Value="Yellow" />
-                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTextColumn.CellStyle>
@@ -367,15 +344,11 @@
                                     <DataTrigger Binding="{Binding MultifocalCellColor}" Value="White">
                                         <Setter Property="Background" Value="White" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding BaseCurveCellColor}" Value="Yellow">
-                                        <Setter Property="Background" Value="Yellow" />
-                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
-
             </DataGrid>
 
             <!-- Verify Button -->
@@ -388,8 +361,8 @@
                     Width="100" 
                     Margin="0,0,120,0" 
                     Height="24" 
-                    FontSize="16"
-                    Click="VerifyOrderButton_Click" />
+                    FontSize="16" 
+                    Click="VerifyOrderButton_Click"/>
 
             <!-- Refresh Button -->
             <Button Content="Refresh" 
@@ -472,6 +445,7 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
+
             </Grid.RowDefinitions>
 
             <Rectangle Fill="Black" 
@@ -498,6 +472,205 @@
                        HorizontalAlignment="Stretch"
                        Margin="0,5,0,0"/>
 
+            <!-- Addressee -->
+            <Label Name="AddresseeLabel"
+                   Content="Addressee" 
+                   Grid.Column="1"
+                   HorizontalAlignment="Left"
+                   Grid.Row="1" 
+                   VerticalAlignment="Center" 
+                   Height="30"
+                   Width="80"
+                   FontSize="15"/>
+
+            <TextBox Name="AddresseeTextBox"
+                     Grid.Column="1"
+                     HorizontalAlignment="Stretch" 
+                     Height="22" 
+                     Margin="85,0,10,0" 
+                     Grid.Row="1" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Center" 
+                     Grid.ColumnSpan="2"/>
+
+            <!-- Address -->
+            <Label Name="AddressLabel"
+                   Content="Address" 
+                   Grid.Column="1"
+                   HorizontalAlignment="Left"
+                   Grid.Row="2" 
+                   VerticalAlignment="Center"
+                   Height="30"
+                   Width="80"
+                   FontSize="15"/>
+
+            <TextBox Name="AddressTextBox"
+                     Grid.Column="1"
+                     HorizontalAlignment="Stretch" 
+                     Height="22" 
+                     Margin="85,0,10,0" 
+                     Grid.Row="2" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Center" 
+                     Grid.ColumnSpan="2"/>
+
+            <!-- Suite/ Apt. -->
+            <Label Name="Suite_AptLabel"
+                   Content="Suite/ Apt." 
+                   Grid.Column="1"
+                   HorizontalAlignment="Left"
+                   Grid.Row="3" 
+                   VerticalAlignment="Center"
+                   Height="30"
+                   Width="80"
+                   FontSize="15"/>
+
+            <TextBox Name="Suite_AptTextBox"
+                     Grid.Column="1"
+                     HorizontalAlignment="Stretch" 
+                     Height="22" 
+                     Margin="85,0,10,0" 
+                     Grid.Row="3" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Center" 
+                     Grid.ColumnSpan="2"/>
+
+            <!-- City -->
+            <Label Name="CityLabel"
+                   Content="City" 
+                   Grid.Column="1"
+                   HorizontalAlignment="Left"
+                   Grid.Row="4" 
+                   VerticalAlignment="Center" 
+                   Width="80" 
+                   Height="30"
+                   FontSize="15"/>
+
+            <TextBox Name="CityTextBox"
+                     Grid.Column="1"
+                     HorizontalAlignment="Stretch" 
+                     Height="22"
+                     Margin="85,0,10,0" 
+                     Grid.Row="4" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Center" 
+                     Grid.ColumnSpan="2"/>
+
+            <!-- State -->
+            <Label Name="StateLabel"
+                   Content="State" 
+                   Grid.Column="1"
+                   HorizontalAlignment="Left"
+                   Grid.Row="5" 
+                   VerticalAlignment="Center" 
+                   Height="30"
+                   Width="80"
+                   FontSize="15"/>
+
+            <ComboBox x:Name="StateComboBox" 
+                      Grid.Column="1"
+                      Text="Select State"
+                      IsEditable="True"
+                      IsReadOnly="True"
+                      HorizontalAlignment="Stretch"
+                      Margin="85,0,0,0" 
+                      Grid.Row="5"
+                      VerticalAlignment="Center"
+                      Height="22" >
+
+                <ComboBoxItem Content="Alabama - AL" />
+                <ComboBoxItem Content="Alaska - AK" />
+                <ComboBoxItem Content="Arizona - AZ" />
+                <ComboBoxItem Content="Arkansas - AR" />
+                <ComboBoxItem Content="California - CA" />
+                <ComboBoxItem Content="Colorado - CO" />
+                <ComboBoxItem Content="Connecticut - CT" />
+                <ComboBoxItem Content="Delaware - DE" />
+                <ComboBoxItem Content="Florida - FL" />
+                <ComboBoxItem Content="Georgia - GA" />
+                <ComboBoxItem Content="Hawaii - HI" />
+                <ComboBoxItem Content="Idaho - ID" />
+                <ComboBoxItem Content="Illinois - IL" />
+                <ComboBoxItem Content="Indiana - IN" />
+                <ComboBoxItem Content="Iowa - IA" />
+                <ComboBoxItem Content="Kansas - KS" />
+                <ComboBoxItem Content="Kentucky - KY" />
+                <ComboBoxItem Content="Louisiana - LA" />
+                <ComboBoxItem Content="Maine - ME" />
+                <ComboBoxItem Content="Maryland - MD" />
+                <ComboBoxItem Content="Massachusetts - MA" />
+                <ComboBoxItem Content="Michigan - MI" />
+                <ComboBoxItem Content="Minnesota - MN" />
+                <ComboBoxItem Content="Mississippi - MS" />
+                <ComboBoxItem Content="Missouri - MO" />
+                <ComboBoxItem Content="Montana - MT" />
+                <ComboBoxItem Content="Nebraska - NE" />
+                <ComboBoxItem Content="Nevada - NV" />
+                <ComboBoxItem Content="New Hampshire - NH" />
+                <ComboBoxItem Content="New Jersey - NJ" />
+                <ComboBoxItem Content="New Mexico - NM" />
+                <ComboBoxItem Content="New York - NY" />
+                <ComboBoxItem Content="North Carolina - NC" />
+                <ComboBoxItem Content="North Dakota - ND" />
+                <ComboBoxItem Content="Ohio - OH" />
+                <ComboBoxItem Content="Oklahoma - OK" />
+                <ComboBoxItem Content="Oregon - OR" />
+                <ComboBoxItem Content="Pennsylvania - PA" />
+                <ComboBoxItem Content="Rhode Island - RI" />
+                <ComboBoxItem Content="South Carolina - SC" />
+                <ComboBoxItem Content="South Dakota - SD" />
+                <ComboBoxItem Content="Tennessee - TN" />
+                <ComboBoxItem Content="Texas - TX" />
+                <ComboBoxItem Content="Utah - UT" />
+                <ComboBoxItem Content="Vermont - VT" />
+                <ComboBoxItem Content="Virginia - VA" />
+                <ComboBoxItem Content="Washington - WA" />
+                <ComboBoxItem Content="West Virginia - WV" />
+                <ComboBoxItem Content="Wisconsin - WI" />
+                <ComboBoxItem Content="Wyoming - WY" />
+
+            </ComboBox>
+
+            <!-- Zip -->
+            <Label Name="ZipLabel"
+                   Content="ZIP" 
+                   Grid.Column="2"
+                   HorizontalAlignment="Left"
+                   Grid.Row="5" 
+                   VerticalAlignment="Center" 
+                   Height="30" 
+                   Width="30"
+                   FontSize="15"/>
+
+            <TextBox Name="ZipTextBox"
+                     Grid.Column="2"
+                     HorizontalAlignment="Stretch" 
+                     Height="22" 
+                     Margin="35,0,10,0" 
+                     Grid.Row="5" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Center"/>
+
+            <!-- Phone -->
+            <Label Name="PhoneLabel"
+                   Content="Phone" 
+                   Grid.Column="1"
+                   HorizontalAlignment="Left"
+                   Grid.Row="6" 
+                   VerticalAlignment="Center" 
+                   Height="30" 
+                   Width="80"
+                   FontSize="15"/>
+
+            <TextBox Name="PhoneTextBox"
+                     Grid.Column="1"
+                     HorizontalAlignment="Stretch" 
+                     Height="22" 
+                     Margin="85,0,0,0" 
+                     Grid.Row="6" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Center"/>
+
             <!-- Account ID -->
             <Label Content="Account ID:" 
                    Grid.Column="3"
@@ -517,11 +690,12 @@
                    Grid.Row="2" 
                    VerticalAlignment="Center"
                    Height="30"
-                   Width="88"
+                   Width="90"
                    FontSize="15"
                    Margin="10,0,0,1"/>
 
-            <TextBox Grid.Column="3" 
+            <TextBox x:Name="OrderedByTextBox"
+                     Grid.Column="3" 
                      HorizontalAlignment="Stretch"
                      Height="26" 
                      Margin="100,0,55,0"
@@ -529,6 +703,7 @@
                      FontSize="15"
                      TextWrapping="NoWrap"     
                      VerticalAlignment="Center"/>
+
 
             <!-- Shipping Type -->
             <Label Content="Ship Type:" 
@@ -538,8 +713,9 @@
                    VerticalAlignment="Center" 
                    FontSize="15"
                    Height="30"
-                   Width="90"
-                   Margin="10,0,0,1"/>
+                   Width="110"
+                   Margin="10,0,0,0"/>
+
 
             <!-- Shipping Type ComboBox -->
             <ComboBox Name="ShippingTypeComboBox"
@@ -551,39 +727,56 @@
                       Height="28"
                       Margin="100,0,55,0" 
                       IsEditable="True"
-                      IsReadOnly="True"
+                      IsReadOnly="True" 
                       Text="Select Shipping Type"/>
 
-            <!-- Submit Order Button -->
-            <Button Name="SubmitOrderButton"
+            <StackPanel Grid.Row="5"
+                        Grid.Column="3"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                
+                <!-- Save Order Button -->
+                <Button Name="SaveOrderButton"
+                        Content="Save" 
+                        Grid.Column="3" 
+                        HorizontalAlignment="Right"
+                        Width="100" 
+                        Margin="0,0,10,0"
+                        Grid.Row="5" 
+                        Grid.RowSpan="1" 
+                        Height="24"
+                        FontSize="16"
+                        Click="SaveOrderButton_Click"/>
+
+                <!-- Submit Order Button -->
+                <Button Name="SubmitOrderButton"
                     Content="Submit" 
                     Grid.Column="3" 
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
                     Width="100" 
-                    Margin="0,0,119,0"
+                    Margin="0,0,10,0"
                     Grid.Row="5" 
                     Grid.RowSpan="1" 
                     Height="24"
                     FontSize="16"
                     Click="SubmitOrderButton_Click"/>
 
-            <!-- Delete Order Button -->
-            <Button Name="DeleteOrderButton" 
+                <!-- Delete Order Button -->
+                <Button Name="DeleteOrderButton"
                     Content="Delete" 
                     Grid.Column="3" 
                     HorizontalAlignment="Right"
                     Grid.Row="5"
                     Width="100" 
-                    VerticalAlignment="Center"
-                    Margin="101,0,0,0" 
+                    Margin="0,0,0,0" 
                     Grid.RowSpan="1"
                     Height="24"
                     FontSize="16"
                     Click="DeleteOrderButton_Click"/>
 
+            </StackPanel>
+            
         </Grid>
 
     </Grid>
-
 </UserControl>

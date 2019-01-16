@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Misc\App.xaml
-19-330488795
+171725004906
 
-891372973648
+89-1132615952
 16860080095
-Views\Error\ErrorWindow.xaml;Views\HelpView.xaml;Views\Login\ChangePasswordWindow.xaml;Views\Login\ForgotPasswordWindow.xaml;Views\Login\LoginWindow.xaml;Views\MainWindow.xaml;Views\OrdersView.xaml;Views\AddToOrderView.xaml;Views\Orders\WVA_OrderView.xaml;Views\Registration\RegistrationWindow.xaml;Views\ResourceDict\Styles.xaml;Views\LoadingWindow.xaml;Views\Search\SearchExamsView.xaml;Views\Search\SearchPatientsView.xaml;Views\SearchView.xaml;Views\SettingsLogin.xaml;Views\SettingsView.xaml;Views\Orders\ShipToOfficeView.xaml;Views\Orders\ShipToPatientView.xaml;
+Views\Error\ErrorWindow.xaml;Views\HelpView.xaml;Views\Login\ChangePasswordWindow.xaml;Views\Login\ForgotPasswordWindow.xaml;Views\Login\LoginWindow.xaml;Views\MainWindow.xaml;Views\OrdersView.xaml;Views\AddToOrderView.xaml;Views\Orders\CompulinkOrders.xaml;Views\Orders\OrderCreationView.xaml;Views\Orders\WVAOrders.xaml;Views\Registration\RegistrationWindow.xaml;Views\ResourceDict\Styles.xaml;Views\LoadingWindow.xaml;Views\Search\SearchExamsView.xaml;Views\Search\SearchPatientsView.xaml;Views\SettingsView.xaml;
 
-True
+False
 

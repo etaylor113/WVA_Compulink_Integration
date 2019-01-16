@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WVA_Compulink_Integration.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450"
              d:DesignWidth="800">
@@ -156,8 +155,8 @@
                       VerticalAlignment="Center"
                       Margin="10,0,0,0"   
                       Height="35" 
-                      Width="80"
-                      FontSize="18"
+                      Width="85"
+                      FontSize="19"
                       TabIndex="1"
                       SelectedValuePath="Content" 
                       SelectedIndex="1"

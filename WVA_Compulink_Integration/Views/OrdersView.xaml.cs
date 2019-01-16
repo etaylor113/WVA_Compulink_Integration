@@ -28,52 +28,52 @@ namespace WVA_Compulink_Integration.Views
 
         public void DetermineView()
         {           
-            if (OrdersViewModel.SelectedView == "LabOrders")
+            if (OrdersViewModel.SelectedView == "CompulinkOrders")
             {
                 // Navigate to Lab Orders View
                 SetUpLabOrdersView();
-                // OrdersContentControl
+                OrdersContentControl.DataContext = new CompulinkOrdersViewModel();
             }
-            else if (OrdersViewModel.SelectedView == "WVA_Orders")
+            else if (OrdersViewModel.SelectedView == "WVAOrders")
             {
                 // Navigate to WVA Orders View         
                 SetUpWVA_OrdersView();
-                OrdersContentControl.DataContext = new WVA_OrderViewModel(OrdersViewModel.ListPrescriptions);
+                OrdersContentControl.DataContext = new WVAOrdersViewModel();
+                //OrdersContentControl.DataContext = new WVA_OrderViewModel(OrdersViewModel.ListPrescriptions);   // To pass data to view model
             }
             else
             {
-                // Navigate to STO View with no data with listPatients data
-                //OrdersContentControl.DataContext = new ShipToOfficeViewModel();
+                OrdersContentControl.DataContext = new CompulinkOrdersViewModel();
             }
 
             // Reset SelectedView string
             OrdersViewModel.SelectedView = "";
         }
 
-        private void LabOrdersButton_Click(object sender, RoutedEventArgs e)
+        private void CompulinkOrdersButton_Click(object sender, RoutedEventArgs e)
         {
             SetUpLabOrdersView();
-            //OrdersContentControl.DataContext = new WVA_OrderViewModel();
+            OrdersContentControl.DataContext = new CompulinkOrdersViewModel();
         }
 
         private void WVA_OrdersButton_Click(object sender, RoutedEventArgs e)
         {
             SetUpWVA_OrdersView();
-            OrdersContentControl.DataContext = new WVA_OrderViewModel();
+            OrdersContentControl.DataContext = new WVAOrdersViewModel();
         }
 
         private void SetUpLabOrdersView()
         {
             // Update header to show user they are in STP view
-            TabLabel.Content = "Lab Orders";
+            TabLabel.Content = "Compulink Orders";
 
             Color blue = (Color)ColorConverter.ConvertFromString("#FF327EC3");
             SolidColorBrush blueBrush = new SolidColorBrush(blue);
-            STO_Rect.Fill = blueBrush;
+            Rect_1.Fill = blueBrush;
 
             Color white = (Color)ColorConverter.ConvertFromString("#ffffff");
             SolidColorBrush whiteBrush = new SolidColorBrush(white);
-            STP_Rect.Fill = whiteBrush;
+            Rect_2.Fill = whiteBrush;
         }
 
         private void SetUpWVA_OrdersView()
@@ -83,11 +83,11 @@ namespace WVA_Compulink_Integration.Views
 
             Color blue = (Color)ColorConverter.ConvertFromString("#FF327EC3");
             SolidColorBrush blueBrush = new SolidColorBrush(blue);
-            STP_Rect.Fill = blueBrush;
+            Rect_2.Fill = blueBrush;
 
             Color white = (Color)ColorConverter.ConvertFromString("#ffffff");
             SolidColorBrush whiteBrush = new SolidColorBrush(white);
-            STO_Rect.Fill = whiteBrush;
+            Rect_1.Fill = whiteBrush;
         }
 
        

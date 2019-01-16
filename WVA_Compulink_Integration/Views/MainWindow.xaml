@@ -13,7 +13,8 @@
         MinHeight="550" 
         WindowStartupLocation="CenterScreen" 
         ResizeMode="CanResize" 
-        Icon="/WVA_Compulink_Integration;component/Resources/logo-plain-vector-72-48x48.jpg">
+        Icon="/WVA_Compulink_Integration;component/Resources/logo-plain-vector-72-48x48.jpg"
+        Closed="Window_Closed">
 
     <Window.Resources>
 
@@ -22,9 +23,9 @@
             <Setter Property="TextBlock.TextAlignment" Value="Center"/>
             <Setter Property="FontFamily" Value="Sitka Text"/>
             <Setter Property="FontSize" Value="36"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="Width" Value="150"/>
-            <Setter Property="Margin" Value="33,5,0,0"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
             <Setter Property="Template" x:Name="ButtonTemplate">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
@@ -108,11 +109,7 @@
             </Setter>
         </Style>
 
-         <!-- View Models -->
-        <DataTemplate x:Name="searchViewTemplate" DataType="{x:Type viewmodels:SearchViewModel}">
-            <views:SearchView DataContext="{Binding ElementName=searchViewTemplate}"/>
-        </DataTemplate>
-
+         <!-- View Models -->     
         <DataTemplate x:Name="ordersViewTemplate" DataType="{x:Type viewmodels:OrdersViewModel}">
             <views:OrdersView DataContext="{Binding ElementName=ordersViewTemplate}"/>
         </DataTemplate>
@@ -120,11 +117,7 @@
         <DataTemplate x:Name="settingsViewTemplate" DataType="{x:Type viewmodels:SettingsViewModel}">
             <views:SettingsView DataContext="{Binding ElementName=settingsViewTemplate}"/>
         </DataTemplate>
-
-        <DataTemplate x:Name="settingsLoginViewTemplate" DataType="{x:Type viewmodels:SettingsLoginViewModel}">
-            <views:SettingsLogin DataContext="{Binding ElementName=settingsLoginViewTemplate}"/>
-        </DataTemplate>
-
+     
         <DataTemplate x:Name="helpViewTemplate" DataType="{x:Type viewmodels:HelpViewModel}">
             <views:HelpView DataContext="{Binding ElementName=helpViewTemplate}"/>
         </DataTemplate>
@@ -139,7 +132,7 @@
 
         <!-- Nav Bar -->
         <Grid Margin="0,0,0,0"
-              Width="215" 
+              Width="200" 
               HorizontalAlignment="Left" >
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -175,18 +168,9 @@
                        HorizontalAlignment="Stretch">
             </Rectangle>
 
-
-            <!-- Search Tab -->
-            <StackPanel Grid.Row="2" >
-                <Button x:Name="TabSearch" 
-                        Content="Search" 
-                        HorizontalAlignment="Left" 
-                        Style="{StaticResource TabButton}" 
-                        Click="TabSearch_Click" />
-            </StackPanel>
-
+      
             <!-- Orders Tab -->
-            <StackPanel Grid.Row="3" >
+            <StackPanel Grid.Row="2" >
                 <Button x:Name="TabOrders"
                         Content="Orders" 
                         Style="{StaticResource TabButton}" 
@@ -194,7 +178,7 @@
             </StackPanel>
 
             <!-- Settings Tab -->
-            <StackPanel Grid.Row="4" >
+            <StackPanel Grid.Row="3" >
                 <Button x:Name="TabSettings"
                         Content="Settings" 
                         Style="{StaticResource TabButton}"
@@ -202,17 +186,18 @@
             </StackPanel>
 
             <!-- Help Tab -->
-            <StackPanel Grid.Row="5" >
+            <StackPanel Grid.Row="4" >
                 <Button x:Name="TabHelp"
                         Content="Help"  
                         Style="{StaticResource TabButton}" 
+                        Visibility="Hidden"
                         Click="TabHelp_Click" />
             </StackPanel>
         
         </Grid>
 
         <!-- Main Content Area-->
-        <Grid  Margin="215,0,0,0">
+        <Grid  Margin="200,0,0,0">
             
             <Grid.ColumnDefinitions>
 
