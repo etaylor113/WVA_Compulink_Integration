@@ -126,6 +126,10 @@ namespace WVA_Compulink_Integration.Views.Registration
                 {
                     MessageSetup("Email is already in use!");
                 }
+                if (userRegisterResponse.Message == "UserName already exists")
+                {
+                    MessageSetup("Username is already in use!");
+                }
                 else if (userRegisterResponse.Status == "ERROR")
                 {
                     throw new Exception($"Server responded with the following error: {userRegisterResponse.Message}");
