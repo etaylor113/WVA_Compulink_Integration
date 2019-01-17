@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WVA_Compulink_Integration._API;
+using WVA_Compulink_Integration.Error;
+using WVA_Compulink_Integration.Models;
+using WVA_Compulink_Integration.Models.User;
+using WVA_Compulink_Integration.Models.Validations.Emails;
 
 namespace WVA_Compulink_Integration.Views.Login
 {
@@ -22,8 +28,6 @@ namespace WVA_Compulink_Integration.Views.Login
         public ForgotPasswordWindow()
         {
             InitializeComponent();
-            AutoFillEmail();
-                    
         }
 
         // Brings window to front without overlapping any following windows opened by user
@@ -35,51 +39,96 @@ namespace WVA_Compulink_Integration.Views.Login
         private void Window_Initialized(object sender, EventArgs e)
         {
             Topmost = false;
-        }
+            MessageLabel.Visibility = Visibility.Hidden;
+        } 
 
-        private void AutoFillEmail()
+        private void ShowError()
         {
-            EmailTextBox.Text = GetEmail();
-        }
-
-        private string GetEmail()
-        {
-            // Make call to server to get email or get email during login process
-            //
-            //
-
-            string email = "etaylor113@gmail.com";
-
-            return email;
+            MessageLabel.Visibility = Visibility.Visible;
+            MessageLabel.Content = "Error sending email!";
         }
 
         private void SendEmailButton_Click(object sender, RoutedEventArgs e)
         {
-            string email = EmailTextBox.Text;
+            try
+            {
+                string email = "";
 
-            MessageLabel.Visibility = Visibility.Visible;
-            // Send this email to the API and generate a 6 digit code
+                // Get the email from username            
+                 string getEmailEndpoint = "http://localhost:56075/CompuClient/User/GetEmail";
+                User user = new User()
+                {
+                    UserName = UserNameTextBox.Text
+                };
 
+                string strEmail = API.Post(getEmailEndpoint, user, out string httpStatus);
+                User userResponse = JsonConvert.DeserializeObject<User>(strEmail);
+
+                if (userResponse.Status == "ERROR")
+                {
+                    ShowError();
+                }
+                else if (userResponse.Email != null)
+                {
+                    email = userResponse.Email;
+                }
+                else
+                {
+                    ShowError();
+                }
+
+                // Send the email
+                string endpoint = "https://orders-qa.wisvis.com/mailers/reset";
+                EmailValidationSend emailValidation = new EmailValidationSend()
+                {
+                    Email = email,
+                    ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285"
+                };
+
+                string strResponse = API.Post(endpoint, emailValidation, out httpStatus);
+                Response response = JsonConvert.DeserializeObject<Response>(strResponse);
+
+                if (response.Status == "FAIL")
+                {
+                    ShowError();
+                }
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            } 
+           
         }
 
         private void SubmitCodeButton_Click(object sender, RoutedEventArgs e)
         {
-            string sixDigitCode = CodeTextBox.Text.Trim();
-
-            // Make call to API and see if code they typed in is correct
-
-            bool codeIsCorrect = false;
-
-            if (sixDigitCode == "123456")
-                codeIsCorrect = true;
-
-            if (codeIsCorrect)
+            try
             {
-                new ChangePasswordWindow().Show();
-                Close();
-            }                        
-            else
-                CodeTextBox.Text = "Invalid Code";
+                string endpoint = "https://orders-qa.wisvis.com/mailers/reset_check";
+                EmailValidationCode emailValidation = new EmailValidationCode()
+                {
+                    EmailCode = CodeTextBox.Text.Trim(),
+                    ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285"
+                };
+
+                string strResponse = API.Post(endpoint, emailValidation, out string httpStatus);
+                Response response = JsonConvert.DeserializeObject<Response>(strResponse);
+
+                if (response.Status == "SUCCESS")
+                {
+                    new ChangePasswordWindow().Show();
+                    Close();
+                }
+                else
+                {
+                    MessageLabel.Visibility = Visibility.Visible;
+                    MessageLabel.Content = "Invalid Code!";
+                }
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }       
         }
 
         private void CodeTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -87,9 +136,14 @@ namespace WVA_Compulink_Integration.Views.Login
             MessageLabel.Visibility = Visibility.Hidden;
         }
 
+        private void EmailTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            MessageLabel.Visibility = Visibility.Hidden;
+        }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
+        }   
     }
 }

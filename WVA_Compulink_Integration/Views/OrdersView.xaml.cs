@@ -39,7 +39,6 @@ namespace WVA_Compulink_Integration.Views
                 // Navigate to WVA Orders View         
                 SetUpWVA_OrdersView();
                 OrdersContentControl.DataContext = new WVAOrdersViewModel();
-                //OrdersContentControl.DataContext = new WVA_OrderViewModel(OrdersViewModel.ListPrescriptions);   // To pass data to view model
             }
             else
             {

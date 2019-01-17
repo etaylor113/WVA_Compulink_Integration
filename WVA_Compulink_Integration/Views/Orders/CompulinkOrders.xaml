@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:WVA_Compulink_Integration.Views.Orders"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
-             d:DesignWidth="800">
+             d:DesignWidth="1000">
     <UserControl.Resources>
 
         <LinearGradientBrush x:Key="ExamsButtonGroup" StartPoint="0,0" EndPoint="1,1">
@@ -20,9 +20,9 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontFamily" Value="Sitka Text"/>
-            <Setter Property="FontSize" Value="27"/>
-            <Setter Property="Height" Value="40" />
-            <Setter Property="Width" Value="190" />
+            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="Height" Value="35" />
+            <Setter Property="Width" Value="240" />
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="1"/>
             <Setter Property="Template">
@@ -134,7 +134,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="1"
@@ -143,50 +143,25 @@
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
 
+            <Label Name="SearchProductsLabel"
+                   Content="Search Patients"
+                   FontFamily="Sitka Text"
+                   FontSize="26" />
+
             <TextBox Name="SearchTextBox" 
                      Margin="0,0,0,0"
                      Height="35"     
-                     Width="350"
+                     Width="410"
                      HorizontalAlignment="Right"
                      FontFamily="Sitka Text"
                      FontSize="26"
+                     VerticalContentAlignment="Center"
                      TextChanged="SearchTextBox_TextChanged"/>
-
-            <ComboBox Name="SearchFilterComboBox" 
-                      Width="100"
-                      Margin="20,0,0,0"
-                      Height="35"
-                      FontFamily="Sitka Text"
-                      FontSize="24" 
-                      SelectedIndex="1">
-
-                <ComboBoxItem>
-                    <TextBlock>ID</TextBlock>
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock>Name</TextBlock>
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock>Street</TextBlock>
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock>City</TextBlock>
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock>State</TextBlock>
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock>Zip</TextBlock>
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    <TextBlock>Phone</TextBlock>
-                </ComboBoxItem>
-                
-            </ComboBox>
-
+        
             <Button Name="RefreshButton"
                     Width="50"
                     Margin="20,0,0,0"
+                    Height="40"
                     MouseEnter="RefreshButton_MouseEnter"
                     MouseLeave="RefreshButton_MouseLeave"
                     Click="RefreshButton_Click">
@@ -214,8 +189,9 @@
                   ItemsSource="{Binding Prescription}"
                   CanUserReorderColumns="False"
                   CanUserSortColumns="False" 
+                  HorizontalContentAlignment="Stretch"
                   IsReadOnly="False" 
-                  Margin="0,0,0,20" 
+                  Margin="0,0,0,0" 
                   Background="Transparent"
                   HeadersVisibility="Column">
          
@@ -242,19 +218,20 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding Path=Date}" Width="70" MaxWidth="56"  Header="Date"/>
-                <DataGridTextColumn Binding="{Binding Path=Eye}" Width="30" MaxWidth="30" Header="Eye"/>
-                <DataGridTextColumn Binding="{Binding Path=Product}" Width="200" Header="Product"/>
-                <DataGridTextColumn Binding="{Binding Path=Quantity}" Width="40" MinWidth="40" MaxWidth="40" Header="Qty"/>
-                <DataGridTextColumn Binding="{Binding Path=BaseCurve}" Width="80" MinWidth="70" MaxWidth="70" Header="Base Curve"/>
-                <DataGridTextColumn Binding="{Binding Path=Diameter}" Width="65" MinWidth="65" MaxWidth="65" Header="Diameter"/>
-                <DataGridTextColumn Binding="{Binding Path=Sphere}" Width="60" Header="Sphere"/>
-                <DataGridTextColumn Binding="{Binding Path=Cylinder}" Width="60" Header="Cylinder"/>
-                <DataGridTextColumn Binding="{Binding Path=Axis}" Width="40" Header="Axis"/>
-                <DataGridTextColumn Binding="{Binding Path=Add}" Width="50" Header="Add"/>
-                <DataGridTextColumn Binding="{Binding Path=Color}" Width="100" Header="Color"/>
-                <DataGridTextColumn Binding="{Binding Path=Multifocal}" Width="80" MinWidth="70" Header="Multifocal"/>
-                <DataGridTemplateColumn Width="45" Header="Is STP" MinWidth="45" MaxWidth="45" IsReadOnly="False">
+                <DataGridTextColumn Binding="{Binding Path=Patient}"    Width="*"   Header="Patient"  />
+                <DataGridTextColumn Binding="{Binding Path=Date}"       Width="*"   Header="Date"        MaxWidth="56"  />
+                <DataGridTextColumn Binding="{Binding Path=Product}"    Width="*"   Header="Product"/>
+                <DataGridTextColumn Binding="{Binding Path=Eye}"        Width="*"   Header="Eye"         MaxWidth="30" />
+                <DataGridTextColumn Binding="{Binding Path=Quantity}"   Width="*"   Header="Qty"         MinWidth="40" MaxWidth="40" />
+                <DataGridTextColumn Binding="{Binding Path=BaseCurve}"  Width="*"   Header="Base Curve"  MinWidth="70" MaxWidth="70" />
+                <DataGridTextColumn Binding="{Binding Path=Diameter}"   Width="*"   Header="Diameter"    MinWidth="65" MaxWidth="65" />
+                <DataGridTextColumn Binding="{Binding Path=Sphere}"     Width="*"   Header="Sphere"/>
+                <DataGridTextColumn Binding="{Binding Path=Cylinder}"   Width="*"   Header="Cylinder"/>
+                <DataGridTextColumn Binding="{Binding Path=Axis}"       Width="*"   Header="Axis"/>
+                <DataGridTextColumn Binding="{Binding Path=Add}"        Width="*"   Header="Add"/>
+                <DataGridTextColumn Binding="{Binding Path=Color}"      Width="*"   Header="Color"/>
+                <DataGridTextColumn Binding="{Binding Path=Multifocal}" Width="*"   Header="Multifocal"  MinWidth="70" />
+                <DataGridTemplateColumn                                 Width="*"   Header="Is STP"      MinWidth="45" MaxWidth="45" IsReadOnly="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding Path=IsShipToPatient, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
@@ -268,32 +245,33 @@
               Grid.Column="1"
               Margin="0,0,0,0">
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="210"/>
-            </Grid.ColumnDefinitions>
 
-            <Label Name="OrderNameLabel"
-                   Content="Order Name: "
-                   Grid.Row="2"
-                   FontFamily="Sitka Text"
-                   FontSize="22"/>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                
+                <ComboBox Name="WvaOrdersComboBox" 
+                          Grid.Column="1"
+                          Text=""
+                          IsEditable="True"
+                          IsReadOnly="True"
+                          HorizontalAlignment="Stretch"
+                          Margin="0,0,20,0" 
+                          Grid.Row="2"
+                          FontFamily="Sitka Text"
+                          FontSize="25"
+                          Width="450"
+                          VerticalContentAlignment="Center"
+                          VerticalAlignment="Center"
+                          Height="35" />
 
-            <TextBox Name="OrderNameTextBox"
-                     Grid.Row="2" 
-                     FontFamily="Sitka Text"
-                     FontSize="28"
-                     Height="40"
-                     HorizontalAlignment="Stretch"
-                     Margin="0,0,0,0"
-                     MaxLength="30"/>
+                <Button Name="AddToOrderOrderButton"
+                        Content="Add To WVA Order" 
+                        Margin="0,0,0,0"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Click="CreateOrderButton_Click"/>
 
-            <Button Name="CreateOrderButton"
-                    Content="Create Order" 
-                    Margin="0,0,0,0"
-                    Grid.Column="1"
-                    HorizontalAlignment="Right"
-                    Click="CreateOrderButton_Click"/>
+            </StackPanel>
 
         </Grid>
 

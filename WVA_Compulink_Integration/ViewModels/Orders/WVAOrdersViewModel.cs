@@ -20,5 +20,10 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
         {
             ListPrescriptions.AddRange(prescriptions);
         }
+
+        public static void SaveOrders()
+        {
+
+        }
     }
 }

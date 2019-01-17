@@ -47,7 +47,7 @@ namespace WVA_Compulink_Integration._API
             {
                 AppError.PrintToLog(x);
                 httpStatus = null;
-                return "ERROR: " + x.Message;
+                return null;
             }
         }
 

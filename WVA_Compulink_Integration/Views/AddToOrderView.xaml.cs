@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WVA_Compulink_Integration._API;
+using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Models.Patient;
 using WVA_Compulink_Integration.Models.Prescription;
 using WVA_Compulink_Integration.ViewModels;
@@ -56,6 +57,7 @@ namespace WVA_Compulink_Integration.Views
             }
             catch (Exception x)
             {
+                AppError.PrintToLog(x);
                 return null;
             }         
         }

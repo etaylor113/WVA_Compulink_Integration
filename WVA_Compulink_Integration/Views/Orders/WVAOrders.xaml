@@ -153,6 +153,7 @@
                      HorizontalAlignment="Right"
                      FontFamily="Sitka Text"
                      FontSize="26"
+                     VerticalContentAlignment="Center"
                      TextChanged="SearchTextBox_TextChanged"/>
 
             <ComboBox Name="SearchFilterComboBox" 
@@ -201,6 +202,7 @@
                   ItemsSource="{Binding Prescription}"
                   CanUserReorderColumns="False"
                   CanUserSortColumns="False" 
+                  HorizontalContentAlignment="Stretch"
                   IsReadOnly="False" 
                   Margin="0,0,0,0" 
                   Background="Transparent"
@@ -229,19 +231,19 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding Path=Date}" Width="70" MaxWidth="56"  Header="Date"/>
-                <DataGridTextColumn Binding="{Binding Path=Eye}" Width="30" MaxWidth="30" Header="Eye"/>
-                <DataGridTextColumn Binding="{Binding Path=Product}" Width="200" Header="Product"/>
-                <DataGridTextColumn Binding="{Binding Path=Quantity}" Width="40" MinWidth="40" MaxWidth="40" Header="Qty"/>
-                <DataGridTextColumn Binding="{Binding Path=BaseCurve}" Width="80" MinWidth="70" MaxWidth="70" Header="Base Curve"/>
-                <DataGridTextColumn Binding="{Binding Path=Diameter}" Width="65" MinWidth="65" MaxWidth="65" Header="Diameter"/>
-                <DataGridTextColumn Binding="{Binding Path=Sphere}" Width="60" Header="Sphere"/>
-                <DataGridTextColumn Binding="{Binding Path=Cylinder}" Width="60" Header="Cylinder"/>
-                <DataGridTextColumn Binding="{Binding Path=Axis}" Width="40" Header="Axis"/>
-                <DataGridTextColumn Binding="{Binding Path=Add}" Width="50" Header="Add"/>
-                <DataGridTextColumn Binding="{Binding Path=Color}" Width="100" Header="Color"/>
-                <DataGridTextColumn Binding="{Binding Path=Multifocal}" Width="80" MinWidth="70" Header="Multifocal"/>
-                <DataGridTemplateColumn Width="45" Header="Is STP" MinWidth="45" MaxWidth="45" IsReadOnly="False">
+                <DataGridTextColumn Binding="{Binding Path=Date}"       Width="*"   Header="Date"        MaxWidth="56"  />
+                <DataGridTextColumn Binding="{Binding Path=Eye}"        Width="*"   Header="Eye"         MaxWidth="30" />
+                <DataGridTextColumn Binding="{Binding Path=Product}"    Width="*"   Header="Product"/>
+                <DataGridTextColumn Binding="{Binding Path=Quantity}"   Width="*"   Header="Qty"         MinWidth="40" MaxWidth="40"/>
+                <DataGridTextColumn Binding="{Binding Path=BaseCurve}"  Width="*"   Header="Base Curve"  MinWidth="70" MaxWidth="70" />
+                <DataGridTextColumn Binding="{Binding Path=Diameter}"   Width="*"   Header="Diameter"    MinWidth="65" MaxWidth="65" />
+                <DataGridTextColumn Binding="{Binding Path=Sphere}"     Width="*"   Header="Sphere"/>
+                <DataGridTextColumn Binding="{Binding Path=Cylinder}"   Width="*"   Header="Cylinder"/>
+                <DataGridTextColumn Binding="{Binding Path=Axis}"       Width="*"   Header="Axis"/>
+                <DataGridTextColumn Binding="{Binding Path=Add}"        Width="*"   Header="Add"/>
+                <DataGridTextColumn Binding="{Binding Path=Color}"      Width="*"   Header="Color"/>
+                <DataGridTextColumn Binding="{Binding Path=Multifocal}" Width="*"   Header="Multifocal"  MinWidth="40" />
+                <DataGridTemplateColumn                                 Width="*"   Header="Is STP"      MinWidth="45" MaxWidth="45" IsReadOnly="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding Path=IsShipToPatient, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>

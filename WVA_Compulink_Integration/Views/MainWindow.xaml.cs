@@ -28,31 +28,26 @@ namespace WVA_Compulink_Integration.Views
         public MainWindow()
         {
             InitializeComponent();
-            SetUpApp();
-            MainContentControl.DataContext = new OrdersViewModel();
+            SetUpApp();          
         }
 
-        private void SetUpApp()
+        private async void SetUpApp()
         {
-            Width += 200;
-            Height += 100;    
+            // Set the main data context to the Compulink orders view 
+            MainContentControl.DataContext = new OrdersViewModel();
+
             // Spawn a loading window and change cursor to waiting cursor
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.Show();
             Mouse.OverrideCursor = Cursors.Wait;
 
-            LoadProductsList();
+            await Task.Run(() => List_WVA_Products.LoadProducts());
 
             // Close loading window and change cursor back to default arrow cursor
             loadingWindow.Close();
             Mouse.OverrideCursor = Cursors.Arrow;
         }
-
-        private async void LoadProductsList()
-        {
-            List_WVA_Products.LoadProducts();
-        }
-
+    
         /// <summary>
         /// Side Tab Control Buttons For Changing Views
         /// </summary>
@@ -79,7 +74,7 @@ namespace WVA_Compulink_Integration.Views
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            WVA_OrderViewModel.SaveOrders();
+            WVAOrdersViewModel.SaveOrders();
         }      
     }
 }

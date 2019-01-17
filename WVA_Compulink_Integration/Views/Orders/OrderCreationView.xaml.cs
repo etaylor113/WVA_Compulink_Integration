@@ -15,6 +15,9 @@ using WVA_Compulink_Integration.Models.ProductParameters;
 using WVA_Compulink_Integration.Models.Validations;
 using WVA_Compulink_Integration.Utility.UI_Tools;
 using WVA_Compulink_Integration.ViewModels.Orders;
+using WVA_Compulink_Integration.Error;
+using System.Windows.Input;
+using WVA_Compulink_Integration.Views.Search;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
@@ -56,7 +59,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 if (matchProducts.Count > 0)
                 {
                     ListMatchedProducts.Add(matchProducts);
-                    WVA_OrderViewModel.ListPrescriptions[index].ProductCode = matchProducts[0].ProductKey;
+                    WVAOrdersViewModel.ListPrescriptions[index].ProductCode = matchProducts[0].ProductKey;
                 }
                 else
                 {
@@ -85,13 +88,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVA_OrderViewModel.ListPrescriptions[SelectedRow].BaseCurveValidItems.Count;
+                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].BaseCurveValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = WVA_OrderViewModel.ListPrescriptions[SelectedRow].BaseCurveValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].BaseCurveValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -101,7 +104,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             throw new Exception("No Valid Items");
                         }
                     }
-                    catch (Exception x)
+                    catch
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -113,13 +116,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVA_OrderViewModel.ListPrescriptions[SelectedRow].DiameterValidItems.Count;
+                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].DiameterValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = WVA_OrderViewModel.ListPrescriptions[SelectedRow].DiameterValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].DiameterValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -129,7 +132,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             throw new Exception("No Valid Items");
                         }
                     }
-                    catch (Exception x)
+                    catch
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -141,13 +144,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVA_OrderViewModel.ListPrescriptions[SelectedRow].SphereValidItems.Count;
+                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].SphereValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].SphereValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].SphereValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -157,7 +160,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             throw new Exception("No Valid Items");
                         }
                     }
-                    catch (Exception x)
+                    catch
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -169,13 +172,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVA_OrderViewModel.ListPrescriptions[SelectedRow].CylinderValidItems.Count;
+                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].CylinderValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = WVA_OrderViewModel.ListPrescriptions[SelectedRow].CylinderValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].CylinderValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -185,7 +188,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             throw new Exception("No Valid Items");
                         }
                     }
-                    catch (Exception x)
+                    catch
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -197,13 +200,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVA_OrderViewModel.ListPrescriptions[SelectedRow].AxisValidItems.Count;
+                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].AxisValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = WVA_OrderViewModel.ListPrescriptions[SelectedRow].AxisValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].AxisValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -213,7 +216,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             throw new Exception("No Valid Items");
                         }
                     }
-                    catch (Exception x)
+                    catch
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -225,13 +228,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVA_OrderViewModel.ListPrescriptions[SelectedRow].AddValidItems.Count;
+                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].AddValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].AddValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].AddValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -241,7 +244,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             throw new Exception("No Valid Items");
                         }
                     }
-                    catch (Exception x)
+                    catch
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -253,13 +256,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVA_OrderViewModel.ListPrescriptions[SelectedRow].ColorValidItems.Count;
+                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].ColorValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = ShipToOfficeViewModel.ListPrescriptions[SelectedRow].ColorValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].ColorValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -269,7 +272,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             throw new Exception("No Valid Items");
                         }
                     }
-                    catch (Exception x)
+                    catch
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -281,13 +284,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVA_OrderViewModel.ListPrescriptions[SelectedRow].MultifocalValidItems.Count;
+                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].MultifocalValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = WVA_OrderViewModel.ListPrescriptions[SelectedRow].MultifocalValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].MultifocalValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -297,7 +300,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             throw new Exception("No Valid Items");
                         }
                     }
-                    catch (Exception x)
+                    catch
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -317,7 +320,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-
+                AppError.PrintToLog(x);
             }
         }
 
@@ -331,7 +334,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void SetUpOrdersDataGrid()
         {
-            OrdersDataGrid.ItemsSource = WVA_OrderViewModel.ListPrescriptions;
+            OrdersDataGrid.ItemsSource = WVAOrdersViewModel.ListPrescriptions;
         }
 
         private string AssignCellColor(string prodValue, bool isValid, string errorMessage, bool canBeValidated)
@@ -394,53 +397,53 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                     if (column <= 4)
                     {
-                        WVA_OrderViewModel.ListPrescriptions[row].Product = selectedItem;
+                        WVAOrdersViewModel.ListPrescriptions[row].Product = selectedItem;
 
                         if (ListMatchedProducts[row][selectedIndex].MatchScore > 92)
                         {
-                            WVA_OrderViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\GreenBubble.png";
+                            WVAOrdersViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\GreenBubble.png";
                         }
                         else if (ListMatchedProducts[row][selectedIndex].MatchScore > 75)
                         {
-                            WVA_OrderViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\YellowBubble.png";
+                            WVAOrdersViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\YellowBubble.png";
                         }
                         else
                         {
-                            WVA_OrderViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\RedBubble.jpg";
+                            WVAOrdersViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\RedBubble.jpg";
                         }
                     }
 
                     if (column == 5)
                     {
-                        WVA_OrderViewModel.ListPrescriptions[row].BaseCurve = selectedItem;
+                        WVAOrdersViewModel.ListPrescriptions[row].BaseCurve = selectedItem;
                     }
                     if (column == 6)
                     {
-                        WVA_OrderViewModel.ListPrescriptions[row].Diameter = selectedItem;
+                        WVAOrdersViewModel.ListPrescriptions[row].Diameter = selectedItem;
                     }
                     if (column == 7)
                     {
-                        WVA_OrderViewModel.ListPrescriptions[row].Sphere = selectedItem;
+                        WVAOrdersViewModel.ListPrescriptions[row].Sphere = selectedItem;
                     }
                     if (column == 8)
                     {
-                        WVA_OrderViewModel.ListPrescriptions[row].Cylinder = selectedItem;
+                        WVAOrdersViewModel.ListPrescriptions[row].Cylinder = selectedItem;
                     }
                     if (column == 9)
                     {
-                        WVA_OrderViewModel.ListPrescriptions[row].Axis = selectedItem;
+                        WVAOrdersViewModel.ListPrescriptions[row].Axis = selectedItem;
                     }
                     if (column == 10)
                     {
-                        WVA_OrderViewModel.ListPrescriptions[row].Add = selectedItem;
+                        WVAOrdersViewModel.ListPrescriptions[row].Add = selectedItem;
                     }
                     if (column == 11)
                     {
-                        WVA_OrderViewModel.ListPrescriptions[row].Color = selectedItem;
+                        WVAOrdersViewModel.ListPrescriptions[row].Color = selectedItem;
                     }
                     if (column == 12)
                     {
-                        WVA_OrderViewModel.ListPrescriptions[row].Multifocal = selectedItem;
+                        WVAOrdersViewModel.ListPrescriptions[row].Multifocal = selectedItem;
                     }
 
                     OrdersDataGrid.Items.Refresh();
@@ -448,7 +451,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-
+                AppError.PrintToLog(x);
             }
         }
 
@@ -466,7 +469,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-
+                AppError.PrintToLog(x);
             }
         }
 
@@ -545,59 +548,59 @@ namespace WVA_Compulink_Integration.Views.Orders
                 Prescription prescription = new Prescription()
                 {
                     // These properties don't need to be validated
-                    ProductImagePath = WVA_OrderViewModel.ListPrescriptions[i].ProductImagePath,
-                    IsChecked = WVA_OrderViewModel.ListPrescriptions[i].IsChecked,
-                    FirstName = WVA_OrderViewModel.ListPrescriptions[i].FirstName,
-                    LastName = WVA_OrderViewModel.ListPrescriptions[i].LastName,
-                    Patient = WVA_OrderViewModel.ListPrescriptions[i].Patient,
-                    Eye = WVA_OrderViewModel.ListPrescriptions[i].Eye,
-                    Quantity = WVA_OrderViewModel.ListPrescriptions[i].Quantity,
-                    Date = WVA_OrderViewModel.ListPrescriptions[i].Date,
-                    _CustomerID = WVA_OrderViewModel.ListPrescriptions[i]._CustomerID,
+                    ProductImagePath = WVAOrdersViewModel.ListPrescriptions[i].ProductImagePath,
+                    IsChecked = WVAOrdersViewModel.ListPrescriptions[i].IsChecked,
+                    FirstName = WVAOrdersViewModel.ListPrescriptions[i].FirstName,
+                    LastName = WVAOrdersViewModel.ListPrescriptions[i].LastName,
+                    Patient = WVAOrdersViewModel.ListPrescriptions[i].Patient,
+                    Eye = WVAOrdersViewModel.ListPrescriptions[i].Eye,
+                    Quantity = WVAOrdersViewModel.ListPrescriptions[i].Quantity,
+                    Date = WVAOrdersViewModel.ListPrescriptions[i].Date,
+                    _CustomerID = WVAOrdersViewModel.ListPrescriptions[i]._CustomerID,
 
                     // If prods[i].Property.Value == null change field to old value, else change to new value
                     CanBeValidated = prods[i].CanBeValidated,
-                    Product = prods[i]._Description ?? WVA_OrderViewModel.ListPrescriptions[i].Product,
-                    ProductCode = Validator.CheckIfValid(prods[i]._ProductKey) ? prods[i]._ProductKey?.Value : WVA_OrderViewModel.ListPrescriptions[i].ProductCode,
+                    Product = prods[i]._Description ?? WVAOrdersViewModel.ListPrescriptions[i].Product,
+                    ProductCode = Validator.CheckIfValid(prods[i]._ProductKey) ? prods[i]._ProductKey?.Value : WVAOrdersViewModel.ListPrescriptions[i].ProductCode,
 
                     // NOTE: to help explain ternary statements below for cell colors
                     // If property is null || is blank && errorMessage is null then cell color = White 
                     // If property isValid then cell color = Green
                     // If property not isValid then cell color = Red
                     BaseCurveValidItems = prods[i]._BaseCurve.ValidItems,
-                    BaseCurve = Validator.CheckIfValid(prods[i]._BaseCurve) ? prods[i]._BaseCurve.Value : WVA_OrderViewModel.ListPrescriptions[i].BaseCurve,
+                    BaseCurve = Validator.CheckIfValid(prods[i]._BaseCurve) ? prods[i]._BaseCurve.Value : WVAOrdersViewModel.ListPrescriptions[i].BaseCurve,
                     BaseCurveCellColor = AssignCellColor(prodValue: prods[i]._BaseCurve?.Value?.Trim(), isValid: prods[i]._BaseCurve.IsValid, errorMessage: prods[i]._BaseCurve.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     DiameterValidItems = prods[i]._Diameter.ValidItems,
-                    Diameter = Validator.CheckIfValid(prods[i]._Diameter) ? prods[i]._Diameter.Value : WVA_OrderViewModel.ListPrescriptions[i].Diameter,
+                    Diameter = Validator.CheckIfValid(prods[i]._Diameter) ? prods[i]._Diameter.Value : WVAOrdersViewModel.ListPrescriptions[i].Diameter,
                     DiameterCellColor = AssignCellColor(prodValue: prods[i]._Diameter?.Value?.Trim(), isValid: prods[i]._Diameter.IsValid, errorMessage: prods[i]._Diameter.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     SphereValidItems = prods[i]._Sphere.ValidItems,
-                    Sphere = Validator.CheckIfValid(prods[i]._Sphere) ? prods[i]._Sphere.Value : WVA_OrderViewModel.ListPrescriptions[i].Sphere,
+                    Sphere = Validator.CheckIfValid(prods[i]._Sphere) ? prods[i]._Sphere.Value : WVAOrdersViewModel.ListPrescriptions[i].Sphere,
                     SphereCellColor = AssignCellColor(prodValue: prods[i]._Sphere?.Value?.Trim(), isValid: prods[i]._Sphere.IsValid, errorMessage: prods[i]._Sphere.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     CylinderValidItems = prods[i]._Cylinder.ValidItems,
-                    Cylinder = Validator.CheckIfValid(prods[i]._Cylinder) ? prods[i]._Cylinder.Value : WVA_OrderViewModel.ListPrescriptions[i].Cylinder,
+                    Cylinder = Validator.CheckIfValid(prods[i]._Cylinder) ? prods[i]._Cylinder.Value : WVAOrdersViewModel.ListPrescriptions[i].Cylinder,
                     CylinderCellColor = AssignCellColor(prodValue: prods[i]._Cylinder?.Value?.Trim(), isValid: prods[i]._Cylinder.IsValid, errorMessage: prods[i]._Cylinder.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     AxisValidItems = prods[i]._Axis.ValidItems,
-                    Axis = Validator.CheckIfValid(prods[i]._Axis) ? prods[i]._Axis.Value : WVA_OrderViewModel.ListPrescriptions[i].Axis,
+                    Axis = Validator.CheckIfValid(prods[i]._Axis) ? prods[i]._Axis.Value : WVAOrdersViewModel.ListPrescriptions[i].Axis,
                     AxisCellColor = AssignCellColor(prodValue: prods[i]._Axis?.Value?.Trim(), isValid: prods[i]._Axis.IsValid, errorMessage: prods[i]._Axis.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     AddValidItems = prods[i]._Add.ValidItems,
-                    Add = Validator.CheckIfValid(prods[i]._Add) ? prods[i]._Add.Value : WVA_OrderViewModel.ListPrescriptions[i].Add,
+                    Add = Validator.CheckIfValid(prods[i]._Add) ? prods[i]._Add.Value : WVAOrdersViewModel.ListPrescriptions[i].Add,
                     AddCellColor = AssignCellColor(prodValue: prods[i]._Add?.Value?.Trim(), isValid: prods[i]._Add.IsValid, errorMessage: prods[i]._Add.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     ColorValidItems = prods[i]._Color.ValidItems,
-                    Color = Validator.CheckIfValid(prods[i]._Color) ? prods[i]._Color.Value : WVA_OrderViewModel.ListPrescriptions[i].Color,
+                    Color = Validator.CheckIfValid(prods[i]._Color) ? prods[i]._Color.Value : WVAOrdersViewModel.ListPrescriptions[i].Color,
                     ColorCellColor = AssignCellColor(prodValue: prods[i]._Color?.Value?.Trim(), isValid: prods[i]._Color.IsValid, errorMessage: prods[i]._Color.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     MultifocalValidItems = prods[i]._Multifocal.ValidItems,
-                    Multifocal = Validator.CheckIfValid(prods[i]._Multifocal) ? prods[i]._Multifocal.Value : WVA_OrderViewModel.ListPrescriptions[i].Multifocal,
+                    Multifocal = Validator.CheckIfValid(prods[i]._Multifocal) ? prods[i]._Multifocal.Value : WVAOrdersViewModel.ListPrescriptions[i].Multifocal,
                     MultifocalCellColor = AssignCellColor(prodValue: prods[i]._Multifocal?.Value?.Trim(), isValid: prods[i]._Multifocal.IsValid, errorMessage: prods[i]._Multifocal.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
                 };
 
-                WVA_OrderViewModel.ListPrescriptions[i] = prescription;
+                WVAOrdersViewModel.ListPrescriptions[i] = prescription;
             }
 
             OrdersDataGrid.Items.Refresh();
@@ -610,7 +613,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
             if (result.ToString() == "Yes")
             {
-                WVA_OrderViewModel.ListPrescriptions.Clear();
+                WVAOrdersViewModel.ListPrescriptions.Clear();
                 OrdersDataGrid.Items.Refresh();
             }
         }
@@ -685,7 +688,16 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Save order to database
         private void SaveOrderButton_Click(object sender, RoutedEventArgs e)
         {
+            // Spawn a loading window and change cursor to waiting cursor
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.Show();
+            Mouse.OverrideCursor = Cursors.Wait;
 
+            //await Task.Run(() => List_WVA_Products.LoadProducts());
+
+            // Close loading window and change cursor back to default arrow cursor
+            loadingWindow.Close();
+            Mouse.OverrideCursor = Cursors.Arrow;
         }
     }
 }

@@ -107,7 +107,8 @@ namespace WVA_Compulink_Integration.Views.Search
                 return JsonConvert.DeserializeObject<List<Exam>>(strExams);
             }
             catch(Exception x)
-            {              
+            {
+                AppError.PrintToLog(x);
                 return null;
             }
         } 

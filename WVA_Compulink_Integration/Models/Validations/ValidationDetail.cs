@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Models.Order;
 using WVA_Compulink_Integration.Models.ProductParameters;
 
@@ -155,7 +156,7 @@ namespace WVA_Compulink_Integration.Models.Validations
             }
             catch (Exception x)
             {
-
+                AppError.PrintToLog(x);
             };
         }
 
@@ -286,7 +287,7 @@ namespace WVA_Compulink_Integration.Models.Validations
             }
             catch (Exception x)
             {
-                  
+                AppError.PrintToLog(x);
             };
         }
 

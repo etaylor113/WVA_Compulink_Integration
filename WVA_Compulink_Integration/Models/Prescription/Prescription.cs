@@ -23,11 +23,11 @@ namespace WVA_Compulink_Integration.Models.Prescription
         public bool CanBeValidated { get; set; } = true;
 
         // These properties are visible to the client in the data grid
-        private string patient;      
+      
         public string Patient
         {
-            get { return patient; }
-            set { patient = $"{FirstName} {LastName}"; }
+            get { return $"{LastName}, {FirstName}"; }
+            set { Patient = value; }
         }                    
         public string Date { get; set; }
         public string Eye { get; set; }

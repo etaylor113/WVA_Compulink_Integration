@@ -62,6 +62,7 @@
     </ApplicationDefinition>
     <Compile Include="Cryptography\Crypto.cs" />
     <Compile Include="MatchFinder\WVA_Products.cs" />
+    <Compile Include="Memory\Orders.cs" />
     <Compile Include="Memory\UserData.cs" />
     <Compile Include="Models\Order\ItemDetail.cs" />
     <Compile Include="Models\Order\Out\Item.cs" />
@@ -85,8 +86,10 @@
     <Compile Include="Models\ProductParameters\Children\Sphere.cs" />
     <Compile Include="Models\ProductParameters\Children\UPC.cs" />
     <Compile Include="Models\ProductParameters\Parent\Parameter.cs" />
-    <Compile Include="Models\Product\List_WVA_Products.cs" />
+    <Compile Include="Memory\List_WVA_Products.cs" />
     <Compile Include="Models\Request\Out_Request.cs" />
+    <Compile Include="Models\Validations\Emails\EmailValidationCode.cs" />
+    <Compile Include="Models\Validations\Emails\EmailValidationSend.cs" />
     <Compile Include="Models\Validations\ProductValidation.cs" />
     <Compile Include="Models\Validations\ValidationDetail.cs" />
     <Compile Include="Models\Validations\ValidationProducts.cs" />
@@ -98,9 +101,6 @@
     <Compile Include="ViewModels\Orders\CompulinkOrdersViewModel.cs" />
     <Compile Include="ViewModels\Orders\OrderCreationViewModel.cs" />
     <Compile Include="ViewModels\Orders\WVAOrdersViewModel.cs" />
-    <Compile Include="ViewModels\Orders\WVA_OrderViewModel.cs" />
-    <Compile Include="ViewModels\SearchViewModel.cs" />
-    <Compile Include="ViewModels\SettingsLoginViewModel.cs" />
     <Compile Include="Views\AddToOrderView.xaml.cs">
       <DependentUpon>AddToOrderView.xaml</DependentUpon>
     </Compile>
@@ -139,8 +139,6 @@
     <Compile Include="Utility\File\Paths.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\OrdersViewModel.cs" />
-    <Compile Include="ViewModels\Orders\ShipToOfficeViewModel.cs" />
-    <Compile Include="ViewModels\Orders\ShipToPatientViewModel.cs" />
     <Compile Include="ViewModels\Search\SearchExamsViewModel.cs" />
     <Compile Include="ViewModels\Search\SearchPatientsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
