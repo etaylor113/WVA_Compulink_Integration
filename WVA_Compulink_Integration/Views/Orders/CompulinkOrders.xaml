@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:WVA_Compulink_Integration.Views.Orders"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
-             d:DesignWidth="1000">
+             d:DesignWidth="800">
     <UserControl.Resources>
 
         <LinearGradientBrush x:Key="ExamsButtonGroup" StartPoint="0,0" EndPoint="1,1">
@@ -21,8 +21,8 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontFamily" Value="Sitka Text"/>
             <Setter Property="FontSize" Value="25"/>
-            <Setter Property="Height" Value="35" />
-            <Setter Property="Width" Value="240" />
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="240"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="1"/>
             <Setter Property="Template">
@@ -185,7 +185,7 @@
                   CanUserResizeRows="False"
                   CanUserAddRows="False"
                   FontWeight="DemiBold"
-                  BorderThickness="1"
+                  BorderThickness="1"               
                   ItemsSource="{Binding Prescription}"
                   CanUserReorderColumns="False"
                   CanUserSortColumns="False" 

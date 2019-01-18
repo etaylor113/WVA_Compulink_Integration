@@ -23,6 +23,7 @@ using WVA_Compulink_Integration.Models.Order.Out;
 using WVA_Compulink_Integration.Models.Patient;
 using WVA_Compulink_Integration.Models.Prescription;
 using WVA_Compulink_Integration.Utility.File;
+using WVA_Compulink_Integration.ViewModels;
 using WVA_Compulink_Integration.ViewModels.Orders;
 using WVA_Compulink_Integration.Views.Search;
 
@@ -54,10 +55,9 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             List<Order> listWvaOrders = Memory.Orders.WVAOrders;
             
-            try { WvaOrdersComboBox.Text = $"wva_order-{File.ReadAllText(Paths.ActNumFile)}-{DateTime.Now.ToString("yyyy-MM-dd")}"; }
-            catch { WvaOrdersComboBox.Text = $"wva_order-{DateTime.Now.ToString("yyyy-MM-dd")}"; }
-
-          
+            // If there is an account number 
+            try   { WvaOrdersComboBox.Text = $"wva_order-{File.ReadAllText(Paths.ActNumFile)}-{DateTime.Now.ToString("yyyy-MM-dd")}"; }
+            catch { WvaOrdersComboBox.Text = $"wva_order-{DateTime.Now.ToString("yyyy-MM-dd")}"; }      
         }
 
         // Filters out orders in table by whatever the user enters in the search text box
@@ -82,14 +82,14 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         // Asyncronously get Compulink Orders from server
         private async Task<List<Prescription>> GetCompulinkOrders()
-        {
+        {           
             string endpoint = "http://localhost:56075/CompuClient/prescriptions/";
             string strPrescriptions = API.Get(endpoint, out string httpStatus);
 
             if (strPrescriptions == null)
                 throw new NullReferenceException();
 
-            return JsonConvert.DeserializeObject<List<Prescription>>(strPrescriptions);    
+            return JsonConvert.DeserializeObject<List<Prescription>>(strPrescriptions);           
         }
 
         // Set up items in OrdersDataGrid 
@@ -172,22 +172,52 @@ namespace WVA_Compulink_Integration.Views.Orders
             try
             {
                 // Get order name, selected row in table, and patient object attatched to row
-                IList rows = OrdersDataGrid.SelectedItems;
-                Patient patient = (Patient)rows[0];
+                IList rows = OrdersDataGrid.Items;
 
-                // Jumps back to parent view and changes it to order creation view 
-                foreach (Window window in Application.Current.Windows)
+                int stpCount = 0;
+                int totalCount = 0;
+                List<Prescription> listPrescriptions = new List<Prescription>();
+
+                // Add only checked orders to list
+                foreach (Prescription prescription in rows)
                 {
-                    if (window.GetType() == typeof(MainWindow))
-                    {
-                        (window as MainWindow).MainContentControl.DataContext = new OrderCreationViewModel(patient);
-                        return;
-                    }
+                    if (prescription.IsChecked)
+                    {                       
+                        listPrescriptions.Add(prescription);
+                        totalCount++;
+                        if (prescription.IsShipToPatient)
+                            stpCount++;
+                    }                                         
                 }
-            }
-            catch
-            {
 
+                // Make sure user can't create a mixed STP & STO order
+                if (stpCount > 0 && stpCount != totalCount)
+                {
+                    // Notify user they can't create a mixed order
+                    MessageBox.Show("Cannot create a mixed Ship to Patient/Ship to Office order!", "Compulink Integration", MessageBoxButton.OK);
+                }
+                else if (totalCount == 0)
+                {
+                    // Notify user they must select at least one Compulink order
+                    MessageBox.Show("You must select at least one Compulink order. \nClick checkbox in (+) column to select an order.", "Compulink Integration", MessageBoxButton.OK);
+                }
+                else
+                {                              
+                    // Jumps back to parent view and changes it to order creation view 
+                    foreach (Window window in Application.Current.Windows)
+                    {
+                        if (window.GetType() == typeof(MainWindow))
+                        {
+                            OrdersViewModel.SelectedView = "OrderCreation";
+                            (window as MainWindow).MainContentControl.DataContext = new OrdersView(listPrescriptions, WvaOrdersComboBox.Text);                    
+                            return;
+                        }
+                    }
+                }                
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
             }
         }
 

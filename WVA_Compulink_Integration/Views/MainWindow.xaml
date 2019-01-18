@@ -8,7 +8,7 @@
         xmlns:views="clr-namespace:WVA_Compulink_Integration.Views"
         mc:Ignorable="d"
         Height="650"
-        Width="1400"
+        Width="1200"
         MinWidth="1000" 
         MinHeight="550" 
         WindowStartupLocation="CenterScreen" 
@@ -117,13 +117,9 @@
         <DataTemplate x:Name="settingsViewTemplate" DataType="{x:Type viewmodels:SettingsViewModel}">
             <views:SettingsView DataContext="{Binding ElementName=settingsViewTemplate}"/>
         </DataTemplate>
-     
+
         <DataTemplate x:Name="helpViewTemplate" DataType="{x:Type viewmodels:HelpViewModel}">
             <views:HelpView DataContext="{Binding ElementName=helpViewTemplate}"/>
-        </DataTemplate>
-
-        <DataTemplate x:Name="addToOrderViewTemplate" DataType="{x:Type viewmodels:AddToOrderViewModel}">
-            <views:AddToOrderView DataContext="{Binding ElementName=addToOrderViewTemplate}"/>
         </DataTemplate>
 
     </Window.Resources>

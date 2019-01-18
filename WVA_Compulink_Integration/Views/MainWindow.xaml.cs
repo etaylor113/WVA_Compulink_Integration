@@ -17,6 +17,9 @@ using WVA_Compulink_Integration.ViewModels;
 using WVA_Compulink_Integration.ViewModels.Orders;
 using WVA_Compulink_Integration.Views.Search;
 using WVA_Compulink_Integration.Views;
+using WVA_Compulink_Integration.Memory;
+using System.IO;
+using WVA_Compulink_Integration.Utility.File;
 
 namespace WVA_Compulink_Integration.Views
 {
@@ -41,6 +44,11 @@ namespace WVA_Compulink_Integration.Views
             loadingWindow.Show();
             Mouse.OverrideCursor = Cursors.Wait;
 
+            // Set user account number in memory
+            try { UserData._User.Account = File.ReadAllText(Paths.ActNumFile); }
+            catch {}
+           
+            // Load product list into memory for match algorithm
             await Task.Run(() => List_WVA_Products.LoadProducts());
 
             // Close loading window and change cursor back to default arrow cursor

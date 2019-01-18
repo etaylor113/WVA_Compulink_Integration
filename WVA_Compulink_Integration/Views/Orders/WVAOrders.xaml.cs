@@ -48,49 +48,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
-                OrdersDataGrid.Items.Clear();
-
-                if (searchString == "")
-                    return;
-
-                List<Patient> tempList = new List<Patient>();
-
-                switch (index)
-                {
-                    // PatientID
-                    case 0:
-                        tempList = ListPatients.OrigListPatients.Where(x => x.PatientID.ToLower().StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
-                        break;
-                    // Name
-                    case 1:
-                        tempList = ListPatients.OrigListPatients.Where(x => x.FullName.ToLower().StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
-                        break;
-                    // Street
-                    case 2:
-                        tempList = ListPatients.OrigListPatients.Where(x => x.Street.ToLower().StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
-                        break;
-                    // City
-                    case 3:
-                        tempList = ListPatients.OrigListPatients.Where(x => x.City.ToLower().StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
-                        break;
-                    // State
-                    case 4:
-                        tempList = ListPatients.OrigListPatients.Where(x => x.State.ToLower().StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
-                        break;
-                    // Zip
-                    case 5:
-                        tempList = ListPatients.OrigListPatients.Where(x => x.Zip.ToLower().StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
-                        break;
-                    // Phone
-                    case 6:
-                        tempList = ListPatients.OrigListPatients.Where(x => x.Phone.StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
-                        break;
-                    default:
-                        break;
-                }
-
-                foreach (Patient patient in tempList)
-                    OrdersDataGrid.Items.Add(patient);
+              
             }
             catch (Exception x)
             {
@@ -101,21 +59,20 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Asyncronously return this account's orders from the server 
         private async Task<List<Order>> GetWVAOrders()
         {       
-            string endpoint = "http://localhost:56075/CompuClient/prescriptions/";
-            string strORders = API.Get(endpoint, out string httpStatus);
+            string endpoint = $"http://localhost:56075/CompuClient/orders/" + $"{UserData._User.Account}";
+            string strOrders = API.Get(endpoint, out string httpStatus);
 
-            if (strORders == null)
+            if (strOrders == null)
                 throw new NullReferenceException();
 
-            return JsonConvert.DeserializeObject<List<Order>>(strORders);
-           
+            return JsonConvert.DeserializeObject<List<Order>>(strOrders);          
         }
 
         private async void SetUpOrdersDataGrid()
         {
             try
             {
-              
+                await GetWVAOrders();
             }
             catch (Exception x)
             {

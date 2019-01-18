@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WVA_Compulink_Integration.Views.Orders"
              mc:Ignorable="d" 
-             d:DesignHeight="450" 
+             d:DesignHeight="500" 
              d:DesignWidth="800">
-    
+
     <UserControl.Resources>
 
         <LinearGradientBrush x:Key="ExamsButtonGroup" StartPoint="0,0" EndPoint="1,1">
@@ -145,7 +145,7 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
-                <RowDefinition Height="200*"/>
+                <RowDefinition Height="150*"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
 
@@ -425,16 +425,16 @@
 
         </Grid>
 
-
         <!-- Bottom Half Grid -->
         <Grid Grid.Row="1">
 
             <!-- Grid Definitions -->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="190*"/>
-                <ColumnDefinition Width="150*"/>
-                <ColumnDefinition Width="300*"/>
+                <ColumnDefinition Width="122*"/>
+                <ColumnDefinition Width="111*"/>
+                <ColumnDefinition Width="184*"/>
+                <ColumnDefinition Width="343*"/>
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -445,32 +445,32 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
-
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <Rectangle Fill="Black" 
                        Height="3" 
                        Grid.Column="1" 
-                       Grid.ColumnSpan="3" 
+                       Grid.ColumnSpan="4" 
                        VerticalAlignment="Top"/>
 
             <Rectangle Fill="Black" 
                        Width="3"
-                       Grid.Column="3" 
+                       Grid.Column="4" 
                        Grid.Row="0"
-                       Grid.RowSpan="7" 
+                       Grid.RowSpan="8" 
                        VerticalAlignment="Stretch" 
                        HorizontalAlignment="Left"
-                       Margin="0,0,0,-10"/>
+                       Margin="0,0,0,0"/>
 
             <Rectangle Fill="Black" 
                        Height="3" 
-                       Grid.Column="3" 
+                       Grid.Column="4" 
                        Grid.ColumnSpan="1"
-                       Grid.Row="4"
+                       Grid.Row="6"
                        VerticalAlignment="Top" 
-                       HorizontalAlignment="Stretch"
-                       Margin="0,5,0,0"/>
+                       HorizontalAlignment="Stretch"                     
+                       Margin="0,0,0,0"/>
 
             <!-- Addressee -->
             <Label Name="AddresseeLabel"
@@ -486,12 +486,12 @@
             <TextBox Name="AddresseeTextBox"
                      Grid.Column="1"
                      HorizontalAlignment="Stretch" 
-                     Height="22" 
-                     Margin="85,0,10,0" 
+                     Height="24" 
+                     Margin="85,3,10,3" 
                      Grid.Row="1" 
                      TextWrapping="Wrap" 
                      VerticalAlignment="Center" 
-                     Grid.ColumnSpan="2"/>
+                     Grid.ColumnSpan="3"/>
 
             <!-- Address -->
             <Label Name="AddressLabel"
@@ -507,16 +507,16 @@
             <TextBox Name="AddressTextBox"
                      Grid.Column="1"
                      HorizontalAlignment="Stretch" 
-                     Height="22" 
-                     Margin="85,0,10,0" 
+                     Height="24" 
+                     Margin="85,3,10,3" 
                      Grid.Row="2" 
                      TextWrapping="Wrap" 
                      VerticalAlignment="Center" 
-                     Grid.ColumnSpan="2"/>
+                     Grid.ColumnSpan="3"/>
 
             <!-- Suite/ Apt. -->
             <Label Name="Suite_AptLabel"
-                   Content="Suite/ Apt." 
+                   Content="Suite/Apt." 
                    Grid.Column="1"
                    HorizontalAlignment="Left"
                    Grid.Row="3" 
@@ -528,12 +528,12 @@
             <TextBox Name="Suite_AptTextBox"
                      Grid.Column="1"
                      HorizontalAlignment="Stretch" 
-                     Height="22" 
-                     Margin="85,0,10,0" 
+                     Height="24" 
+                     Margin="85,3,10,3" 
                      Grid.Row="3" 
                      TextWrapping="Wrap" 
                      VerticalAlignment="Center" 
-                     Grid.ColumnSpan="2"/>
+                     Grid.ColumnSpan="3"/>
 
             <!-- City -->
             <Label Name="CityLabel"
@@ -549,12 +549,12 @@
             <TextBox Name="CityTextBox"
                      Grid.Column="1"
                      HorizontalAlignment="Stretch" 
-                     Height="22"
-                     Margin="85,0,10,0" 
+                     Height="24"
+                     Margin="85,3,10,3" 
                      Grid.Row="4" 
                      TextWrapping="Wrap" 
                      VerticalAlignment="Center" 
-                     Grid.ColumnSpan="2"/>
+                     Grid.ColumnSpan="3"/>
 
             <!-- State -->
             <Label Name="StateLabel"
@@ -569,15 +569,16 @@
 
             <ComboBox x:Name="StateComboBox" 
                       Grid.Column="1"
-                      Text="Select State"
+                      Text="-Select State-"
                       IsEditable="True"
                       IsReadOnly="True"
+                      FontFamily="Sitka Text"
+                      FontSize="15"
                       HorizontalAlignment="Stretch"
-                      Margin="85,0,0,0" 
+                      Margin="85,3,0,3" 
                       Grid.Row="5"
                       VerticalAlignment="Center"
-                      Height="22" >
-
+                      Height="24" Grid.ColumnSpan="2" >
                 <ComboBoxItem Content="Alabama - AL" />
                 <ComboBoxItem Content="Alaska - AK" />
                 <ComboBoxItem Content="Arizona - AZ" />
@@ -628,13 +629,12 @@
                 <ComboBoxItem Content="West Virginia - WV" />
                 <ComboBoxItem Content="Wisconsin - WI" />
                 <ComboBoxItem Content="Wyoming - WY" />
-
             </ComboBox>
 
             <!-- Zip -->
             <Label Name="ZipLabel"
                    Content="ZIP" 
-                   Grid.Column="2"
+                   Grid.Column="3"
                    HorizontalAlignment="Left"
                    Grid.Row="5" 
                    VerticalAlignment="Center" 
@@ -643,10 +643,10 @@
                    FontSize="15"/>
 
             <TextBox Name="ZipTextBox"
-                     Grid.Column="2"
+                     Grid.Column="3"
                      HorizontalAlignment="Stretch" 
-                     Height="22" 
-                     Margin="35,0,10,0" 
+                     Height="24" 
+                     Margin="40,3,10,3" 
                      Grid.Row="5" 
                      TextWrapping="Wrap" 
                      VerticalAlignment="Center"/>
@@ -665,76 +665,169 @@
             <TextBox Name="PhoneTextBox"
                      Grid.Column="1"
                      HorizontalAlignment="Stretch" 
-                     Height="22" 
-                     Margin="85,0,0,0" 
+                     Height="24" 
+                     Margin="85,3,0,3" 
+                     Grid.Row="6" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+
+            <!-- Phone -->
+            <Label Name="DoBLabel"
+                   Content="DoB" 
+                   Grid.Column="3"
+                   HorizontalAlignment="Left"
+                   Grid.Row="6" 
+                   VerticalAlignment="Center" 
+                   Height="30" 
+                   Width="50"
+                   FontSize="15"/>
+
+            <TextBox Name="DoBTextBox"
+                     Grid.Column="3"
+                     HorizontalAlignment="Stretch" 
+                     Height="24" 
+                     Margin="40,3,10,3" 
                      Grid.Row="6" 
                      TextWrapping="Wrap" 
                      VerticalAlignment="Center"/>
 
-            <!-- Account ID -->
-            <Label Content="Account ID:" 
-                   Grid.Column="3"
+            <!-- Order Name -->
+            <Label Name="OrderNameLabel"
+                   Content="Order Name:" 
+                   Grid.Column="4"
                    HorizontalAlignment="Left"
                    Grid.Row="1" 
                    FontSize="15"
                    VerticalAlignment="Center"
                    Height="30"
-                   Width="276" 
-                   Grid.ColumnSpan="2" 
-                   Margin="10,0,0,0"/>
+                   Width="100" 
+                   Margin="5,0,0,0"/>
 
-            <!-- Ordered By -->
-            <Label Content="Ordered By:" 
-                   Grid.Column="3"
+            <TextBox x:Name="OrderNameTextBox"
+                     Grid.Column="4" 
+                     HorizontalAlignment="Stretch"
+                     Height="24" 
+                     Margin="100,3,0,3"
+                     Grid.Row="1" 
+                     FontSize="15"
+                     TextWrapping="NoWrap"     
+                     VerticalAlignment="Center"/>
+
+            <!-- Account ID -->
+            <Label Content="Account ID:" 
+                   Grid.Column="4"
                    HorizontalAlignment="Left"
                    Grid.Row="2" 
+                   FontSize="15"
                    VerticalAlignment="Center"
                    Height="30"
-                   Width="90"
-                   FontSize="15"
-                   Margin="10,0,0,1"/>
+                   Width="90" 
+                   Margin="5,0,0,0"/>
 
-            <TextBox x:Name="OrderedByTextBox"
-                     Grid.Column="3" 
+            <TextBox x:Name="AccountIDTextBox"
+                     Grid.Column="4" 
                      HorizontalAlignment="Stretch"
-                     Height="26" 
-                     Margin="100,0,55,0"
+                     Height="24" 
+                     IsReadOnly="True"
+                     Margin="100,3,0,3"
                      Grid.Row="2" 
                      FontSize="15"
                      TextWrapping="NoWrap"     
                      VerticalAlignment="Center"/>
 
+            <!-- Ordered By -->
+            <Label Content="Ordered By:" 
+                   Grid.Column="4"
+                   HorizontalAlignment="Left"
+                   Grid.Row="3" 
+                   VerticalAlignment="Center"
+                   Height="30"
+                   Width="95"
+                   FontSize="15"
+                   Margin="5,0,0,0"/>
+
+            <TextBox x:Name="OrderedByTextBox"
+                     Grid.Column="4" 
+                     HorizontalAlignment="Stretch"
+                     Height="24" 
+                     Margin="100,3,0,3"
+                     Grid.Row="3" 
+                     FontSize="15"
+                     TextWrapping="NoWrap"     
+                     VerticalAlignment="Center"/>
+
+            <!-- Ordered By -->
+            <Label Name="PoNumberLabel"
+                   Content="PO Number:" 
+                   Grid.Column="4"
+                   HorizontalAlignment="Left"
+                   Grid.Row="4" 
+                   VerticalAlignment="Center"
+                   Height="30"
+                   Width="95"
+                   FontSize="15"
+                   Margin="5,0,0,0"/>
+
+            <TextBox Name="PoNumberTextBox"
+                     Grid.Column="4" 
+                     HorizontalAlignment="Stretch"
+                     Height="24" 
+                     Margin="100,3,0,3"
+                     Grid.Row="4" 
+                     FontSize="15"
+                     TextWrapping="NoWrap"     
+                     VerticalAlignment="Center"/>
 
             <!-- Shipping Type -->
             <Label Content="Ship Type:" 
-                   Grid.Column="3"
+                   Grid.Column="4"
                    HorizontalAlignment="Left"
-                   Grid.Row="3" 
+                   Grid.Row="5" 
                    VerticalAlignment="Center" 
                    FontSize="15"
                    Height="30"
-                   Width="110"
-                   Margin="10,0,0,0"/>
+                   Width="90"
+                   Margin="5,0,0,0"/>
 
 
             <!-- Shipping Type ComboBox -->
             <ComboBox Name="ShippingTypeComboBox"
-                      Grid.Column="3"
+                      Grid.Column="4"
                       HorizontalAlignment="Stretch"
-                      Grid.Row="3"
+                      Grid.Row="5"
                       FontSize="15"
+                      SelectedIndex="0"
+                      FontFamily="Sitka Text"
                       VerticalAlignment="Center"
-                      Height="28"
-                      Margin="100,0,55,0" 
+                      Height="24"
+                      Margin="100,3,0,3" 
                       IsEditable="True"
-                      IsReadOnly="True" 
-                      Text="Select Shipping Type"/>
+                      IsReadOnly="True">
+                <ComboBoxItem>
+                    Standard
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    UPS Ground
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    UPS 2nd Day Air
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    UPS Next Day Air
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    Free Standard
+                </ComboBoxItem>
+            </ComboBox>
 
-            <StackPanel Grid.Row="5"
-                        Grid.Column="3"
+            <StackPanel Grid.Row="6"
+                        Grid.Column="4"
+                        Grid.RowSpan="1"
                         Orientation="Horizontal"
-                        HorizontalAlignment="Right">
-                
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,7,0,0">
+
                 <!-- Save Order Button -->
                 <Button Name="SaveOrderButton"
                         Content="Save" 
@@ -742,7 +835,7 @@
                         HorizontalAlignment="Right"
                         Width="100" 
                         Margin="0,0,10,0"
-                        Grid.Row="5" 
+                        Grid.Row="6" 
                         Grid.RowSpan="1" 
                         Height="24"
                         FontSize="16"
@@ -750,32 +843,32 @@
 
                 <!-- Submit Order Button -->
                 <Button Name="SubmitOrderButton"
-                    Content="Submit" 
-                    Grid.Column="3" 
-                    HorizontalAlignment="Right"
-                    Width="100" 
-                    Margin="0,0,10,0"
-                    Grid.Row="5" 
-                    Grid.RowSpan="1" 
-                    Height="24"
-                    FontSize="16"
-                    Click="SubmitOrderButton_Click"/>
+                        Content="Submit" 
+                        Grid.Column="3" 
+                        HorizontalAlignment="Right"
+                        Width="100" 
+                        Margin="0,0,10,0"
+                        Grid.Row="6" 
+                        Grid.RowSpan="1" 
+                        Height="24"
+                        FontSize="16"
+                        Click="SubmitOrderButton_Click"/>
 
                 <!-- Delete Order Button -->
                 <Button Name="DeleteOrderButton"
-                    Content="Delete" 
-                    Grid.Column="3" 
-                    HorizontalAlignment="Right"
-                    Grid.Row="5"
-                    Width="100" 
-                    Margin="0,0,0,0" 
-                    Grid.RowSpan="1"
-                    Height="24"
-                    FontSize="16"
-                    Click="DeleteOrderButton_Click"/>
+                        Content="Delete" 
+                        Grid.Column="3" 
+                        HorizontalAlignment="Right"
+                        Grid.Row="6"
+                        Width="100" 
+                        Margin="0,0,0,0" 
+                        Grid.RowSpan="1"
+                        Height="24"
+                        FontSize="16"
+                        Click="DeleteOrderButton_Click"/>
 
             </StackPanel>
-            
+
         </Grid>
 
     </Grid>

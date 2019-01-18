@@ -125,6 +125,10 @@
             <views:WVAOrders DataContext="{Binding ElementName=wvaOrdersViewTemplate}"/>
         </DataTemplate>
 
+        <DataTemplate x:Name="OrderCreationViewTemplate" DataType="{x:Type viewmodels:OrderCreationViewModel}">
+            <views:OrderCreationView DataContext="{Binding ElementName=orderCreationViewTemplate}"/>
+        </DataTemplate>
+
     </UserControl.Resources>
 
     <!-- Main Grid -->
@@ -212,7 +216,6 @@
                             VerticalAlignment="Stretch" 
                             Content="{Binding}" 
                             x:FieldModifier="public"/>
-
 
         </Grid>
     </Grid>

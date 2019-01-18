@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WVA_Compulink_Integration.Models.Patient;
+using WVA_Compulink_Integration.Models.Prescription;
 using WVA_Compulink_Integration.ViewModels;
 using WVA_Compulink_Integration.ViewModels.Orders;
 
@@ -26,7 +27,13 @@ namespace WVA_Compulink_Integration.Views
             DetermineView();
         }
 
-        public void DetermineView()
+        public OrdersView(List<Prescription> prescriptions, string orderName)
+        {
+            InitializeComponent();
+            DetermineView(prescriptions, orderName);
+        }
+
+        public void DetermineView(List<Prescription> prescriptions = null, string orderName = "")
         {           
             if (OrdersViewModel.SelectedView == "CompulinkOrders")
             {
@@ -40,6 +47,10 @@ namespace WVA_Compulink_Integration.Views
                 SetUpWVA_OrdersView();
                 OrdersContentControl.DataContext = new WVAOrdersViewModel();
             }
+            else if (OrdersViewModel.SelectedView == "OrderCreation")
+            {    
+                OrdersContentControl.DataContext = new OrderCreationViewModel(prescriptions, orderName);
+            }
             else
             {
                 OrdersContentControl.DataContext = new CompulinkOrdersViewModel();
@@ -47,7 +58,8 @@ namespace WVA_Compulink_Integration.Views
 
             // Reset SelectedView string
             OrdersViewModel.SelectedView = "";
-        }
+            
+        }     
 
         private void CompulinkOrdersButton_Click(object sender, RoutedEventArgs e)
         {

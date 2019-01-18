@@ -18,6 +18,7 @@ using WVA_Compulink_Integration.ViewModels.Orders;
 using WVA_Compulink_Integration.Error;
 using System.Windows.Input;
 using WVA_Compulink_Integration.Views.Search;
+using WVA_Compulink_Integration.Memory;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
@@ -35,6 +36,39 @@ namespace WVA_Compulink_Integration.Views.Orders
         public OrderCreationView()
         {
             InitializeComponent();
+            SetUpUI();
+        }
+
+        private void SetUpUI()
+        {
+            // Add rows to datagrid
+            SetUpOrdersDataGrid();
+
+            // Autofill some user information 
+            OrderNameTextBox.Text = OrderCreationViewModel.OrderName;
+            AccountIDTextBox.Text = UserData._User?.Account ?? "";
+            OrderedByTextBox.Text = UserData._User?.UserName ?? "";
+
+            // Hide STP fields if order not STP
+            if (!OrderCreationViewModel.Prescriptions[0].IsShipToPatient)
+            {
+                AddresseeLabel.Visibility = Visibility.Hidden;
+                AddresseeTextBox.Visibility = Visibility.Hidden;
+                AddressLabel.Visibility = Visibility.Hidden;
+                AddressTextBox.Visibility = Visibility.Hidden;
+                Suite_AptLabel.Visibility = Visibility.Hidden;
+                Suite_AptTextBox.Visibility = Visibility.Hidden;
+                CityLabel.Visibility = Visibility.Hidden;
+                CityTextBox.Visibility = Visibility.Hidden;
+                StateLabel.Visibility = Visibility.Hidden;
+                StateComboBox.Visibility = Visibility.Hidden;
+                ZipLabel.Visibility = Visibility.Hidden;
+                ZipTextBox.Visibility = Visibility.Hidden;
+                PhoneLabel.Visibility = Visibility.Hidden;
+                PhoneTextBox.Visibility = Visibility.Hidden;
+                DoBLabel.Visibility = Visibility.Hidden;
+                DoBTextBox.Visibility = Visibility.Hidden;
+            }
         }
 
         private void FindProductMatches()
@@ -59,7 +93,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 if (matchProducts.Count > 0)
                 {
                     ListMatchedProducts.Add(matchProducts);
-                    WVAOrdersViewModel.ListPrescriptions[index].ProductCode = matchProducts[0].ProductKey;
+                    OrderCreationViewModel.Prescriptions[index].ProductCode = matchProducts[0].ProductKey;
                 }
                 else
                 {
@@ -88,13 +122,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].BaseCurveValidItems.Count;
+                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].BaseCurveValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].BaseCurveValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].BaseCurveValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -116,13 +150,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].DiameterValidItems.Count;
+                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].DiameterValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].DiameterValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].DiameterValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -144,13 +178,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].SphereValidItems.Count;
+                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].SphereValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].SphereValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].SphereValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -172,13 +206,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].CylinderValidItems.Count;
+                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].CylinderValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].CylinderValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].CylinderValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -200,13 +234,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].AxisValidItems.Count;
+                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].AxisValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].AxisValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].AxisValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -228,13 +262,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].AddValidItems.Count;
+                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].AddValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].AddValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].AddValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -256,13 +290,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].ColorValidItems.Count;
+                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].ColorValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].ColorValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].ColorValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -284,13 +318,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = WVAOrdersViewModel.ListPrescriptions[SelectedRow].MultifocalValidItems.Count;
+                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].MultifocalValidItems.Count;
 
                         if (ValidItemsCount > 0)
                         {
                             for (int i = 0; i < ValidItemsCount; i++)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = WVAOrdersViewModel.ListPrescriptions[SelectedRow].MultifocalValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].MultifocalValidItems[i] };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                                 WVA_OrdersContextMenu.Items.Add(menuItem);
                             }
@@ -334,27 +368,19 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void SetUpOrdersDataGrid()
         {
-            OrdersDataGrid.ItemsSource = WVAOrdersViewModel.ListPrescriptions;
+            OrdersDataGrid.ItemsSource = OrderCreationViewModel.Prescriptions;
         }
 
         private string AssignCellColor(string prodValue, bool isValid, string errorMessage, bool canBeValidated)
         {
             if (prodValue == null || prodValue == "" && errorMessage == null)
-            {
                 return "White";
-            }
             else if (!canBeValidated)
-            {
                 return "Yellow";
-            }
             else if (isValid)
-            {
                 return "Green";
-            }
             else
-            {
                 return "Red";
-            }
         }
 
         private void SaveData()
@@ -397,53 +423,53 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                     if (column <= 4)
                     {
-                        WVAOrdersViewModel.ListPrescriptions[row].Product = selectedItem;
+                        OrderCreationViewModel.Prescriptions[row].Product = selectedItem;
 
                         if (ListMatchedProducts[row][selectedIndex].MatchScore > 92)
                         {
-                            WVAOrdersViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\GreenBubble.png";
+                            OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\GreenBubble.png";
                         }
                         else if (ListMatchedProducts[row][selectedIndex].MatchScore > 75)
                         {
-                            WVAOrdersViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\YellowBubble.png";
+                            OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\YellowBubble.png";
                         }
                         else
                         {
-                            WVAOrdersViewModel.ListPrescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\RedBubble.jpg";
+                            OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\RedBubble.jpg";
                         }
                     }
 
                     if (column == 5)
                     {
-                        WVAOrdersViewModel.ListPrescriptions[row].BaseCurve = selectedItem;
+                        OrderCreationViewModel.Prescriptions[row].BaseCurve = selectedItem;
                     }
                     if (column == 6)
                     {
-                        WVAOrdersViewModel.ListPrescriptions[row].Diameter = selectedItem;
+                        OrderCreationViewModel.Prescriptions[row].Diameter = selectedItem;
                     }
                     if (column == 7)
                     {
-                        WVAOrdersViewModel.ListPrescriptions[row].Sphere = selectedItem;
+                        OrderCreationViewModel.Prescriptions[row].Sphere = selectedItem;
                     }
                     if (column == 8)
                     {
-                        WVAOrdersViewModel.ListPrescriptions[row].Cylinder = selectedItem;
+                        OrderCreationViewModel.Prescriptions[row].Cylinder = selectedItem;
                     }
                     if (column == 9)
                     {
-                        WVAOrdersViewModel.ListPrescriptions[row].Axis = selectedItem;
+                        OrderCreationViewModel.Prescriptions[row].Axis = selectedItem;
                     }
                     if (column == 10)
                     {
-                        WVAOrdersViewModel.ListPrescriptions[row].Add = selectedItem;
+                        OrderCreationViewModel.Prescriptions[row].Add = selectedItem;
                     }
                     if (column == 11)
                     {
-                        WVAOrdersViewModel.ListPrescriptions[row].Color = selectedItem;
+                        OrderCreationViewModel.Prescriptions[row].Color = selectedItem;
                     }
                     if (column == 12)
                     {
-                        WVAOrdersViewModel.ListPrescriptions[row].Multifocal = selectedItem;
+                        OrderCreationViewModel.Prescriptions[row].Multifocal = selectedItem;
                     }
 
                     OrdersDataGrid.Items.Refresh();
@@ -475,15 +501,22 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void OrdersDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FindProductMatches();
-            SetMenuItems();
+            try
+            {
+                FindProductMatches();
+                SetMenuItems();
+            }
+            catch (Exception x)
+            {
+
+            }           
         }
 
         private void MinScoreAdjustSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
+            MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
             if (WVA_OrdersContextMenu.Items.Count > 0)
-            {
-                MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
+            {               
                 FindProductMatches();
                 SetMenuItems();
             }
@@ -548,59 +581,59 @@ namespace WVA_Compulink_Integration.Views.Orders
                 Prescription prescription = new Prescription()
                 {
                     // These properties don't need to be validated
-                    ProductImagePath = WVAOrdersViewModel.ListPrescriptions[i].ProductImagePath,
-                    IsChecked = WVAOrdersViewModel.ListPrescriptions[i].IsChecked,
-                    FirstName = WVAOrdersViewModel.ListPrescriptions[i].FirstName,
-                    LastName = WVAOrdersViewModel.ListPrescriptions[i].LastName,
-                    Patient = WVAOrdersViewModel.ListPrescriptions[i].Patient,
-                    Eye = WVAOrdersViewModel.ListPrescriptions[i].Eye,
-                    Quantity = WVAOrdersViewModel.ListPrescriptions[i].Quantity,
-                    Date = WVAOrdersViewModel.ListPrescriptions[i].Date,
-                    _CustomerID = WVAOrdersViewModel.ListPrescriptions[i]._CustomerID,
+                    ProductImagePath = OrderCreationViewModel.Prescriptions[i].ProductImagePath,
+                    IsChecked = OrderCreationViewModel.Prescriptions[i].IsChecked,
+                    FirstName = OrderCreationViewModel.Prescriptions[i].FirstName,
+                    LastName = OrderCreationViewModel.Prescriptions[i].LastName,
+                    Patient = OrderCreationViewModel.Prescriptions[i].Patient,
+                    Eye = OrderCreationViewModel.Prescriptions[i].Eye,
+                    Quantity = OrderCreationViewModel.Prescriptions[i].Quantity,
+                    Date = OrderCreationViewModel.Prescriptions[i].Date,
+                    _CustomerID = OrderCreationViewModel.Prescriptions[i]._CustomerID,
 
                     // If prods[i].Property.Value == null change field to old value, else change to new value
                     CanBeValidated = prods[i].CanBeValidated,
-                    Product = prods[i]._Description ?? WVAOrdersViewModel.ListPrescriptions[i].Product,
-                    ProductCode = Validator.CheckIfValid(prods[i]._ProductKey) ? prods[i]._ProductKey?.Value : WVAOrdersViewModel.ListPrescriptions[i].ProductCode,
+                    Product = prods[i]._Description ?? OrderCreationViewModel.Prescriptions[i].Product,
+                    ProductCode = Validator.CheckIfValid(prods[i]._ProductKey) ? prods[i]._ProductKey?.Value : OrderCreationViewModel.Prescriptions[i].ProductCode,
 
                     // NOTE: to help explain ternary statements below for cell colors
                     // If property is null || is blank && errorMessage is null then cell color = White 
                     // If property isValid then cell color = Green
                     // If property not isValid then cell color = Red
                     BaseCurveValidItems = prods[i]._BaseCurve.ValidItems,
-                    BaseCurve = Validator.CheckIfValid(prods[i]._BaseCurve) ? prods[i]._BaseCurve.Value : WVAOrdersViewModel.ListPrescriptions[i].BaseCurve,
+                    BaseCurve = Validator.CheckIfValid(prods[i]._BaseCurve) ? prods[i]._BaseCurve.Value : OrderCreationViewModel.Prescriptions[i].BaseCurve,
                     BaseCurveCellColor = AssignCellColor(prodValue: prods[i]._BaseCurve?.Value?.Trim(), isValid: prods[i]._BaseCurve.IsValid, errorMessage: prods[i]._BaseCurve.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     DiameterValidItems = prods[i]._Diameter.ValidItems,
-                    Diameter = Validator.CheckIfValid(prods[i]._Diameter) ? prods[i]._Diameter.Value : WVAOrdersViewModel.ListPrescriptions[i].Diameter,
+                    Diameter = Validator.CheckIfValid(prods[i]._Diameter) ? prods[i]._Diameter.Value : OrderCreationViewModel.Prescriptions[i].Diameter,
                     DiameterCellColor = AssignCellColor(prodValue: prods[i]._Diameter?.Value?.Trim(), isValid: prods[i]._Diameter.IsValid, errorMessage: prods[i]._Diameter.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     SphereValidItems = prods[i]._Sphere.ValidItems,
-                    Sphere = Validator.CheckIfValid(prods[i]._Sphere) ? prods[i]._Sphere.Value : WVAOrdersViewModel.ListPrescriptions[i].Sphere,
+                    Sphere = Validator.CheckIfValid(prods[i]._Sphere) ? prods[i]._Sphere.Value : OrderCreationViewModel.Prescriptions[i].Sphere,
                     SphereCellColor = AssignCellColor(prodValue: prods[i]._Sphere?.Value?.Trim(), isValid: prods[i]._Sphere.IsValid, errorMessage: prods[i]._Sphere.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     CylinderValidItems = prods[i]._Cylinder.ValidItems,
-                    Cylinder = Validator.CheckIfValid(prods[i]._Cylinder) ? prods[i]._Cylinder.Value : WVAOrdersViewModel.ListPrescriptions[i].Cylinder,
+                    Cylinder = Validator.CheckIfValid(prods[i]._Cylinder) ? prods[i]._Cylinder.Value : OrderCreationViewModel.Prescriptions[i].Cylinder,
                     CylinderCellColor = AssignCellColor(prodValue: prods[i]._Cylinder?.Value?.Trim(), isValid: prods[i]._Cylinder.IsValid, errorMessage: prods[i]._Cylinder.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     AxisValidItems = prods[i]._Axis.ValidItems,
-                    Axis = Validator.CheckIfValid(prods[i]._Axis) ? prods[i]._Axis.Value : WVAOrdersViewModel.ListPrescriptions[i].Axis,
+                    Axis = Validator.CheckIfValid(prods[i]._Axis) ? prods[i]._Axis.Value : OrderCreationViewModel.Prescriptions[i].Axis,
                     AxisCellColor = AssignCellColor(prodValue: prods[i]._Axis?.Value?.Trim(), isValid: prods[i]._Axis.IsValid, errorMessage: prods[i]._Axis.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     AddValidItems = prods[i]._Add.ValidItems,
-                    Add = Validator.CheckIfValid(prods[i]._Add) ? prods[i]._Add.Value : WVAOrdersViewModel.ListPrescriptions[i].Add,
+                    Add = Validator.CheckIfValid(prods[i]._Add) ? prods[i]._Add.Value : OrderCreationViewModel.Prescriptions[i].Add,
                     AddCellColor = AssignCellColor(prodValue: prods[i]._Add?.Value?.Trim(), isValid: prods[i]._Add.IsValid, errorMessage: prods[i]._Add.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     ColorValidItems = prods[i]._Color.ValidItems,
-                    Color = Validator.CheckIfValid(prods[i]._Color) ? prods[i]._Color.Value : WVAOrdersViewModel.ListPrescriptions[i].Color,
+                    Color = Validator.CheckIfValid(prods[i]._Color) ? prods[i]._Color.Value : OrderCreationViewModel.Prescriptions[i].Color,
                     ColorCellColor = AssignCellColor(prodValue: prods[i]._Color?.Value?.Trim(), isValid: prods[i]._Color.IsValid, errorMessage: prods[i]._Color.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
 
                     MultifocalValidItems = prods[i]._Multifocal.ValidItems,
-                    Multifocal = Validator.CheckIfValid(prods[i]._Multifocal) ? prods[i]._Multifocal.Value : WVAOrdersViewModel.ListPrescriptions[i].Multifocal,
+                    Multifocal = Validator.CheckIfValid(prods[i]._Multifocal) ? prods[i]._Multifocal.Value : OrderCreationViewModel.Prescriptions[i].Multifocal,
                     MultifocalCellColor = AssignCellColor(prodValue: prods[i]._Multifocal?.Value?.Trim(), isValid: prods[i]._Multifocal.IsValid, errorMessage: prods[i]._Multifocal.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
                 };
 
-                WVAOrdersViewModel.ListPrescriptions[i] = prescription;
+                OrderCreationViewModel.Prescriptions[i] = prescription;
             }
 
             OrdersDataGrid.Items.Refresh();
@@ -609,80 +642,80 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Are you sure you want to clear your cart?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this order?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result.ToString() == "Yes")
             {
-                WVAOrdersViewModel.ListPrescriptions.Clear();
+                OrderCreationViewModel.Prescriptions.Clear();
                 OrdersDataGrid.Items.Refresh();
             }
         }
 
         private void SubmitOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            List<Item> listItems = new List<Item>();
-            IList rows = OrdersDataGrid.Items;
-
-            for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
+            try
             {
-                Prescription prescription = (Prescription)rows[i];
-                listItems.Add(new Item()
-                {
-                    ID = prescription.ID,
-                    FirstName = prescription.FirstName,
-                    LastName = prescription.LastName,
-                    PatientID = prescription._CustomerID?.Value,
-                    Eye = prescription.Eye,
-                    Quantity = prescription.Quantity,
-                    ItemRetailPrice = prescription.Price,
-                    OrderDetail = new OrderDetail()
-                    {
-                        _SKU = new SKU() { Value = prescription.SKU },
-                        _ProductKey = new ProductKey() { Value = prescription.ProductCode },
-                        _UPC = new UPC() { Value = prescription.UPC },
-                        _BaseCurve = new BaseCurve() { Value = prescription.BaseCurve },
-                        _Diameter = new Diameter() { Value = prescription.Diameter },
-                        _Sphere = new Sphere() { Value = prescription.Sphere },
-                        _Cylinder = new Cylinder() { Value = prescription.Cylinder },
-                        _Axis = new Axis() { Value = prescription.Axis },
-                        _Add = new Add() { Value = prescription.Add },
-                        _Color = new Models.ProductParameters.Color() { Value = prescription.Color },
-                        _Multifocal = new Multifocal() { Value = prescription.Multifocal },
-                    }
-                });
-            }
+                List<Item> listItems = new List<Item>();
+                IList rows = OrdersDataGrid.Items;
 
-            OutOrderWrapper outOrderWrapper = new OutOrderWrapper()
-            {
-                OutOrder = new OutOrder()
+                for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
                 {
-                    ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
-                    PatientOrder = new Order()
+                    Prescription prescription = (Prescription)rows[i];
+                    listItems.Add(new Item()
                     {
-                        CustomerID = "",
-                        ID = "",
-                        DoB = "",
-                        Name_1 = "",
-                        Name_2 = "",
-                        StreetAddr_1 = "",
-                        StreetAddr_2 = "",
-                        City = "",
-                        Zip = "",
-                        ShipToAccount = "",
-                        OfficeName = "",
-                        OrderedBy = "",
-                        PoNumber = "",
-                        ShippingMethod = ShippingTypeComboBox.Text,
-                        ShipToPatient = "Y",
-                        Freight = "",
-                        Tax = "",
-                        Discount = "",
-                        InvoiceTotal = "",
-                        Email = "",
-                        Items = listItems
-                    }
+                        ID = prescription.ID,
+                        FirstName = prescription.FirstName,
+                        LastName = prescription.LastName,
+                        PatientID = prescription._CustomerID?.Value,
+                        Eye = prescription.Eye,
+                        Quantity = prescription.Quantity,
+                        ItemRetailPrice = prescription.Price,
+                        OrderDetail = new OrderDetail()
+                        {
+                            _SKU = new SKU() { Value = prescription.SKU },
+                            _ProductKey = new ProductKey() { Value = prescription.ProductCode },
+                            _UPC = new UPC() { Value = prescription.UPC },
+                            _BaseCurve = new BaseCurve() { Value = prescription.BaseCurve },
+                            _Diameter = new Diameter() { Value = prescription.Diameter },
+                            _Sphere = new Sphere() { Value = prescription.Sphere },
+                            _Cylinder = new Cylinder() { Value = prescription.Cylinder },
+                            _Axis = new Axis() { Value = prescription.Axis },
+                            _Add = new Add() { Value = prescription.Add },
+                            _Color = new Models.ProductParameters.Color() { Value = prescription.Color },
+                            _Multifocal = new Multifocal() { Value = prescription.Multifocal },
+                        }
+                    });
                 }
-            };
+
+                OutOrderWrapper outOrderWrapper = new OutOrderWrapper()
+                {
+                    OutOrder = new OutOrder()
+                    {
+                        ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
+                        PatientOrder = new Order()
+                        {
+                            CustomerID = AccountIDTextBox.Text,
+                            DoB = "",
+                            Name_1 = AddresseeTextBox.Text,
+                            StreetAddr_1 = AddressTextBox.Text,
+                            StreetAddr_2 = Suite_AptTextBox.Text,
+                            City = CityTextBox.Text,
+                            Zip = ZipTextBox.Text,
+                            ShipToAccount = null,
+                            OrderedBy = OrderedByTextBox.Text,
+                            PoNumber = PoNumberTextBox.Text,
+                            ShippingMethod = ShippingTypeComboBox.Text,
+                            ShipToPatient = OrderCreationViewModel.Prescriptions[0].IsShipToPatient ? "Y" : "N",
+                            Email =UserData._User?.Email,
+                            Items = listItems
+                        }
+                    }
+                };
+            }
+            catch (Exception x)
+            {
+
+            }
         }
 
         // Save order to database
