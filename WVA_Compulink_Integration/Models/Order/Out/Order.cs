@@ -12,6 +12,9 @@ namespace WVA_Compulink_Integration.Models.Order.Out
         [JsonProperty("customer_id")]
         public string CustomerID { get; set; }
 
+        [JsonProperty("order_name")]
+        public string OrderName { get; set; }
+
         [JsonProperty("id")]
         public string ID { get; set; }
 
@@ -71,6 +74,9 @@ namespace WVA_Compulink_Integration.Models.Order.Out
 
         [JsonProperty("email")]
         public string Email { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
 
         [JsonProperty("items")]
         public List<Item> Items { get; set; }

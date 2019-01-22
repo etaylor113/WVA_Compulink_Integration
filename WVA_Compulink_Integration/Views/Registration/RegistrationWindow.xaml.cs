@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WVA_Compulink_Integration.Cryptography;
 using WVA_Compulink_Integration.Error;
+using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models.User;
 using WVA_Compulink_Integration.Views.Login;
 
@@ -120,7 +121,7 @@ namespace WVA_Compulink_Integration.Views.Registration
 
                 string registerResponse = _API.API.Post("http://localhost:56075/CompuClient/User/register", user, out string httpStatus);        
                 User userRegisterResponse = JsonConvert.DeserializeObject<User>(registerResponse);
-
+           
                 // Check if email exists
                 if (userRegisterResponse.Message == "Email already exists")
                 {
@@ -136,6 +137,7 @@ namespace WVA_Compulink_Integration.Views.Registration
                 }
                 else if (userRegisterResponse.Status == "OK")
                 {
+                    UserData._User = userRegisterResponse;
                     new MainWindow().Show();
                     Close();
                 }

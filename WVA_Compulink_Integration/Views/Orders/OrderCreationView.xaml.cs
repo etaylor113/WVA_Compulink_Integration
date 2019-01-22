@@ -19,6 +19,7 @@ using WVA_Compulink_Integration.Error;
 using System.Windows.Input;
 using WVA_Compulink_Integration.Views.Search;
 using WVA_Compulink_Integration.Memory;
+using WVA_Compulink_Integration.Models;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
@@ -41,6 +42,9 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void SetUpUI()
         {
+            // Set match percent label
+            MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
+
             // Add rows to datagrid
             SetUpOrdersDataGrid();
 
@@ -646,8 +650,13 @@ namespace WVA_Compulink_Integration.Views.Orders
 
             if (result.ToString() == "Yes")
             {
+                // Clear entire view
                 OrderCreationViewModel.Prescriptions.Clear();
                 OrdersDataGrid.Items.Refresh();
+                OrderNameTextBox.Text = "";
+                AccountIDTextBox.Text = "";
+                OrderedByTextBox.Text = "";
+                PoNumberTextBox.Text = "";
             }
         }
 
@@ -655,12 +664,15 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
+                // TODO: Check to be sure all items are valid
+
                 List<Item> listItems = new List<Item>();
                 IList rows = OrdersDataGrid.Items;
 
                 for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
                 {
                     Prescription prescription = (Prescription)rows[i];
+
                     listItems.Add(new Item()
                     {
                         ID = prescription.ID,
@@ -681,7 +693,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             _Cylinder = new Cylinder() { Value = prescription.Cylinder },
                             _Axis = new Axis() { Value = prescription.Axis },
                             _Add = new Add() { Value = prescription.Add },
-                            _Color = new Models.ProductParameters.Color() { Value = prescription.Color },
+                            _Color = new Color() { Value = prescription.Color },
                             _Multifocal = new Multifocal() { Value = prescription.Multifocal },
                         }
                     });
@@ -693,24 +705,50 @@ namespace WVA_Compulink_Integration.Views.Orders
                     {
                         ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
                         PatientOrder = new Order()
-                        {
+                        {                        
                             CustomerID = AccountIDTextBox.Text,
-                            DoB = "",
+                            DoB = DoBTextBox.Text,
+                            OfficeName = OfficeNameTextBox.Text,
                             Name_1 = AddresseeTextBox.Text,
                             StreetAddr_1 = AddressTextBox.Text,
                             StreetAddr_2 = Suite_AptTextBox.Text,
+                            State = StateComboBox.Text,
                             City = CityTextBox.Text,
-                            Zip = ZipTextBox.Text,
+                            Zip = ZipTextBox.Text,                          
                             ShipToAccount = null,
                             OrderedBy = OrderedByTextBox.Text,
                             PoNumber = PoNumberTextBox.Text,
                             ShippingMethod = ShippingTypeComboBox.Text,
                             ShipToPatient = OrderCreationViewModel.Prescriptions[0].IsShipToPatient ? "Y" : "N",
-                            Email =UserData._User?.Email,
-                            Items = listItems
+                            Email = UserData._User?.Email,
+                            Items = listItems,
+                            Status = "open"
                         }
                     }
                 };
+
+                string endpoint = "http://localhost:56075/CompuClient/orders/" + UserData._User?.Account;
+                string strResponse = API.Post(endpoint, outOrderWrapper, out string httpStatus);
+
+                Response response = JsonConvert.DeserializeObject<Response>(strResponse);
+
+                if (response.Status == "SUCCESS")
+                {
+                    MessageWindow messageWindow = new MessageWindow("Order created!");
+                    messageWindow.Show();
+                }
+                else if (response.Status == "FAIL")
+                {
+                    MessageWindow messageWindow = new MessageWindow("Order creation failed");
+                    messageWindow.Show();
+
+                    AppError.PrintToLog(response.Message);
+                }
+                else
+                {
+                    // General error 
+                }
+
             }
             catch (Exception x)
             {
