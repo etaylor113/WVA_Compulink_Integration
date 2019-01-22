@@ -63,9 +63,10 @@ namespace WVA_Compulink_Integration._API
                 request.ContentType = @"application/json";
 
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                using (Stream stream = response.GetResponseStream())
+                using (Stream stream = response.GetResponseStream())               
                 using (StreamReader reader = new StreamReader(stream))
                 {
+                    httpStatus = response.StatusDescription;
                     return targetResponse = reader.ReadToEnd();
                 }
             }
@@ -73,7 +74,7 @@ namespace WVA_Compulink_Integration._API
             {
                 AppError.PrintToLog(x);
                 httpStatus = null;
-                return "ERROR: " + x.Message;
+                return null;
             }
         }
 

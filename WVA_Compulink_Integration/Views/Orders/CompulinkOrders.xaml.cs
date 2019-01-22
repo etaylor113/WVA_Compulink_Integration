@@ -44,20 +44,45 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         // Do any setup after loading the view
         private void SetUp()
-        {
+        {      
             IsVisibleChanged += new DependencyPropertyChangedEventHandler(LoginControl_IsVisibleChanged);
             SetUpOrdersDataGrid();
-            GetWvaOrders();
+            GetWvaOrders();            
         }
-
+      
         // Get wva orders for this user 
         private void GetWvaOrders()
         {
-            List<Order> listWvaOrders = Memory.Orders.WVAOrders;
-            
-            // If there is an account number 
-            try   { WvaOrdersComboBox.Text = $"wva_order-{File.ReadAllText(Paths.ActNumFile)}-{DateTime.Now.ToString("yyyy-MM-dd")}"; }
-            catch { WvaOrdersComboBox.Text = $"wva_order-{DateTime.Now.ToString("yyyy-MM-dd")}"; }      
+            try
+            {
+                // Get this account's open wva orders
+                string endpoint = "http://localhost:56075/CompuClient/orders/get-names/" +  UserData._User?.Account;
+                string strNames = API.Get(endpoint, out string httpStatus);
+                Dictionary<string, string> dictOrderNames = JsonConvert.DeserializeObject<Dictionary<string, string>>(strNames);
+
+                // Break if bad response
+                if (httpStatus != "OK")
+                    throw new Exception("Bad response from server!");
+
+                try { WvaOrdersComboBox.Text = $"{File.ReadAllText(Paths.ActNumFile)}-{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}"; }
+                catch { WvaOrdersComboBox.Text = $"{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}"; }
+
+                if (dictOrderNames.Count > 1)
+                {
+                    foreach (string orderName in dictOrderNames.Values)
+                        WvaOrdersComboBox.Items.Add(orderName);
+                
+                    //WvaOrdersComboBox.SelectedIndex = 0;
+                }
+                else
+                {
+                    
+                }
+            }
+            catch (Exception x)
+            {
+                // TODO
+            }
         }
 
         // Filters out orders in table by whatever the user enters in the search text box

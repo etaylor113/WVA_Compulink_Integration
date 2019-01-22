@@ -245,7 +245,6 @@
               Grid.Column="1"
               Margin="0,0,0,0">
 
-
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
                 
@@ -255,14 +254,14 @@
                           IsEditable="True"
                           IsReadOnly="True"
                           HorizontalAlignment="Stretch"
-                          Margin="0,0,20,0" 
+                          Margin="0,0,10,0" 
                           Grid.Row="2"
                           FontFamily="Sitka Text"
                           FontSize="25"
                           Width="450"
                           VerticalContentAlignment="Center"
                           VerticalAlignment="Center"
-                          Height="35" />
+                          Height="35"/>
 
                 <Button Name="AddToOrderOrderButton"
                         Content="Add To WVA Order" 

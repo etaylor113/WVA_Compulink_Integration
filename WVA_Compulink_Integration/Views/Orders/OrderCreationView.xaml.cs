@@ -705,10 +705,10 @@ namespace WVA_Compulink_Integration.Views.Orders
                     {
                         ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
                         PatientOrder = new Order()
-                        {                        
+                        {                            
                             CustomerID = AccountIDTextBox.Text,
-                            DoB = DoBTextBox.Text,
-                            OfficeName = OfficeNameTextBox.Text,
+                            OrderName = OrderNameTextBox.Text,
+                            DoB = DoBTextBox.Text,                        
                             Name_1 = AddresseeTextBox.Text,
                             StreetAddr_1 = AddressTextBox.Text,
                             StreetAddr_2 = Suite_AptTextBox.Text,
@@ -716,13 +716,14 @@ namespace WVA_Compulink_Integration.Views.Orders
                             City = CityTextBox.Text,
                             Zip = ZipTextBox.Text,                          
                             ShipToAccount = null,
+                            OfficeName = OfficeNameTextBox.Text,
                             OrderedBy = OrderedByTextBox.Text,
                             PoNumber = PoNumberTextBox.Text,
                             ShippingMethod = ShippingTypeComboBox.Text,
                             ShipToPatient = OrderCreationViewModel.Prescriptions[0].IsShipToPatient ? "Y" : "N",
                             Email = UserData._User?.Email,
-                            Items = listItems,
-                            Status = "open"
+                            Status = "open",
+                            Items = listItems                           
                         }
                     }
                 };
@@ -736,6 +737,8 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     MessageWindow messageWindow = new MessageWindow("Order created!");
                     messageWindow.Show();
+
+
                 }
                 else if (response.Status == "FAIL")
                 {

@@ -36,17 +36,22 @@ namespace WVA_Compulink_Integration.Views
 
         private async void SetUpApp()
         {
-            // Set the main data context to the Compulink orders view 
-            MainContentControl.DataContext = new OrdersViewModel();
-
+            // Set the main data context to the Compulink orders view if their account number is set
+            if (AccountNumAvailable())
+            {
+                MainContentControl.DataContext = new OrdersViewModel();
+            }
+            else
+            {
+                MessageWindow messageWindow = new MessageWindow("You must set your account number in the settings tab before continuing.");
+                messageWindow.Show();
+                return;
+            }
+            
             // Spawn a loading window and change cursor to waiting cursor
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.Show();
             Mouse.OverrideCursor = Cursors.Wait;
-
-            // Set user account number in memory
-            try { UserData._User.Account = File.ReadAllText(Paths.ActNumFile); }
-            catch {}
            
             // Load product list into memory for match algorithm
             await Task.Run(() => List_WVA_Products.LoadProducts());
@@ -55,19 +60,46 @@ namespace WVA_Compulink_Integration.Views
             loadingWindow.Close();
             Mouse.OverrideCursor = Cursors.Arrow;
         }
-    
+
         /// <summary>
         /// Side Tab Control Buttons For Changing Views
         /// </summary>
+        /// 
 
-        private void MinimizeButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void SetActNum()
         {
-            WindowState = WindowState.Minimized;
+            // Set user account number in memory
+            try { UserData._User.Account = File.ReadAllText(Paths.ActNumFile); }
+            catch { }
         }
-   
+
+        private bool AccountNumAvailable()
+        {
+            try
+            {
+                SetActNum();
+                if (UserData._User?.Account != null && UserData._User.Account.Trim() != "")
+                    return true;
+                else
+                    return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private void TabOrders_Click(object sender, RoutedEventArgs e)
         {
-            MainContentControl.DataContext = new OrdersViewModel();
+            if (AccountNumAvailable())
+            {
+                MainContentControl.DataContext = new OrdersViewModel();
+            }
+            else
+            {
+                MessageWindow messageWindow = new MessageWindow("You must set your account number in the settings tab before continuing.");
+                messageWindow.Show();
+            }
         }
 
         private void TabSettings_Click(object sender, RoutedEventArgs e)
