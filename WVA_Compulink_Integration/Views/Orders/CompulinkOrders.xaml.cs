@@ -222,7 +222,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 else if (totalCount == 0)
                 {
                     // Notify user they must select at least one Compulink order
-                    MessageBox.Show("You must select at least one Compulink order. \nClick checkbox in (+) column to select an order.", "Compulink Integration", MessageBoxButton.OK);
+                    MessageBox.Show("You must select at least one Compulink order. \nClick checkbox in the (+) column to add it to the order.", "Compulink Integration", MessageBoxButton.OK);
                 }
                 else
                 {                              

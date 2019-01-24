@@ -56,7 +56,7 @@ namespace WVA_Compulink_Integration.Views
 
                     // Open order creation view with the order's saved data (edits the selected order)
                     if (order != null)                     
-                        OrdersContentControl.DataContext = new OrderCreationViewModel(order, orderName);
+                        OrdersContentControl.DataContext = new OrderCreationViewModel(order, prescriptions, orderName);
                     else
                         // Open order creation view with a clean slate (creates a new order in the db)
                         OrdersContentControl.DataContext = new OrderCreationViewModel(prescriptions, orderName);                    

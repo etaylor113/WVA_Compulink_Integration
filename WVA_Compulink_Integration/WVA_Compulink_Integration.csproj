@@ -142,8 +142,6 @@
     <Compile Include="Utility\File\Paths.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\OrdersViewModel.cs" />
-    <Compile Include="ViewModels\Search\SearchExamsViewModel.cs" />
-    <Compile Include="ViewModels\Search\SearchPatientsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\Error\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
@@ -162,12 +160,6 @@
     </Compile>
     <Compile Include="Views\LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Search\SearchExamsView.xaml.cs">
-      <DependentUpon>SearchExamsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Search\SearchPatientsView.xaml.cs">
-      <DependentUpon>SearchPatientsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
@@ -240,14 +232,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Search\SearchExamsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Search\SearchPatientsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -282,7 +266,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Update\" />
-    <Folder Include="Views\Help\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons8-Minimize Window-64.png" />

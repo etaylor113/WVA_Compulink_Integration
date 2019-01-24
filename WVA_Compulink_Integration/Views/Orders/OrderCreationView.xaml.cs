@@ -46,14 +46,16 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             // Set match percent label
             MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
+            // Add rows to datagrid
+            SetUpOrdersDataGrid();
             CheckViewMode();         
         }
 
         private void CheckViewMode()
-        {
+        {         
             if (OrderCreationViewModel.Order != null)
             {
-                ViewMode = "edit";
+                ViewMode = "edit";               
                 SetUpEditOrder();
             }                       
             else if (OrderCreationViewModel.Prescriptions != null)
@@ -64,18 +66,15 @@ namespace WVA_Compulink_Integration.Views.Orders
         }
 
         private void SetUpNewOrder()
-        {
-            // Add rows to datagrid
-            SetUpOrdersDataGrid();
-
+        {         
             // Autofill some user information 
-            OrderNameTextBox.Text = OrderCreationViewModel.OrderName;
+            OrderNameTextBox.Text = OrderCreationViewModel.Order.OrderName ?? "";
             AccountIDTextBox.Text = UserData._User?.Account ?? "";
             OrderedByTextBox.Text = UserData._User?.UserName ?? "";
 
             // Hide STP fields if order not STP
             if (!OrderCreationViewModel.Prescriptions[0].IsShipToPatient)
-                ShowStpItems();
+                HideStpItems();
         }
 
         private void SetUpEditOrder()
@@ -85,6 +84,32 @@ namespace WVA_Compulink_Integration.Views.Orders
                 ShowStpItems();
                 AutoFillStpItems();
             }
+            else
+            {
+                HideStpItems();
+            }
+
+            // Left column
+            AddresseeTextBox.Text = OrderCreationViewModel.Order.Name_1 ?? "";
+            AddressTextBox.Text = OrderCreationViewModel.Order.StreetAddr_1 ?? "";
+            Suite_AptTextBox.Text = OrderCreationViewModel.Order.StreetAddr_2 ?? "";
+            CityTextBox.Text = OrderCreationViewModel.Order.City ?? "";
+            StateComboBox.Text = OrderCreationViewModel.Order.State ?? "";
+            ZipTextBox.Text = OrderCreationViewModel.Order.Zip ?? "";
+            PhoneTextBox.Text = OrderCreationViewModel.Order.Phone ?? "";
+            DoBTextBox.Text = OrderCreationViewModel.Order.DoB ?? "";
+
+            // Right column
+            OrderNameTextBox.Text = OrderCreationViewModel.Order.OrderName ?? "";
+            AccountIDTextBox.Text = OrderCreationViewModel.Order.OrderedBy ?? "";
+            OfficeNameTextBox.Text = OrderCreationViewModel.Order.OfficeName ?? "";
+            PoNumberTextBox.Text = OrderCreationViewModel.Order.PoNumber ?? "";
+            ShippingTypeComboBox.Text = OrderCreationViewModel.Order.ShippingMethod ?? "";
+
+            
+            // If there are no items then exit
+            if (OrderCreationViewModel.Order.Items == null || OrderCreationViewModel.Order.Items?.Count == 0)
+                return;
 
             // Datagrid rows
             for (int i = 0; i < OrderCreationViewModel.Order.Items.Count; i++)
@@ -106,9 +131,11 @@ namespace WVA_Compulink_Integration.Views.Orders
                     Multifocal = OrderCreationViewModel.Order.Items[i].OrderDetail._Multifocal.Value
                 };
                 OrdersDataGrid.Items.Add(prescription);
-            }
+            }       
+        }
 
-            // Left column
+        private void AutoFillStpItems()
+        {
             AddresseeTextBox.Text = OrderCreationViewModel.Order.Name_1;
             AddressTextBox.Text = OrderCreationViewModel.Order.StreetAddr_1;
             Suite_AptTextBox.Text = OrderCreationViewModel.Order.StreetAddr_2;
@@ -117,16 +144,9 @@ namespace WVA_Compulink_Integration.Views.Orders
             ZipTextBox.Text = OrderCreationViewModel.Order.Zip;
             PhoneTextBox.Text = OrderCreationViewModel.Order.Phone;
             DoBTextBox.Text = OrderCreationViewModel.Order.DoB;
-
-            // Right column
-            OrderNameTextBox.Text = OrderCreationViewModel.Order.OrderName;
-            AccountIDTextBox.Text = OrderCreationViewModel.Order.OrderedBy;
-            OfficeNameTextBox.Text = OrderCreationViewModel.Order.OfficeName;
-            PoNumberTextBox.Text = OrderCreationViewModel.Order.PoNumber;
-            ShippingTypeComboBox.Text = OrderCreationViewModel.Order.ShippingMethod;
         }
 
-        private void ShowStpItems()
+        private void HideStpItems()
         {
             AddresseeLabel.Visibility = Visibility.Hidden;
             AddresseeTextBox.Visibility = Visibility.Hidden;
@@ -146,16 +166,24 @@ namespace WVA_Compulink_Integration.Views.Orders
             DoBTextBox.Visibility = Visibility.Hidden;
         }
 
-        private void AutoFillStpItems()
+        private void ShowStpItems()
         {
-            AddresseeTextBox.Text = OrderCreationViewModel.Order.Name_1;
-            AddressTextBox.Text = OrderCreationViewModel.Order.StreetAddr_1;
-            Suite_AptTextBox.Text = OrderCreationViewModel.Order.StreetAddr_2;
-            CityTextBox.Text = OrderCreationViewModel.Order.City;
-            StateComboBox.Text = OrderCreationViewModel.Order.State;
-            ZipTextBox.Text = OrderCreationViewModel.Order.Zip;
-            PhoneTextBox.Text = OrderCreationViewModel.Order.Phone;
-            DoBTextBox.Text = OrderCreationViewModel.Order.DoB;
+            AddresseeLabel.Visibility = Visibility.Visible;
+            AddresseeTextBox.Visibility = Visibility.Visible;
+            AddressLabel.Visibility = Visibility.Visible;
+            AddressTextBox.Visibility = Visibility.Visible;
+            Suite_AptLabel.Visibility = Visibility.Visible;
+            Suite_AptTextBox.Visibility = Visibility.Visible;
+            CityLabel.Visibility = Visibility.Visible;
+            CityTextBox.Visibility = Visibility.Visible;
+            StateLabel.Visibility = Visibility.Visible;
+            StateComboBox.Visibility = Visibility.Visible;
+            ZipLabel.Visibility = Visibility.Visible;
+            ZipTextBox.Visibility = Visibility.Visible;
+            PhoneLabel.Visibility = Visibility.Visible;
+            PhoneTextBox.Visibility = Visibility.Visible;
+            DoBLabel.Visibility = Visibility.Visible;
+            DoBTextBox.Visibility = Visibility.Visible;
         }
 
         private void ClearView()
@@ -524,7 +552,10 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void SetUpOrdersDataGrid()
         {
-            OrdersDataGrid.ItemsSource = OrderCreationViewModel.Prescriptions;
+            foreach (Prescription prescription in OrderCreationViewModel.Prescriptions)
+            {
+                OrdersDataGrid.Items.Add(prescription);
+            }
         }
 
         private string AssignCellColor(string prodValue, bool isValid, string errorMessage, bool canBeValidated)
