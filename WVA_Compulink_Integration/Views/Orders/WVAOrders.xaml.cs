@@ -17,9 +17,11 @@ using System.Windows.Threading;
 using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Memory;
+using WVA_Compulink_Integration.Models;
 using WVA_Compulink_Integration.Models.Order.Out;
 using WVA_Compulink_Integration.Models.Patient;
 using WVA_Compulink_Integration.Models.Prescription;
+using WVA_Compulink_Integration.ViewModels.Orders;
 using WVA_Compulink_Integration.Views.Search;
 
 namespace WVA_Compulink_Integration.Views.Orders
@@ -30,6 +32,7 @@ namespace WVA_Compulink_Integration.Views.Orders
     public partial class WVAOrders : UserControl
     {
         ToolTip toolTip = new ToolTip();
+        List<Order> ListOrders { get; set; }
 
         public WVAOrders()
         {
@@ -44,22 +47,25 @@ namespace WVA_Compulink_Integration.Views.Orders
             SetUpOrdersDataGrid();
         }
 
-        private void SearchOrders(int index, string searchString)
+        private void SearchOrders(string searchString)
         {
             try
             {
-              
+                List<Order> tempList = ListOrders.Where(x => x.OrderName.ToLower().Contains(searchString.ToLower())).ToList();
+
+                OrdersListBox.Items.Clear();
+                foreach (Order order in tempList)
+                {
+                    OrdersListBox.Items.Add(order.OrderName);
+                }
             }
-            catch (Exception x)
-            {
-                AppError.PrintToLog(x);
-            }
+            catch { }
         }
 
         // Asyncronously return this account's orders from the server 
-        private async Task<List<Order>> GetWVAOrders()
+        private List<Order> GetWVAOrders()
         {       
-            string endpoint = $"http://localhost:56075/CompuClient/orders/" + $"{UserData._User.Account}";
+            string endpoint = $"http://localhost:56075/CompuClient/orders/get-orders/" + $"{UserData._User.Account}";
             string strOrders = API.Get(endpoint, out string httpStatus);
 
             if (strOrders == null)
@@ -68,11 +74,17 @@ namespace WVA_Compulink_Integration.Views.Orders
             return JsonConvert.DeserializeObject<List<Order>>(strOrders);          
         }
 
-        private async void SetUpOrdersDataGrid()
+        private  void SetUpOrdersDataGrid()
         {
             try
             {
-                await GetWVAOrders();
+                ListOrders = GetWVAOrders();
+                OrdersListBox.Items.Clear();
+
+                foreach (Order order in ListOrders)
+                {
+                    OrdersListBox.Items.Add($"{order.OrderName}");
+                }          
             }
             catch (Exception x)
             {
@@ -97,7 +109,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Search Text Box
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            SearchOrders(SearchFilterComboBox.SelectedIndex, SearchTextBox.Text);
+            SearchOrders(SearchTextBox.Text);
         }
 
         // Refresh Button
@@ -152,7 +164,21 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Delete Button
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
         {
+            string selectedOrder = OrdersListBox.SelectedItem as string;
+       
+            string endpoint = "http://localhost:56075/CompuClient/orders/delete/";
+            string strResponse = API.Post(endpoint, selectedOrder, out string httpStatus);
+            Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
+            if (response.Status == "SUCCESS")
+            {
+                SetUpOrdersDataGrid();
+                MessageBox.Show("\t\t\tOrder deleted!\t\t\t", "", MessageBoxButton.OK);
+            }
+            else
+            {
+                MessageBox.Show("An error has occurred. Order not deleted.", "", MessageBoxButton.OK);
+            }
         }
 
     }

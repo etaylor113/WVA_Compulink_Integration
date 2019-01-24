@@ -622,7 +622,7 @@
 
             <ComboBox x:Name="StateComboBox" 
                       Grid.Column="1"
-                      Text="-Select State-"
+                      Text=""
                       IsEditable="True"
                       IsReadOnly="True"
                       FontFamily="Sitka Text"
@@ -763,6 +763,7 @@
 
             <TextBox x:Name="OrderNameTextBox"
                      Grid.Column="4" 
+                     IsReadOnly="True"
                      HorizontalAlignment="Stretch"
                      Height="24" 
                      Margin="100,3,0,3"
@@ -786,7 +787,7 @@
             <TextBox x:Name="AccountIDTextBox"
                      Grid.Column="4" 
                      HorizontalAlignment="Stretch"
-                     Height="24" 
+                     Height="24"                      
                      IsReadOnly="True"
                      Margin="100,3,0,3"
                      Grid.Row="2" 

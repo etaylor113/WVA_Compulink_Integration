@@ -137,31 +137,38 @@
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="1"
-                    Grid.Row="0"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Right"
-                    Orientation="Horizontal">
+        <Grid VerticalAlignment="Center"
+              HorizontalAlignment="Stretch"
+              Grid.Column="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="60" />
+            </Grid.ColumnDefinitions>
 
             <Label Name="SearchProductsLabel"
-                   Content="Search Patients"
+                   Content="Search Orders"
+                   Grid.Column="0"
                    FontFamily="Sitka Text"
                    FontSize="26" />
 
             <TextBox Name="SearchTextBox" 
-                     Margin="0,0,0,0"
+                     Margin="5,0,5,0"
                      Height="35"     
-                     Width="430"
-                     HorizontalAlignment="Right"
+                     HorizontalAlignment="Stretch"
                      FontFamily="Sitka Text"
                      FontSize="26"
+                     Grid.Column="1"
                      VerticalContentAlignment="Center"
-                     TextChanged="SearchTextBox_TextChanged"/>
+                     TextChanged="SearchTextBox_TextChanged" />
         
             <Button Name="RefreshButton"
                     Width="50"
-                    Margin="20,0,0,0"
+                    Grid.Column="2"
+                    Margin="0,0,0,0"
                     Height="40"
+                    HorizontalAlignment="Right"
                     MouseEnter="RefreshButton_MouseEnter"
                     MouseLeave="RefreshButton_MouseLeave"
                     Click="RefreshButton_Click">
@@ -172,10 +179,10 @@
                    Margin="0,0,0,0" 
                    VerticalAlignment="Center" 
                    Width="30" 
-                   Source="/Resources/icons8-available-updates-filled-48.png"/>
+                   Source="/Resources/icons8-available-updates-filled-48.png" />
             </Button>
 
-        </StackPanel>
+        </Grid>
 
         <DataGrid x:Name="OrdersDataGrid" 
                   HorizontalAlignment="Stretch"
@@ -246,8 +253,13 @@
               Grid.Column="1"
               Margin="0,0,0,0">
 
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right">
+            <Grid >
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="250" />
+                </Grid.ColumnDefinitions>
                 
                 <ComboBox Name="WvaOrdersComboBox" 
                           Grid.Column="1"
@@ -255,11 +267,11 @@
                           IsEditable="True"
                           IsReadOnly="True"
                           HorizontalAlignment="Stretch"
-                          Margin="0,0,10,0" 
+                          Margin="0,0,0,0" 
                           Grid.Row="2"
                           FontFamily="Sitka Text"
                           FontSize="25"
-                          Width="450"
+                          HorizontalContentAlignment="Right"
                           VerticalContentAlignment="Center"
                           VerticalAlignment="Center"
                           Height="35"/>
@@ -267,11 +279,11 @@
                 <Button Name="AddToOrderOrderButton"
                         Content="Add To WVA Order" 
                         Margin="0,0,0,0"
-                        Grid.Column="1"
+                        Grid.Column="2"
                         HorizontalAlignment="Right"
                         Click="AddToOrderButton_Click"/>
 
-            </StackPanel>
+            </Grid>
 
         </Grid>
 

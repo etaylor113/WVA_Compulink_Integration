@@ -67,10 +67,10 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void SetUpNewOrder()
         {         
-            // Autofill some user information 
-            OrderNameTextBox.Text = OrderCreationViewModel.Order.OrderName ?? "";
+            // Autofill some user information      
+            OrderNameTextBox.Text = OrderCreationViewModel.OrderName ?? "";
             AccountIDTextBox.Text = UserData._User?.Account ?? "";
-            OrderedByTextBox.Text = UserData._User?.UserName ?? "";
+            OrderedByTextBox.Text = UserData._User?.UserName ?? "";               
 
             // Hide STP fields if order not STP
             if (!OrderCreationViewModel.Prescriptions[0].IsShipToPatient)
@@ -209,10 +209,10 @@ namespace WVA_Compulink_Integration.Views.Orders
             PhoneTextBox.Text       = "";
             DoBTextBox.Text         = "";
         }
-
+       
         private void DeleteOrder()
         {         
-            string endpoint = "http://localhost:56075/CompuClient/orders/delete/" + UserData._User?.Account;
+            string endpoint = "http://localhost:56075/CompuClient/orders/delete/";
             string strResponse = API.Delete(endpoint, OrderNameTextBox.Text, out string httpStatus);
             Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
@@ -643,7 +643,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
-                string endpoint = "http://localhost:56075/CompuClient/orders/save/" + UserData._User?.Account;
+                string endpoint = "http://localhost:56075/CompuClient/orders/save/";
                 string strResponse = API.Post(endpoint, outOrderWrapper, out string httpStatus);
                 Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
