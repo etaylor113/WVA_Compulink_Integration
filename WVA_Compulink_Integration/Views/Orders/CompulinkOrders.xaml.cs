@@ -64,15 +64,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 if (httpStatus != "OK")
                     throw new Exception("Bad response from server!");
 
-                try { WvaOrdersComboBox.Text = $"{File.ReadAllText(Paths.ActNumFile)}-{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}"; }
-                catch { WvaOrdersComboBox.Text = $"{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}"; }
+                try { WvaOrdersComboBox.Text = $"WVA Order {DateTime.Now.ToString("MM/dd/yy--HH:mm:ss")}"; }
+                catch { WvaOrdersComboBox.Text = $"{DateTime.Now.ToString("MM/dd/yy--HH:mm:ss")}"; }
 
-                if (dictOrderNames.Count > 1)
+                if (dictOrderNames.Count > 0)
                 {
                     foreach (string orderName in dictOrderNames.Values)
-                        WvaOrdersComboBox.Items.Add(orderName);
-                
-                    //WvaOrdersComboBox.SelectedIndex = 0;
+                        WvaOrdersComboBox.Items.Add(orderName);            
                 }
                 else
                 {
@@ -192,7 +190,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         }
 
         // Create Order Button
-        private void CreateOrderButton_Click(object sender, RoutedEventArgs e)
+        private void AddToOrderButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -233,8 +231,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     {
                         if (window.GetType() == typeof(MainWindow))
                         {
-                            OrdersViewModel.SelectedView = "OrderCreation";
-                            (window as MainWindow).MainContentControl.DataContext = new OrdersView(listPrescriptions, WvaOrdersComboBox.Text);                    
+                            (window as MainWindow).MainContentControl.DataContext = new OrdersView(listPrescriptions, WvaOrdersComboBox.Text,  "OrderCreation");                    
                             return;
                         }
                     }

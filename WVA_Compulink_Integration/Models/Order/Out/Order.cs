@@ -72,6 +72,9 @@ namespace WVA_Compulink_Integration.Models.Order.Out
         [JsonProperty("invoice_total")]
         public string InvoiceTotal { get; set; }
 
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
+
         [JsonProperty("email")]
         public string Email { get; set; }
 

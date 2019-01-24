@@ -23,7 +23,6 @@ namespace WVA_Compulink_Integration.Models.Prescription
         public bool CanBeValidated { get; set; } = true;
 
         // These properties are visible to the client in the data grid
-
         private string patient;
         public string Patient
         {

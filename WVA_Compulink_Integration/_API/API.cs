@@ -51,6 +51,123 @@ namespace WVA_Compulink_Integration._API
             }
         }
 
+        static public string Post(string endpoint, string jsonString, out string httpStatus)
+        {
+            try
+            {
+                string targetResponse = null;
+                string json = JsonConvert.SerializeObject(jsonString);
+
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] byteArray = encoding.GetBytes(json);
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(endpoint);
+                request.ContentLength = byteArray.Length;
+                request.ContentType = @"application/json";
+                request.Method = "POST";
+
+                using (Stream dataStream = request.GetRequestStream())
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                }
+
+                WebResponse webResponse = request.GetResponse();
+                using (Stream responseStream = webResponse.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                    targetResponse = reader.ReadToEnd();
+                    reader.Close();
+                }
+                httpStatus = ((HttpWebResponse)webResponse).StatusDescription.ToString();
+
+                return targetResponse;
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+                httpStatus = null;
+                return null;
+            }
+        }
+
+        static public string Delete(string endpoint, object jsonObject, out string httpStatus)
+        {
+            try
+            {
+                string targetResponse = null;
+                string json = JsonConvert.SerializeObject(jsonObject);
+
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] byteArray = encoding.GetBytes(json);
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(endpoint);
+                request.ContentLength = byteArray.Length;
+                request.ContentType = @"application/json";
+                request.Method = "DELETE";
+
+                using (Stream dataStream = request.GetRequestStream())
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                }
+
+                WebResponse webResponse = request.GetResponse();
+                using (Stream responseStream = webResponse.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                    targetResponse = reader.ReadToEnd();
+                    reader.Close();
+                }
+                httpStatus = ((HttpWebResponse)webResponse).StatusDescription.ToString();
+
+                return targetResponse;
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+                httpStatus = null;
+                return null;
+            }
+        }
+
+        static public string Delete(string endpoint, string strJson, out string httpStatus)
+        {
+            try
+            {
+                string targetResponse = null;
+                string json = JsonConvert.SerializeObject(strJson);
+
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] byteArray = encoding.GetBytes(json);
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(endpoint);
+                request.ContentLength = byteArray.Length;
+                request.ContentType = @"application/json";
+                request.Method = "DELETE";
+
+                using (Stream dataStream = request.GetRequestStream())
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                }
+
+                WebResponse webResponse = request.GetResponse();
+                using (Stream responseStream = webResponse.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                    targetResponse = reader.ReadToEnd();
+                    reader.Close();
+                }
+                httpStatus = ((HttpWebResponse)webResponse).StatusDescription.ToString();
+
+                return targetResponse;
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+                httpStatus = null;
+                return null;
+            }
+        }
+
         static public string Get(string endpoint, out string httpStatus)
         {
             try

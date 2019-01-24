@@ -10,6 +10,9 @@ namespace WVA_Compulink_Integration.Models.Order.Out
 {
     class OrderDetail
     {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
         [JsonProperty("wva_sku")]
         public SKU _SKU { get; set; }
 

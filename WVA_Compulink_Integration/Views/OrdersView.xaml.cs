@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WVA_Compulink_Integration._API;
+using WVA_Compulink_Integration.Models.Order.Out;
 using WVA_Compulink_Integration.Models.Patient;
 using WVA_Compulink_Integration.Models.Prescription;
 using WVA_Compulink_Integration.ViewModels;
@@ -27,39 +30,58 @@ namespace WVA_Compulink_Integration.Views
             DetermineView();
         }
 
-        public OrdersView(List<Prescription> prescriptions, string orderName)
+        public OrdersView(List<Prescription> prescriptions, string orderName, string selectedView)
         {
             InitializeComponent();
-            DetermineView(prescriptions, orderName);
+            DetermineView(prescriptions, orderName, selectedView);
         }
 
-        public void DetermineView(List<Prescription> prescriptions = null, string orderName = "")
-        {           
-            if (OrdersViewModel.SelectedView == "CompulinkOrders")
+        public void DetermineView(List<Prescription> prescriptions = null, string orderName = "",  string selectedView = "")
+        {
+            switch (selectedView)
             {
-                // Navigate to Lab Orders View
-                SetUpLabOrdersView();
-                OrdersContentControl.DataContext = new CompulinkOrdersViewModel();
-            }
-            else if (OrdersViewModel.SelectedView == "WVAOrders")
-            {
-                // Navigate to WVA Orders View         
-                SetUpWVA_OrdersView();
-                OrdersContentControl.DataContext = new WVAOrdersViewModel();
-            }
-            else if (OrdersViewModel.SelectedView == "OrderCreation")
-            {    
-                OrdersContentControl.DataContext = new OrderCreationViewModel(prescriptions, orderName);
-            }
-            else
-            {
-                OrdersContentControl.DataContext = new CompulinkOrdersViewModel();
-            }
+                case "CompulinkOrders":
+                    // Navigate to Lab Orders View
+                    SetUpLabOrdersView();
+                    OrdersContentControl.DataContext = new CompulinkOrdersViewModel();
+                    break;
+                case "WVAOrders":
+                    // Navigate to WVA Orders View         
+                    SetUpWVA_OrdersView();
+                    OrdersContentControl.DataContext = new WVAOrdersViewModel();
+                    break;
+                case "OrderCreation":
 
-            // Reset SelectedView string
-            OrdersViewModel.SelectedView = "";
-            
+                    Order order = GetOrder(orderName);
+
+                    // Open order creation view with the order's saved data (edits the selected order)
+                    if (order != null)                     
+                        OrdersContentControl.DataContext = new OrderCreationViewModel(order, orderName);
+                    else
+                        // Open order creation view with a clean slate (creates a new order in the db)
+                        OrdersContentControl.DataContext = new OrderCreationViewModel(prescriptions, orderName);                    
+                    break;
+                default:
+                    OrdersContentControl.DataContext = new CompulinkOrdersViewModel();
+                    break;
+            }         
         }     
+
+        private Order GetOrder(string orderName)
+        {
+            // Check if the given order exists
+            try
+            {
+                string endpoint = "http://localhost:56075/CompuClient/orders/exists/";
+                string strOrder = API.Post(endpoint, orderName, out string httpStatus);
+                Order order = JsonConvert.DeserializeObject<Order>(strOrder);
+                return order;
+            }
+            catch (Exception x)
+            {
+                return null;
+            }         
+        }
 
         private void CompulinkOrdersButton_Click(object sender, RoutedEventArgs e)
         {

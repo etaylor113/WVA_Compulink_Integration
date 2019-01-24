@@ -11,6 +11,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
 {
     class OrderCreationViewModel
     {
+        public static Order Order { get; set; }
         public static List<Prescription> Prescriptions { get; set; }
         public static string OrderName { get; set; }
 
@@ -24,5 +25,12 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
             Prescriptions = listPrescriptions;
             OrderName = orderName;
         }
+
+        public OrderCreationViewModel(Order order,  string orderName)
+        {
+            Order = order;
+            OrderName = orderName;
+        }
+
     }
 }
