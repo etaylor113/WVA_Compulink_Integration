@@ -49,7 +49,7 @@ namespace WVA_Compulink_Integration.Views.Login
                 };
 
                 string endpoint = "http://localhost:56075/CompuClient/User/login";
-                string loginResponse = API.Post(endpoint, user, out string httpStatus);
+                string loginResponse = API.Post(endpoint, user);
                 User userLoginResponse = JsonConvert.DeserializeObject<User>(loginResponse);
                            
                 return userLoginResponse;

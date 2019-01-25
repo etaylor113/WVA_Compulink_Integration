@@ -105,8 +105,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             OfficeNameTextBox.Text = OrderCreationViewModel.Order.OfficeName ?? "";
             PoNumberTextBox.Text = OrderCreationViewModel.Order.PoNumber ?? "";
             ShippingTypeComboBox.Text = OrderCreationViewModel.Order.ShippingMethod ?? "";
-
-            
+           
             // If there are no items then exit
             if (OrderCreationViewModel.Order.Items == null || OrderCreationViewModel.Order.Items?.Count == 0)
                 return;
@@ -130,7 +129,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     Color = OrderCreationViewModel.Order.Items[i].OrderDetail._Color.Value,
                     Multifocal = OrderCreationViewModel.Order.Items[i].OrderDetail._Multifocal.Value
                 };
-                OrdersDataGrid.Items.Add(prescription);
+                OrderCreationViewModel.Prescriptions.Add(prescription);
             }       
         }
 
@@ -190,7 +189,8 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             // Empty datagrid
             OrderCreationViewModel.Prescriptions.Clear();
-            OrdersDataGrid.Items.Refresh();
+            //OrdersDataGrid.Items.Clear();
+            //OrdersDataGrid.Items.Refresh();
 
             // Clear right column
             OrderNameTextBox.Text   = "";
@@ -213,7 +213,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         private void DeleteOrder()
         {         
             string endpoint = "http://localhost:56075/CompuClient/orders/delete/";
-            string strResponse = API.Delete(endpoint, OrderNameTextBox.Text, out string httpStatus);
+            string strResponse = API.Post(endpoint, OrderNameTextBox.Text);
             Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
             if (response.Status == "SUCCESS")
@@ -232,7 +232,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             try
             {
                 string endpoint = "http://localhost:56075/CompuClient/orders/submit/" + UserData._User?.Account;
-                string strResponse = API.Post(endpoint, GetOrder(), out string httpStatus);
+                string strResponse = API.Post(endpoint, GetCompleteOrder());
                 Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
                 if (response.Status == "SUCCESS")
@@ -318,9 +318,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             }
                         }
                         else
-                        {
                             throw new Exception("No Valid Items");
-                        }
                     }
                     catch
                     {
@@ -346,9 +344,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             }
                         }
                         else
-                        {
                             throw new Exception("No Valid Items");
-                        }
                     }
                     catch
                     {
@@ -374,9 +370,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             }
                         }
                         else
-                        {
                             throw new Exception("No Valid Items");
-                        }
                     }
                     catch
                     {
@@ -402,9 +396,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             }
                         }
                         else
-                        {
                             throw new Exception("No Valid Items");
-                        }
                     }
                     catch
                     {
@@ -430,9 +422,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             }
                         }
                         else
-                        {
                             throw new Exception("No Valid Items");
-                        }
                     }
                     catch
                     {
@@ -458,9 +448,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             }
                         }
                         else
-                        {
                             throw new Exception("No Valid Items");
-                        }
                     }
                     catch
                     {
@@ -514,9 +502,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             }
                         }
                         else
-                        {
                             throw new Exception("No Valid Items");
-                        }
                     }
                     catch
                     {
@@ -552,10 +538,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void SetUpOrdersDataGrid()
         {
-            foreach (Prescription prescription in OrderCreationViewModel.Prescriptions)
-            {
-                OrdersDataGrid.Items.Add(prescription);
-            }
+            OrdersDataGrid.ItemsSource = OrderCreationViewModel.Prescriptions;
         }
 
         private string AssignCellColor(string prodValue, bool isValid, string errorMessage, bool canBeValidated)
@@ -570,92 +553,102 @@ namespace WVA_Compulink_Integration.Views.Orders
                 return "Red";
         }
 
-        private OutOrderWrapper GetOrder()
+        private OutOrderWrapper GetCompleteOrder()
         {
-            // TODO: Check to be sure all items are valid
-
-            List<Item> listItems = new List<Item>();
-            IList rows = OrdersDataGrid.Items;
-
-            for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
+            try
             {
-                Prescription prescription = (Prescription)rows[i];
+                // TODO: Check to be sure all items are valid
 
-                listItems.Add(new Item()
-                {
-                    FirstName = prescription.FirstName,
-                    LastName = prescription.LastName,
-                    PatientID = prescription._CustomerID?.Value,
-                    Eye = prescription.Eye,
-                    Quantity = prescription.Quantity,
-                    ItemRetailPrice = prescription.Price,
-                    OrderDetail = new OrderDetail()
-                    {
-                        Name = prescription.Product,
-                        _SKU = new SKU() { Value = prescription.SKU },
-                        _ProductKey = new ProductKey() { Value = prescription.ProductCode },
-                        _UPC = new UPC() { Value = prescription.UPC },
-                        _BaseCurve = new BaseCurve() { Value = prescription.BaseCurve },
-                        _Diameter = new Diameter() { Value = prescription.Diameter },
-                        _Sphere = new Sphere() { Value = prescription.Sphere },
-                        _Cylinder = new Cylinder() { Value = prescription.Cylinder },
-                        _Axis = new Axis() { Value = prescription.Axis },
-                        _Add = new Add() { Value = prescription.Add },
-                        _Color = new Color() { Value = prescription.Color },
-                        _Multifocal = new Multifocal() { Value = prescription.Multifocal },
-                    }
-                });
-            }
+                Order order = OrderCreationViewModel.Order;
+             
+                List<Item> listItems = new List<Item>();
+                IList rows = OrdersDataGrid.Items;
+             
+                // Update order object with the form data
+                order.CustomerID   = AccountIDTextBox.Text;
+                order.OrderName    = OrderNameTextBox.Text;
+                order.DoB          = DoBTextBox.Text;
+                order.Name_1       = AddresseeTextBox.Text;
+                order.StreetAddr_1 = AccountIDTextBox.Text;
+                order.StreetAddr_2 = AccountIDTextBox.Text;
+                order.State        = AccountIDTextBox.Text;
+                order.City         = AccountIDTextBox.Text;
+                order.Zip          = AccountIDTextBox.Text;
+                order.ShipToAccount = AccountIDTextBox.Text;
+                order.OfficeName = AccountIDTextBox.Text;
+                order.OrderedBy = AccountIDTextBox.Text;
+                order.PoNumber = AccountIDTextBox.Text;
+                order.ShippingMethod = AccountIDTextBox.Text;
+                order.ShipToPatient = AccountIDTextBox.Text;
+                order.Email = AccountIDTextBox.Text;
+                order.Status = AccountIDTextBox.Text;
 
-            OutOrderWrapper outOrderWrapper = new OutOrderWrapper()
-            {
-                OutOrder = new OutOrder()
+                // Update order detail
+                order.Items.Clear();
+                for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
                 {
-                    ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
-                    PatientOrder = new Order()
+                    Prescription prescription = (Prescription)rows[i];
+
+                    order.Items.Add(new Item()
                     {
-                        CustomerID = AccountIDTextBox.Text,
-                        OrderName = OrderNameTextBox.Text,
-                        DoB = DoBTextBox.Text,
-                        Name_1 = AddresseeTextBox.Text,
-                        StreetAddr_1 = AddressTextBox.Text,
-                        StreetAddr_2 = Suite_AptTextBox.Text,
-                        State = StateComboBox.Text,
-                        City = CityTextBox.Text,
-                        Zip = ZipTextBox.Text,
-                        ShipToAccount = null,
-                        OfficeName = OfficeNameTextBox.Text,
-                        OrderedBy = OrderedByTextBox.Text,
-                        PoNumber = PoNumberTextBox.Text,
-                        ShippingMethod = ShippingTypeComboBox.Text,
-                        ShipToPatient = OrderCreationViewModel.Prescriptions[0].IsShipToPatient ? "Y" : "N",
-                        Email = UserData._User?.Email,
-                        Status = "open",
-                        Items = listItems
-                    }
+                        FirstName = prescription.FirstName,
+                        LastName = prescription.LastName,
+                        PatientID = prescription._CustomerID?.Value,
+                        Eye = prescription.Eye,
+                        Quantity = prescription.Quantity,
+                        ItemRetailPrice = prescription.Price,
+                        OrderDetail = new OrderDetail()
+                        {
+                            Name = prescription.Product,
+                            _SKU = new SKU() { Value = prescription.SKU },
+                            _ProductKey = new ProductKey() { Value = prescription.ProductCode },
+                            _UPC = new UPC() { Value = prescription.UPC },
+                            _BaseCurve = new BaseCurve() { Value = prescription.BaseCurve },
+                            _Diameter = new Diameter() { Value = prescription.Diameter },
+                            _Sphere = new Sphere() { Value = prescription.Sphere },
+                            _Cylinder = new Cylinder() { Value = prescription.Cylinder },
+                            _Axis = new Axis() { Value = prescription.Axis },
+                            _Add = new Add() { Value = prescription.Add },
+                            _Color = new Color() { Value = prescription.Color },
+                            _Multifocal = new Multifocal() { Value = prescription.Multifocal },
+                        }
+                    });
                 }
-            };
 
-            return outOrderWrapper;
+                // Create the complete order object 
+                OutOrderWrapper outOrderWrapper = new OutOrderWrapper()
+                {
+                    OutOrder = new OutOrder()
+                    {
+                        ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
+                        PatientOrder = order
+                    }
+                };
+
+                return outOrderWrapper;
+            }
+            catch (Exception x)
+            {
+                return null;
+            }
+            
         }
 
-        private async void SaveOrder(OutOrderWrapper outOrderWrapper)
+        private void SaveOrder(OutOrderWrapper outOrderWrapper)
         {
             try
             {
                 string endpoint = "http://localhost:56075/CompuClient/orders/save/";
-                string strResponse = API.Post(endpoint, outOrderWrapper, out string httpStatus);
+                string strResponse = API.Post(endpoint, outOrderWrapper);
                 Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
                 if (response.Status == "SUCCESS")
                 {
-                    MessageWindow messageWindow = new MessageWindow("Order created!");
+                    MessageWindow messageWindow = new MessageWindow("\t\tOrder Saved!");
                     messageWindow.Show();
                 }
                 else
-                {
                     throw new Exception($"Save order failed. Error message: {response.Message}");                   
-                }
             }
             catch (Exception x)
             {
@@ -701,53 +694,29 @@ namespace WVA_Compulink_Integration.Views.Orders
                         OrderCreationViewModel.Prescriptions[row].Product = selectedItem;
 
                         if (ListMatchedProducts[row][selectedIndex].MatchScore > 92)
-                        {
                             OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\GreenBubble.png";
-                        }
                         else if (ListMatchedProducts[row][selectedIndex].MatchScore > 75)
-                        {
                             OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\YellowBubble.png";
-                        }
                         else
-                        {
                             OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\RedBubble.jpg";
-                        }
                     }
 
                     if (column == 5)
-                    {
                         OrderCreationViewModel.Prescriptions[row].BaseCurve = selectedItem;
-                    }
                     if (column == 6)
-                    {
                         OrderCreationViewModel.Prescriptions[row].Diameter = selectedItem;
-                    }
                     if (column == 7)
-                    {
                         OrderCreationViewModel.Prescriptions[row].Sphere = selectedItem;
-                    }
                     if (column == 8)
-                    {
                         OrderCreationViewModel.Prescriptions[row].Cylinder = selectedItem;
-                    }
                     if (column == 9)
-                    {
                         OrderCreationViewModel.Prescriptions[row].Axis = selectedItem;
-                    }
                     if (column == 10)
-                    {
                         OrderCreationViewModel.Prescriptions[row].Add = selectedItem;
-                    }
                     if (column == 11)
-                    {
                         OrderCreationViewModel.Prescriptions[row].Color = selectedItem;
-                    }
                     if (column == 12)
-                    {
                         OrderCreationViewModel.Prescriptions[row].Multifocal = selectedItem;
-                    }
-
-                    OrdersDataGrid.Items.Refresh();
                 }
             }
             catch (Exception x)
@@ -781,7 +750,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 FindProductMatches();
                 SetMenuItems();
             }
-            catch (Exception x)
+            catch
             {
 
             }           
@@ -846,7 +815,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
 
             string endpoint = "https://orders-qa.wisvis.com/validations";
-            string strValidatedProducts = API.Post(endpoint, validationWrapper, out string httpStatus);
+            string strValidatedProducts = API.Post(endpoint, validationWrapper);
             var validatedProducts = JsonConvert.DeserializeObject<ValidationResponse>(strValidatedProducts);
             var prods = validatedProducts.Data.Products;
 
@@ -910,9 +879,6 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 OrderCreationViewModel.Prescriptions[i] = prescription;
             }
-
-            OrdersDataGrid.Items.Refresh();
-
         }
 
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
@@ -936,7 +902,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 }
                 else if (ViewMode == "edit")
                 {
-                    SaveOrder(GetOrder());
+                    SaveOrder(GetCompleteOrder());
                     return;
                 }
                 else
@@ -954,19 +920,23 @@ namespace WVA_Compulink_Integration.Views.Orders
         }
 
         // Save order to database
-        private async void SaveOrderButton_Click(object sender, RoutedEventArgs e)
+        private void SaveOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            // Spawn a loading window and change cursor to waiting cursor
-            LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.Show();
-            Mouse.OverrideCursor = Cursors.Wait;
+            try
+            {
+                OutOrderWrapper outOrderWrapper = GetCompleteOrder();
 
-            await Task.Run(() => SaveOrder(GetOrder()));
-
-            // Close loading window and change cursor back to default arrow cursor
-            loadingWindow.Close();
-            Mouse.OverrideCursor = Cursors.Arrow;
+                if (outOrderWrapper != null)
+                    SaveOrder(outOrderWrapper);
+                else
+                    throw new NullReferenceException();             
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }           
         }
+
     }
 }
 

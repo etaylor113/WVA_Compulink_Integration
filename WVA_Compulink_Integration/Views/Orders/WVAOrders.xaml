@@ -37,7 +37,8 @@
                             <Border x:Name="border" 
                                     CornerRadius="3,3,3,3" 
                                     BorderBrush="Black" 
-                                    BorderThickness="1.6,1.9,2.9,2.9" Grid.ColumnSpan="2">
+                                    BorderThickness="1.6,1.9,2.9,2.9" 
+                                    Grid.ColumnSpan="2">
                                 <Border.Background>
                                     <RadialGradientBrush GradientOrigin="0.496,1.052">
                                         <RadialGradientBrush.RelativeTransform>

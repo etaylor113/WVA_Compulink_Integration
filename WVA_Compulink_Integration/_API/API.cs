@@ -12,7 +12,8 @@ namespace WVA_Compulink_Integration._API
 {
     class API
     {
-        static public string Post(string endpoint, object jsonObject, out string httpStatus)
+        // POST
+        static public string Post(string endpoint, object jsonObject)
         {
             try
             {
@@ -39,19 +40,17 @@ namespace WVA_Compulink_Integration._API
                     targetResponse = reader.ReadToEnd();
                     reader.Close();
                 }
-                httpStatus = ((HttpWebResponse)webResponse).StatusDescription.ToString();
 
                 return targetResponse;
             }
             catch (Exception x)
             {
                 AppError.PrintToLog(x);
-                httpStatus = null;
                 return null;
             }
         }
 
-        static public string Post(string endpoint, string jsonString, out string httpStatus)
+        static public string Post(string endpoint, string jsonString, string methodType)
         {
             try
             {
@@ -64,7 +63,7 @@ namespace WVA_Compulink_Integration._API
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(endpoint);
                 request.ContentLength = byteArray.Length;
                 request.ContentType = @"application/json";
-                request.Method = "POST";
+                request.Method = methodType;
 
                 using (Stream dataStream = request.GetRequestStream())
                 {
@@ -78,19 +77,18 @@ namespace WVA_Compulink_Integration._API
                     targetResponse = reader.ReadToEnd();
                     reader.Close();
                 }
-                httpStatus = ((HttpWebResponse)webResponse).StatusDescription.ToString();
 
                 return targetResponse;
             }
             catch (Exception x)
             {
                 AppError.PrintToLog(x);
-                httpStatus = null;
                 return null;
             }
         }
 
-        static public string Delete(string endpoint, object jsonObject, out string httpStatus)
+        // PUT
+        static public string Put(string endpoint, object jsonObject)
         {
             try
             {
@@ -103,7 +101,7 @@ namespace WVA_Compulink_Integration._API
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(endpoint);
                 request.ContentLength = byteArray.Length;
                 request.ContentType = @"application/json";
-                request.Method = "DELETE";
+                request.Method = "PUT";
 
                 using (Stream dataStream = request.GetRequestStream())
                 {
@@ -117,57 +115,17 @@ namespace WVA_Compulink_Integration._API
                     targetResponse = reader.ReadToEnd();
                     reader.Close();
                 }
-                httpStatus = ((HttpWebResponse)webResponse).StatusDescription.ToString();
 
                 return targetResponse;
             }
             catch (Exception x)
             {
                 AppError.PrintToLog(x);
-                httpStatus = null;
                 return null;
             }
         }
 
-        static public string Delete(string endpoint, string strJson, out string httpStatus)
-        {
-            try
-            {
-                string targetResponse = null;
-                string json = JsonConvert.SerializeObject(strJson);
-
-                UTF8Encoding encoding = new UTF8Encoding();
-                byte[] byteArray = encoding.GetBytes(json);
-
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(endpoint);
-                request.ContentLength = byteArray.Length;
-                request.ContentType = @"application/json";
-                request.Method = "DELETE";
-
-                using (Stream dataStream = request.GetRequestStream())
-                {
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                }
-
-                WebResponse webResponse = request.GetResponse();
-                using (Stream responseStream = webResponse.GetResponseStream())
-                {
-                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                    targetResponse = reader.ReadToEnd();
-                    reader.Close();
-                }
-                httpStatus = ((HttpWebResponse)webResponse).StatusDescription.ToString();
-
-                return targetResponse;
-            }
-            catch (Exception x)
-            {
-                AppError.PrintToLog(x);
-                httpStatus = null;
-                return null;
-            }
-        }
-
+        // GET
         static public string Get(string endpoint, out string httpStatus)
         {
             try
@@ -195,5 +153,6 @@ namespace WVA_Compulink_Integration._API
             }
         }
 
+        
     }
 }

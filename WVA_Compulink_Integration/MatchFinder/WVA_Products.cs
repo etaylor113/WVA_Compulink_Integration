@@ -27,7 +27,7 @@ namespace WVA_Compulink_Integration.MatchFinder
 
             };
 
-            return API.Post(endpoint, request, out string httpStatus);
+            return API.Post(endpoint, request);
         }
        
     }

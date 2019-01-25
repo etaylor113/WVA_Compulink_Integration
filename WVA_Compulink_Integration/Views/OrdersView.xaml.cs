@@ -52,7 +52,7 @@ namespace WVA_Compulink_Integration.Views
                     break;
                 case "OrderCreation":
 
-                    Order order = GetOrder(orderName);
+                    Order order = OrderCreationViewModel.GetOrder(orderName); 
 
                     // Open order creation view with the order's saved data (edits the selected order)
                     if (order != null)                     
@@ -67,22 +67,7 @@ namespace WVA_Compulink_Integration.Views
             }         
         }     
 
-        private Order GetOrder(string orderName)
-        {
-            // Check if the given order exists
-            try
-            {
-                string endpoint = "http://localhost:56075/CompuClient/orders/exists/";
-                string strOrder = API.Post(endpoint, orderName, out string httpStatus);
-                Order order = JsonConvert.DeserializeObject<Order>(strOrder);
-                return order;
-            }
-            catch (Exception x)
-            {
-                return null;
-            }         
-        }
-
+        
         private void CompulinkOrdersButton_Click(object sender, RoutedEventArgs e)
         {
             SetUpLabOrdersView();

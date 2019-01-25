@@ -33,5 +33,29 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
             OrderName = OrderName;
         }
 
+        public static Order GetOrder(string orderName)
+        {
+            // Check if the given order exists
+            try
+            {
+                string endpoint = "http://localhost:56075/CompuClient/orders/exists/";
+                string strOrder = API.Post(endpoint, orderName);
+                Order order = JsonConvert.DeserializeObject<Order>(strOrder);
+                return order;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static bool CreateOrder()
+        {
+
+        }
+
+
+
+
     }
 }

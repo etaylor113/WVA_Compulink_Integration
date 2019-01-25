@@ -55,6 +55,9 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
+                // Autofill new order display
+                WvaOrdersComboBox.Text = $"WVA Order {DateTime.Now.ToString("MM/dd/yy--HH:mm:ss")}";
+
                 // Get this account's open wva orders
                 string endpoint = "http://localhost:56075/CompuClient/orders/get-names/" +  UserData._User?.Account;
                 string strNames = API.Get(endpoint, out string httpStatus);
@@ -63,23 +66,17 @@ namespace WVA_Compulink_Integration.Views.Orders
                 // Break if bad response
                 if (httpStatus != "OK")
                     throw new Exception("Bad response from server!");
-
-                try { WvaOrdersComboBox.Text = $"WVA Order {DateTime.Now.ToString("MM/dd/yy--HH:mm:ss")}"; }
-                catch { WvaOrdersComboBox.Text = $"{DateTime.Now.ToString("MM/dd/yy--HH:mm:ss")}"; }
-
+             
+                // Put account's open orders in the drop down
                 if (dictOrderNames.Count > 0)
                 {
                     foreach (string orderName in dictOrderNames.Values)
                         WvaOrdersComboBox.Items.Add(orderName);            
                 }
-                else
-                {
-                    
-                }
             }
             catch (Exception x)
             {
-                // TODO
+                AppError.PrintToLog(x);
             }
         }
 

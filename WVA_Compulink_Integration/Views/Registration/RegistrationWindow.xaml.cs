@@ -119,7 +119,7 @@ namespace WVA_Compulink_Integration.Views.Registration
                     ApiKey = ""
                 };
 
-                string registerResponse = _API.API.Post("http://localhost:56075/CompuClient/User/register", user, out string httpStatus);        
+                string registerResponse = _API.API.Post("http://localhost:56075/CompuClient/User/register", user);        
                 User userRegisterResponse = JsonConvert.DeserializeObject<User>(registerResponse);
            
                 // Check if email exists

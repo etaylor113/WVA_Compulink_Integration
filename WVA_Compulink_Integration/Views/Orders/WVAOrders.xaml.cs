@@ -126,7 +126,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             RefreshImage.Source = new BitmapImage(new Uri(@"/Resources/icons8-available-updates-filled-48.png", UriKind.Relative));
         }
 
-        private async void RefreshButton_Click(object sender, RoutedEventArgs e)
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             // Spawn a loading window and change cursor to waiting cursor
             LoadingWindow loadingWindow = new LoadingWindow();
@@ -167,7 +167,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             string selectedOrder = OrdersListBox.SelectedItem as string;
        
             string endpoint = "http://localhost:56075/CompuClient/orders/delete/";
-            string strResponse = API.Post(endpoint, selectedOrder, out string httpStatus);
+            string strResponse = API.Post(endpoint, selectedOrder);
             Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
             if (response.Status == "SUCCESS")

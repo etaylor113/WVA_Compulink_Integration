@@ -61,7 +61,7 @@ namespace WVA_Compulink_Integration.Views.Login
                     UserName = UserNameTextBox.Text
                 };
 
-                string strEmail = API.Post(getEmailEndpoint, user, out string httpStatus);
+                string strEmail = API.Post(getEmailEndpoint, user);
                 User userResponse = JsonConvert.DeserializeObject<User>(strEmail);
 
                 if (userResponse.Status == "ERROR")
@@ -85,7 +85,7 @@ namespace WVA_Compulink_Integration.Views.Login
                     ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285"
                 };
 
-                string strResponse = API.Post(endpoint, emailValidation, out httpStatus);
+                string strResponse = API.Post(endpoint, emailValidation);
                 Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
                 if (response.Status == "FAIL")
@@ -111,7 +111,7 @@ namespace WVA_Compulink_Integration.Views.Login
                     ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285"
                 };
 
-                string strResponse = API.Post(endpoint, emailValidation, out string httpStatus);
+                string strResponse = API.Post(endpoint, emailValidation);
                 Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
                 if (response.Status == "SUCCESS")
