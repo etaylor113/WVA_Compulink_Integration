@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WVA_Compulink_Integration._API;
+using WVA_Compulink_Integration.Memory;
+using WVA_Compulink_Integration.Models;
 using WVA_Compulink_Integration.Models.Order.Out;
 using WVA_Compulink_Integration.Models.Patient;
 using WVA_Compulink_Integration.Models.Prescription;
@@ -35,27 +39,39 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
 
         public static Order GetOrder(string orderName)
         {
-            // Check if the given order exists
-            try
-            {
-                string endpoint = "http://localhost:56075/CompuClient/orders/exists/";
-                string strOrder = API.Post(endpoint, orderName);
-                Order order = JsonConvert.DeserializeObject<Order>(strOrder);
-                return order;
-            }
-            catch
-            {
-                return null;
-            }
+            string endpoint = "http://localhost:56075/CompuClient/orders/exists/";
+            string strOrder = API.Post(endpoint, orderName);
+            Order order = JsonConvert.DeserializeObject<Order>(strOrder);
+
+            return order;
         }
 
-        public static bool CreateOrder()
+        public static Response CreateOrder(OutOrderWrapper outOrderWrapper)
         {
+            string endpoint = "http://localhost:56075/CompuClient/orders/submit/" + UserData._User?.Account;
+            string strResponse = API.Post(endpoint, outOrderWrapper);
+            Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
+            return response;
         }
 
+        public static Response DeleteOrder(string orderName)
+        {
+            string endpoint = "http://localhost:56075/CompuClient/orders/delete/";
+            string strResponse = API.Post(endpoint, orderName);
+            Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
+            return response;
+        }
 
+        public static Response SaveOrder(OutOrderWrapper outOrderWrapper)
+        {
+            string endpoint = "http://localhost:56075/CompuClient/orders/save/";
+            string strResponse = API.Post(endpoint, outOrderWrapper);
+            Response response = JsonConvert.DeserializeObject<Response>(strResponse);
+
+            return response;
+        }
 
     }
 }

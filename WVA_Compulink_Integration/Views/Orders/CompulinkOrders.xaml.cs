@@ -240,6 +240,5 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
         }
 
-
     }
 }

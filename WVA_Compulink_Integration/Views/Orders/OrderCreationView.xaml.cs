@@ -189,8 +189,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             // Empty datagrid
             OrderCreationViewModel.Prescriptions.Clear();
-            //OrdersDataGrid.Items.Clear();
-            //OrdersDataGrid.Items.Refresh();
+            OrdersDataGrid.Items.Refresh();
 
             // Clear right column
             OrderNameTextBox.Text   = "";
@@ -211,10 +210,8 @@ namespace WVA_Compulink_Integration.Views.Orders
         }
        
         private void DeleteOrder()
-        {         
-            string endpoint = "http://localhost:56075/CompuClient/orders/delete/";
-            string strResponse = API.Post(endpoint, OrderNameTextBox.Text);
-            Response response = JsonConvert.DeserializeObject<Response>(strResponse);
+        {
+            Response response = OrderCreationViewModel.DeleteOrder(OrderNameTextBox.Text);
 
             if (response.Status == "SUCCESS")
             {
@@ -231,9 +228,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
-                string endpoint = "http://localhost:56075/CompuClient/orders/submit/" + UserData._User?.Account;
-                string strResponse = API.Post(endpoint, GetCompleteOrder());
-                Response response = JsonConvert.DeserializeObject<Response>(strResponse);
+                Response response = OrderCreationViewModel.CreateOrder(GetCompleteOrder());
 
                 if (response.Status == "SUCCESS")
                 {
@@ -561,36 +556,44 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 Order order = OrderCreationViewModel.Order;
              
+                if (order == null)
+                {
+                    order = new Order
+                    {
+                        Items = new List<Item>()
+                    };
+                }
+                else
+                {
+                    order.Items?.Clear();
+                }
+                    
                 List<Item> listItems = new List<Item>();
                 IList rows = OrdersDataGrid.Items;
              
-                // Update order object with the form data
-                order.CustomerID   = AccountIDTextBox.Text;
-                order.OrderName    = OrderNameTextBox.Text;
-                order.DoB          = DoBTextBox.Text;
-                order.Name_1       = AddresseeTextBox.Text;
-                order.StreetAddr_1 = AccountIDTextBox.Text;
-                order.StreetAddr_2 = AccountIDTextBox.Text;
-                order.State        = AccountIDTextBox.Text;
-                order.City         = AccountIDTextBox.Text;
-                order.Zip          = AccountIDTextBox.Text;
-                order.ShipToAccount = AccountIDTextBox.Text;
-                order.OfficeName = AccountIDTextBox.Text;
-                order.OrderedBy = AccountIDTextBox.Text;
-                order.PoNumber = AccountIDTextBox.Text;
-                order.ShippingMethod = AccountIDTextBox.Text;
-                order.ShipToPatient = AccountIDTextBox.Text;
-                order.Email = AccountIDTextBox.Text;
-                order.Status = AccountIDTextBox.Text;
-
-                // Update order detail
-                order.Items.Clear();
+                // Update order object with the form data               
+                order.OrderName         =   OrderNameTextBox.Text;
+                order.CustomerID        =   AccountIDTextBox.Text;
+                order.OrderedBy         =   OrderedByTextBox.Text;
+                order.OfficeName        =   OfficeNameTextBox.Text;
+                order.PoNumber          =   PoNumberTextBox.Text;
+                order.ShippingMethod    =   ShippingTypeComboBox.Text;
+                order.Name_1            =   AddresseeTextBox.Text;
+                order.StreetAddr_1      =   AddressTextBox.Text;
+                order.StreetAddr_2      =   Suite_AptTextBox.Text;
+                order.State             =   StateComboBox.Text;
+                order.City              =   CityTextBox.Text;
+                order.Zip               =   ZipTextBox.Text;              
+                order.Phone             =   PhoneTextBox.Text;
+                order.DoB               =   DoBTextBox.Text;
+                                                        
+                // Update order detail                
                 for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
                 {
                     Prescription prescription = (Prescription)rows[i];
 
                     order.Items.Add(new Item()
-                    {
+                    {                   
                         FirstName = prescription.FirstName,
                         LastName = prescription.LastName,
                         PatientID = prescription._CustomerID?.Value,
@@ -638,9 +641,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
-                string endpoint = "http://localhost:56075/CompuClient/orders/save/";
-                string strResponse = API.Post(endpoint, outOrderWrapper);
-                Response response = JsonConvert.DeserializeObject<Response>(strResponse);
+                Response response = OrderCreationViewModel.SaveOrder(outOrderWrapper);
 
                 if (response.Status == "SUCCESS")
                 {
@@ -897,18 +898,11 @@ namespace WVA_Compulink_Integration.Views.Orders
             {             
                 // Target a different endpoint depending on if this is a new order or a previous one the user is editing
                 if (ViewMode == "new")
-                {
                     CreateOrder();
-                }
                 else if (ViewMode == "edit")
-                {
                     SaveOrder(GetCompleteOrder());
-                    return;
-                }
                 else
-                {
-                    throw new Exception("ViewMode has not been set.");
-                }              
+                    throw new Exception("ViewMode has not been set.");          
             }
             catch (Exception x)
             {

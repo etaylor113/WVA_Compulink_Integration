@@ -66,8 +66,7 @@ namespace WVA_Compulink_Integration.Views
                     break;
             }         
         }     
-
-        
+ 
         private void CompulinkOrdersButton_Click(object sender, RoutedEventArgs e)
         {
             SetUpLabOrdersView();
@@ -107,8 +106,6 @@ namespace WVA_Compulink_Integration.Views
             SolidColorBrush whiteBrush = new SolidColorBrush(white);
             Rect_1.Fill = whiteBrush;
         }
-
-       
 
     }
 }

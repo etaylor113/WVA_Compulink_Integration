@@ -143,32 +143,75 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Submit Button
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            // Spawn a loading window and change cursor to waiting cursor
-            LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.Show();
-            Mouse.OverrideCursor = Cursors.Wait;
+            try
+            {
+                // Create the complete order object 
+                OutOrderWrapper outOrderWrapper = new OutOrderWrapper()
+                {
+                    OutOrder = new OutOrder()
+                    {
+                        ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
+                        PatientOrder = OrderCreationViewModel.GetOrder(OrdersListBox.SelectedItem as string)
+                    }
+                };
 
-            //await Task.Run(() => List_WVA_Products.LoadProducts());
+                Response response = OrderCreationViewModel.CreateOrder(outOrderWrapper);
 
-            // Close loading window and change cursor back to default arrow cursor
-            loadingWindow.Close();
-            Mouse.OverrideCursor = Cursors.Arrow;
+                if (response.Status == "SUCCESS")
+                {
+                    MessageWindow messageWindow = new MessageWindow("\t\tOrder Created!");
+                    messageWindow.Show();
+                }
+                else
+                    throw new Exception($"Order creation failed. Error message: {response.Message}");
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }         
         }
 
         // Edit Button
         private void EditOrderButton_Click(object sender, RoutedEventArgs e)
         {
+            Order order = OrderCreationViewModel.GetOrder(OrdersListBox.SelectedItem as string);
 
+            List<Prescription> listPrescriptions = new List<Prescription>();
+
+            foreach (Item item in order.Items)
+            {
+                listPrescriptions.Add(new Prescription()
+                {
+                    FirstName   =   item.FirstName,
+                    LastName    =   item.LastName,
+                    Eye         =   item.Eye,
+                    Product     =   item.OrderDetail.Name,
+                    Quantity    =   item.Quantity,
+                    BaseCurve   =   item.OrderDetail._BaseCurve.Value,
+                    Diameter    =   item.OrderDetail._Diameter.Value,
+                    Sphere      =   item.OrderDetail._Sphere.Value,
+                    Cylinder    =   item.OrderDetail._Cylinder.Value,
+                    Axis        =   item.OrderDetail._Axis.Value,
+                    Add         =   item.OrderDetail._Add.Value,
+                    Color       =   item.OrderDetail._Color.Value,
+                    Multifocal  =   item.OrderDetail._Multifocal.Value
+                });
+            }
+
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window.GetType() == typeof(MainWindow))
+                {
+                    (window as MainWindow).MainContentControl.DataContext = new OrdersView(listPrescriptions, OrdersListBox.SelectedItem as string, "OrderCreation");
+                    return;
+                }
+            }
         }
 
         // Delete Button
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            string selectedOrder = OrdersListBox.SelectedItem as string;
-       
-            string endpoint = "http://localhost:56075/CompuClient/orders/delete/";
-            string strResponse = API.Post(endpoint, selectedOrder);
-            Response response = JsonConvert.DeserializeObject<Response>(strResponse);
+            Response response = OrderCreationViewModel.DeleteOrder(OrdersListBox.SelectedItem as string);
 
             if (response.Status == "SUCCESS")
             {
