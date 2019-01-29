@@ -44,9 +44,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void SetUpUI()
         {
-            // Set match percent label
             MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
-            // Add rows to datagrid
             SetUpOrdersDataGrid();
             CheckViewMode();         
         }
@@ -65,72 +63,69 @@ namespace WVA_Compulink_Integration.Views.Orders
             }           
         }
 
-        private void SetUpNewOrder()
-        {         
-            // Autofill some user information      
-            OrderNameTextBox.Text = OrderCreationViewModel.OrderName ?? "";
-            AccountIDTextBox.Text = UserData._User?.Account ?? "";
-            OrderedByTextBox.Text = UserData._User?.UserName ?? "";               
+        // =======================================================================================================================
+        // ================================== Match Algorithm Methods ============================================================
+        // =======================================================================================================================
 
-            // Hide STP fields if order not STP
-            if (!OrderCreationViewModel.Prescriptions[0].IsShipToPatient)
-                HideStpItems();
+        private void FindProductMatches()
+        {
+            // Reset list of matched products 
+            ListMatchedProducts.Clear();
+
+            // Get product names in DataGrid
+            List<Product> compulinkProducts = new List<Product>();
+            for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
+            {
+                Prescription prescription = (Prescription)OrdersDataGrid.Items[i];
+                compulinkProducts.Add(new Product() { Description = prescription.Product });
+            }
+
+            // Loop through product names list and pass each one into matcher algorithm 
+            int index = 0;
+            foreach (Product product in compulinkProducts)
+            {
+                List<MatchProduct> matchProducts = DescriptionMatcher.FindMatch(product.Description, List_WVA_Products.ListProducts, Convert.ToDouble(MinScoreAdjustSlider.Value));
+
+                if (matchProducts.Count > 0)
+                {
+                    ListMatchedProducts.Add(matchProducts);
+                    OrderCreationViewModel.Prescriptions[index].ProductCode = matchProducts[0].ProductKey;
+                }
+                else
+                {
+                    ListMatchedProducts.Add(new List<MatchProduct> { new MatchProduct("No Matches Found", 0) });
+                }
+                index++;
+            }
         }
 
-        private void SetUpEditOrder()
+        // =======================================================================================================================
+        // ================================== UI Related Mehtods =================================================================
+        // =======================================================================================================================
+
+        private void SetUpShippingComboBox()
         {
-            if (OrderCreationViewModel.Order.ShipToPatient == "Y")
+            foreach (string shipType in ShippingTypes.ListShippingTypes)
             {
-                ShowStpItems();
-                AutoFillStpItems();
+                ShippingTypeComboBox.Items.Add(shipType);
             }
+        }
+
+        private void SetUpOrdersDataGrid()
+        {
+            OrdersDataGrid.ItemsSource = OrderCreationViewModel.Prescriptions;
+        }
+
+        private string AssignCellColor(string prodValue, bool isValid, string errorMessage, bool canBeValidated)
+        {
+            if (prodValue == null || prodValue == "" && errorMessage == null)
+                return "White";
+            else if (!canBeValidated)
+                return "Yellow";
+            else if (isValid)
+                return "Green";
             else
-            {
-                HideStpItems();
-            }
-
-            // Left column
-            AddresseeTextBox.Text = OrderCreationViewModel.Order.Name_1 ?? "";
-            AddressTextBox.Text = OrderCreationViewModel.Order.StreetAddr_1 ?? "";
-            Suite_AptTextBox.Text = OrderCreationViewModel.Order.StreetAddr_2 ?? "";
-            CityTextBox.Text = OrderCreationViewModel.Order.City ?? "";
-            StateComboBox.Text = OrderCreationViewModel.Order.State ?? "";
-            ZipTextBox.Text = OrderCreationViewModel.Order.Zip ?? "";
-            PhoneTextBox.Text = OrderCreationViewModel.Order.Phone ?? "";
-            DoBTextBox.Text = OrderCreationViewModel.Order.DoB ?? "";
-
-            // Right column
-            OrderNameTextBox.Text = OrderCreationViewModel.Order.OrderName ?? "";
-            AccountIDTextBox.Text = OrderCreationViewModel.Order.OrderedBy ?? "";
-            OfficeNameTextBox.Text = OrderCreationViewModel.Order.OfficeName ?? "";
-            PoNumberTextBox.Text = OrderCreationViewModel.Order.PoNumber ?? "";
-            ShippingTypeComboBox.Text = OrderCreationViewModel.Order.ShippingMethod ?? "";
-           
-            // If there are no items then exit
-            if (OrderCreationViewModel.Order.Items == null || OrderCreationViewModel.Order.Items?.Count == 0)
-                return;
-
-            // Datagrid rows
-            for (int i = 0; i < OrderCreationViewModel.Order.Items.Count; i++)
-            {
-                Prescription prescription = new Prescription()
-                {
-                    FirstName = OrderCreationViewModel.Order.Items[i].FirstName,
-                    LastName = OrderCreationViewModel.Order.Items[i].LastName,
-                    Eye = OrderCreationViewModel.Order.Items[i].Eye,
-                    Product = OrderCreationViewModel.Order.Items[i].OrderDetail.Name,
-                    Quantity = OrderCreationViewModel.Order.Items[i].Quantity,
-                    BaseCurve = OrderCreationViewModel.Order.Items[i].OrderDetail._BaseCurve.Value,
-                    Diameter = OrderCreationViewModel.Order.Items[i].OrderDetail._Diameter.Value,
-                    Sphere = OrderCreationViewModel.Order.Items[i].OrderDetail._Sphere.Value,
-                    Cylinder = OrderCreationViewModel.Order.Items[i].OrderDetail._Cylinder.Value,
-                    Axis = OrderCreationViewModel.Order.Items[i].OrderDetail._Axis.Value,
-                    Add = OrderCreationViewModel.Order.Items[i].OrderDetail._Axis.Value,
-                    Color = OrderCreationViewModel.Order.Items[i].OrderDetail._Color.Value,
-                    Multifocal = OrderCreationViewModel.Order.Items[i].OrderDetail._Multifocal.Value
-                };
-                OrderCreationViewModel.Prescriptions.Add(prescription);
-            }       
+                return "Red";
         }
 
         private void AutoFillStpItems()
@@ -192,93 +187,91 @@ namespace WVA_Compulink_Integration.Views.Orders
             OrdersDataGrid.Items.Refresh();
 
             // Clear right column
-            OrderNameTextBox.Text   = "";
-            AccountIDTextBox.Text   = "";
-            OrderedByTextBox.Text   = "";
-            OfficeNameTextBox.Text  = "";
-            PoNumberTextBox.Text    = "";
+            OrderNameTextBox.Text = "";
+            AccountIDTextBox.Text = "";
+            OrderedByTextBox.Text = "";
+            OfficeNameTextBox.Text = "";
+            PoNumberTextBox.Text = "";
 
             // Clear left column
-            AddresseeTextBox.Text   = "";
-            AddressTextBox.Text     = "";
-            Suite_AptTextBox.Text   = "";
-            CityTextBox.Text        = "";
-            StateComboBox.Text      = "";
-            ZipTextBox.Text         = "";
-            PhoneTextBox.Text       = "";
-            DoBTextBox.Text         = "";
+            AddresseeTextBox.Text = "";
+            AddressTextBox.Text = "";
+            Suite_AptTextBox.Text = "";
+            CityTextBox.Text = "";
+            StateComboBox.Text = "";
+            ZipTextBox.Text = "";
+            PhoneTextBox.Text = "";
+            DoBTextBox.Text = "";
         }
-       
-        private void DeleteOrder()
-        {
-            Response response = OrderCreationViewModel.DeleteOrder(OrderNameTextBox.Text);
 
-            if (response.Status == "SUCCESS")
+        private void SetUpNewOrder()
+        {
+            // Autofill some user information      
+            OrderNameTextBox.Text = OrderCreationViewModel.OrderName ?? "";
+            AccountIDTextBox.Text = UserData._User?.Account ?? "";
+            OrderedByTextBox.Text = UserData._User?.UserName ?? "";
+
+            // Hide STP fields if order not STP
+            if (!OrderCreationViewModel.Prescriptions[0].IsShipToPatient)
+                HideStpItems();
+        }
+
+        private void SetUpEditOrder()
+        {
+            if (OrderCreationViewModel.Order.ShipToPatient == "Y")
             {
-                ClearView();
-                MessageBox.Show("Order deleted!", "", MessageBoxButton.OK);
+                ShowStpItems();
+                AutoFillStpItems();
             }
             else
             {
-                MessageBox.Show("An error has occurred. Order not deleted.", "", MessageBoxButton.OK);
-            }
-        }
-
-        private void CreateOrder()
-        {
-            try
-            {
-                Response response = OrderCreationViewModel.CreateOrder(GetCompleteOrder());
-
-                if (response.Status == "SUCCESS")
-                {
-                    ClearView();
-                    MessageWindow messageWindow = new MessageWindow("\t\tOrder created!");
-                    messageWindow.Show();
-                }
-                else
-                {
-                    MessageWindow messageWindow = new MessageWindow("Order creation failed. Please see error log for details.");
-                    messageWindow.Show();
-
-                    throw new Exception($"Order creation has failed. Error message: {response.Message}");
-                }
-            }
-            catch (Exception x)
-            {
-                AppError.PrintToLog(x);
-            }        
-        }
-
-        private void FindProductMatches()
-        {
-            // Reset list of matched products 
-            ListMatchedProducts.Clear();
-
-            // Get product names in DataGrid
-            List<Product> compulinkProducts = new List<Product>();
-            for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
-            {
-                Prescription prescription = (Prescription)OrdersDataGrid.Items[i];
-                compulinkProducts.Add(new Product() { Description = prescription.Product });
+                HideStpItems();
             }
 
-            // Loop through product names list and pass each one into matcher algorithm 
-            int index = 0;
-            foreach (Product product in compulinkProducts)
-            {
-                List<MatchProduct> matchProducts = DescriptionMatcher.FindMatch(product.Description, List_WVA_Products.ListProducts, Convert.ToDouble(MinScoreAdjustSlider.Value));
+            // Left column
+            AddresseeTextBox.Text = OrderCreationViewModel.Order.Name_1 ?? "";
+            AddressTextBox.Text = OrderCreationViewModel.Order.StreetAddr_1 ?? "";
+            Suite_AptTextBox.Text = OrderCreationViewModel.Order.StreetAddr_2 ?? "";
+            CityTextBox.Text = OrderCreationViewModel.Order.City ?? "";
+            StateComboBox.Text = OrderCreationViewModel.Order.State ?? "";
+            ZipTextBox.Text = OrderCreationViewModel.Order.Zip ?? "";
+            PhoneTextBox.Text = OrderCreationViewModel.Order.Phone ?? "";
+            DoBTextBox.Text = OrderCreationViewModel.Order.DoB ?? "";
 
-                if (matchProducts.Count > 0)
+            // Right column
+            OrderNameTextBox.Text = OrderCreationViewModel.Order.OrderName ?? "";
+            AccountIDTextBox.Text = UserData._User?.Account;
+            OrderedByTextBox.Text = OrderCreationViewModel.Order.OrderedBy ?? "";
+            OfficeNameTextBox.Text = OrderCreationViewModel.Order.OfficeName ?? "";
+            PoNumberTextBox.Text = OrderCreationViewModel.Order.PoNumber ?? "";
+            ShippingTypeComboBox.Text = OrderCreationViewModel.Order.ShippingMethod ?? "";
+
+            // If there are no items then exit
+            if (OrderCreationViewModel.Order.Items == null || OrderCreationViewModel.Order.Items?.Count == 0)
+                return;
+
+            // Datagrid rows
+            for (int i = 0; i < OrderCreationViewModel.Order.Items.Count; i++)
+            {
+                Prescription prescription = new Prescription()
                 {
-                    ListMatchedProducts.Add(matchProducts);
-                    OrderCreationViewModel.Prescriptions[index].ProductCode = matchProducts[0].ProductKey;
-                }
-                else
-                {
-                    ListMatchedProducts.Add(new List<MatchProduct> { new MatchProduct("No Matches Found", 0) });
-                }
-                index++;
+
+                    FirstName = OrderCreationViewModel.Order.Items[i].FirstName,
+                    LastName = OrderCreationViewModel.Order.Items[i].LastName,
+                    Eye = OrderCreationViewModel.Order.Items[i].Eye,
+                    Quantity = OrderCreationViewModel.Order.Items[i].Quantity,
+                    Product = OrderCreationViewModel.Order.Items[i].OrderDetail.Name,
+                    ProductCode = OrderCreationViewModel.Order.Items[i].OrderDetail._ProductKey.Value,
+                    BaseCurve = OrderCreationViewModel.Order.Items[i].OrderDetail._BaseCurve.Value,
+                    Diameter = OrderCreationViewModel.Order.Items[i].OrderDetail._Diameter.Value,
+                    Sphere = OrderCreationViewModel.Order.Items[i].OrderDetail._Sphere.Value,
+                    Cylinder = OrderCreationViewModel.Order.Items[i].OrderDetail._Cylinder.Value,
+                    Axis = OrderCreationViewModel.Order.Items[i].OrderDetail._Axis.Value,
+                    Add = OrderCreationViewModel.Order.Items[i].OrderDetail._Axis.Value,
+                    Color = OrderCreationViewModel.Order.Items[i].OrderDetail._Color.Value,
+                    Multifocal = OrderCreationViewModel.Order.Items[i].OrderDetail._Multifocal.Value
+                };
+                OrderCreationViewModel.Prescriptions.Add(prescription);
             }
         }
 
@@ -521,32 +514,11 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 AppError.PrintToLog(x);
             }
-        }
+        }    
 
-        private void SetUpShippingComboBox()
-        {
-            foreach (string shipType in ShippingTypes.ListShippingTypes)
-            {
-                ShippingTypeComboBox.Items.Add(shipType);
-            }
-        }
-
-        private void SetUpOrdersDataGrid()
-        {
-            OrdersDataGrid.ItemsSource = OrderCreationViewModel.Prescriptions;
-        }
-
-        private string AssignCellColor(string prodValue, bool isValid, string errorMessage, bool canBeValidated)
-        {
-            if (prodValue == null || prodValue == "" && errorMessage == null)
-                return "White";
-            else if (!canBeValidated)
-                return "Yellow";
-            else if (isValid)
-                return "Green";
-            else
-                return "Red";
-        }
+        // =======================================================================================================================
+        // ================================== CRUD Operations for Order ==========================================================
+        // =======================================================================================================================
 
         private OutOrderWrapper GetCompleteOrder()
         {
@@ -584,9 +556,8 @@ namespace WVA_Compulink_Integration.Views.Orders
                 order.State             =   StateComboBox.Text;
                 order.City              =   CityTextBox.Text;
                 order.Zip               =   ZipTextBox.Text;              
-                order.Phone             =   PhoneTextBox.Text;
-                order.DoB               =   DoBTextBox.Text;
-                                                        
+                order.Phone             =   PhoneTextBox.Text; 
+                
                 // Update order detail                
                 for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
                 {
@@ -594,26 +565,26 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                     order.Items.Add(new Item()
                     {                   
-                        FirstName = prescription.FirstName,
-                        LastName = prescription.LastName,
-                        PatientID = prescription._CustomerID?.Value,
-                        Eye = prescription.Eye,
-                        Quantity = prescription.Quantity,
+                        FirstName       = prescription.FirstName,
+                        LastName        = prescription.LastName,
+                        PatientID       = prescription._CustomerID?.Value,
+                        Eye             = prescription.Eye,
+                        Quantity        = prescription.Quantity,
                         ItemRetailPrice = prescription.Price,
-                        OrderDetail = new OrderDetail()
+                        OrderDetail     = new OrderDetail()
                         {
-                            Name = prescription.Product,
-                            _SKU = new SKU() { Value = prescription.SKU },
-                            _ProductKey = new ProductKey() { Value = prescription.ProductCode },
-                            _UPC = new UPC() { Value = prescription.UPC },
-                            _BaseCurve = new BaseCurve() { Value = prescription.BaseCurve },
-                            _Diameter = new Diameter() { Value = prescription.Diameter },
-                            _Sphere = new Sphere() { Value = prescription.Sphere },
-                            _Cylinder = new Cylinder() { Value = prescription.Cylinder },
-                            _Axis = new Axis() { Value = prescription.Axis },
-                            _Add = new Add() { Value = prescription.Add },
-                            _Color = new Color() { Value = prescription.Color },
-                            _Multifocal = new Multifocal() { Value = prescription.Multifocal },
+                            Name        =                             prescription.Product,
+                            _SKU        = new SKU()         { Value = prescription.SKU },
+                            _ProductKey = new ProductKey()  { Value = prescription.ProductCode },
+                            _UPC        = new UPC()         { Value = prescription.UPC },
+                            _BaseCurve  = new BaseCurve()   { Value = prescription.BaseCurve },
+                            _Diameter   = new Diameter()    { Value = prescription.Diameter },
+                            _Sphere     = new Sphere()      { Value = prescription.Sphere },
+                            _Cylinder   = new Cylinder()    { Value = prescription.Cylinder },
+                            _Axis       = new Axis()        { Value = prescription.Axis },
+                            _Add        = new Add()         { Value = prescription.Add },
+                            _Color      = new Color()       { Value = prescription.Color },
+                            _Multifocal = new Multifocal()  { Value = prescription.Multifocal },
                         }
                     });
                 }
@@ -630,7 +601,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 return outOrderWrapper;
             }
-            catch (Exception x)
+            catch
             {
                 return null;
             }
@@ -656,6 +627,53 @@ namespace WVA_Compulink_Integration.Views.Orders
                 AppError.PrintToLog(x);
             }           
         }
+
+        private void DeleteOrder()
+        {
+            Response response = OrderCreationViewModel.DeleteOrder(OrderNameTextBox.Text);
+
+            if (response.Status == "SUCCESS")
+            {
+                ClearView();
+
+                MessageWindow messageWindow = new MessageWindow("\t\tOrder deleted!");
+                messageWindow.Show();
+            }
+            else
+            {
+                MessageBox.Show("An error has occurred. Order not deleted.", "", MessageBoxButton.OK);
+            }
+        }
+
+        private void CreateOrder()
+        {
+            try
+            {
+                Response response = OrderCreationViewModel.CreateOrder(GetCompleteOrder());
+
+                if (response.Status == "SUCCESS")
+                {
+                    ClearView();
+                    MessageWindow messageWindow = new MessageWindow("\t\tOrder created!");
+                    messageWindow.Show();
+                }
+                else
+                {
+                    MessageWindow messageWindow = new MessageWindow("Order creation failed. Please see error log for details.");
+                    messageWindow.Show();
+
+                    throw new Exception($"Order creation has failed. Error message: {response.Message}");
+                }
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }
+        }
+
+        // =======================================================================================================================
+        // ================================== Event Handlers =====================================================================
+        // =======================================================================================================================
 
         private void WVA_OrdersContextMenu_Click(object sender, RoutedEventArgs e)
         {
@@ -779,25 +797,25 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 listValidations.Add(new ValidationDetail()
                 {
-                    _PatientName = $"{prescription.Patient}",
-                    _Eye = prescription.Eye,
-                    _Quantity = prescription.Quantity.ToString(),
-                    _Description = prescription.Product,
-                    _Vendor = "",
-                    _Price = "",
-                    _ID = new ID() { Value = prescription.ID },
-                    _CustomerID = prescription._CustomerID,
-                    _SKU = new SKU() { Value = "" },
-                    _ProductKey = new ProductKey() { Value = prescription.ProductCode },
-                    _UPC = new UPC() { Value = "" },
-                    _BaseCurve = new BaseCurve() { Value = prescription.BaseCurve },
-                    _Diameter = new Diameter() { Value = prescription.Diameter },
-                    _Sphere = new Sphere() { Value = prescription.Sphere },
-                    _Cylinder = new Cylinder() { Value = prescription.Cylinder },
-                    _Axis = new Axis() { Value = prescription.Axis },
-                    _Add = new Add() { Value = prescription.Add },
-                    _Color = new Color() { Value = prescription.Color },
-                    _Multifocal = new Multifocal() { Value = prescription.Multifocal },
+                    _PatientName    = $"{prescription.Patient}",
+                    _Eye            = prescription.Eye,
+                    _Quantity       = prescription.Quantity.ToString(),
+                    _Description    = prescription.Product,
+                    _Vendor         = "",
+                    _Price          = "",
+                    _ID             = new ID()          { Value = prescription.ID },
+                    _CustomerID     = prescription._CustomerID,
+                    _SKU            = new SKU()         { Value = "" },
+                    _ProductKey     = new ProductKey()  { Value = prescription.ProductCode },
+                    _UPC            = new UPC()         { Value = "" },
+                    _BaseCurve      = new BaseCurve()   { Value = prescription.BaseCurve },
+                    _Diameter       = new Diameter()    { Value = prescription.Diameter },
+                    _Sphere         = new Sphere()      { Value = prescription.Sphere },
+                    _Cylinder       = new Cylinder()    { Value = prescription.Cylinder },
+                    _Axis           = new Axis()        { Value = prescription.Axis },
+                    _Add            = new Add()         { Value = prescription.Add },
+                    _Color          = new Color()       { Value = prescription.Color },
+                    _Multifocal     = new Multifocal()  { Value = prescription.Multifocal },
                 });
             }
 
@@ -878,8 +896,10 @@ namespace WVA_Compulink_Integration.Views.Orders
                     MultifocalCellColor = AssignCellColor(prodValue: prods[i]._Multifocal?.Value?.Trim(), isValid: prods[i]._Multifocal.IsValid, errorMessage: prods[i]._Multifocal.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
                 };
 
-                OrderCreationViewModel.Prescriptions[i] = prescription;
+                 OrderCreationViewModel.Prescriptions[i] = prescription;
             }
+
+            OrdersDataGrid.Items.Refresh();
         }
 
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
@@ -931,6 +951,11 @@ namespace WVA_Compulink_Integration.Views.Orders
             }           
         }
 
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            OutOrderWrapper outOrderWrapper = GetCompleteOrder();
+            OrderCreationViewModel.SaveOrder(outOrderWrapper);
+        }
     }
 }
 

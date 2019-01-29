@@ -52,7 +52,7 @@ namespace WVA_Compulink_Integration.Models.Prescription
         public string ProductImagePath { get; set; }
 
         // Assign these "White", "Green", or "Red" to change the corresponding cell's background color
-        public string BaseCurveCellColor { get; set; } 
+        public string BaseCurveCellColor { get; set; }
         public string DiameterCellColor { get; set; }
         public string SphereCellColor { get; set; }
         public string CylinderCellColor { get; set; } 

@@ -44,7 +44,8 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         // Do any setup after loading the view
         private void SetUp()
-        {      
+        {
+            OrdersDataGrid.ItemsSource = Memory.Orders.CompulinkOrders;
             IsVisibleChanged += new DependencyPropertyChangedEventHandler(LoginControl_IsVisibleChanged);
             SetUpOrdersDataGrid();
             GetWvaOrders();            
@@ -117,16 +118,16 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
-                OrdersDataGrid.Items.Clear();
                 Memory.Orders.CompulinkOrders.Clear();
 
                 var prescriptions = await GetCompulinkOrders();
 
                 foreach (Prescription prescription in prescriptions)
                 {
-                    OrdersDataGrid.Items.Add(prescription);
                     Memory.Orders.CompulinkOrders.Add(prescription);
                 }
+
+                OrdersDataGrid.Items.Refresh();
             }
             catch (Exception x)
             {

@@ -44,7 +44,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         private void SetUp()
         {
             IsVisibleChanged += new DependencyPropertyChangedEventHandler(LoginControl_IsVisibleChanged);
-            SetUpOrdersDataGrid();
+            SetUpListOrders();
         }
 
         private void SearchOrders(string searchString)
@@ -74,7 +74,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             return JsonConvert.DeserializeObject<List<Order>>(strOrders);          
         }
 
-        private  void SetUpOrdersDataGrid()
+        private  void SetUpListOrders()
         {
             try
             {
@@ -133,7 +133,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             loadingWindow.Show();
             Mouse.OverrideCursor = Cursors.Wait;
 
-            SetUpOrdersDataGrid();
+            SetUpListOrders();
 
             // Close loading window and change cursor back to default arrow cursor
             loadingWindow.Close();
@@ -145,21 +145,27 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
+                // Leave method if they don't select an order
+                if (!(OrdersListBox.SelectedItem is string selectedOrder))
+                    return;
+
                 // Create the complete order object 
                 OutOrderWrapper outOrderWrapper = new OutOrderWrapper()
                 {
                     OutOrder = new OutOrder()
                     {
                         ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
-                        PatientOrder = OrderCreationViewModel.GetOrder(OrdersListBox.SelectedItem as string)
+                        PatientOrder = OrderCreationViewModel.GetOrder(selectedOrder)
                     }
                 };
 
                 Response response = OrderCreationViewModel.CreateOrder(outOrderWrapper);
-
+                
                 if (response.Status == "SUCCESS")
                 {
-                    MessageWindow messageWindow = new MessageWindow("\t\tOrder Created!");
+                    SetUpListOrders();
+
+                    MessageWindow messageWindow = new MessageWindow("\t\tOrder created!");
                     messageWindow.Show();
                 }
                 else
@@ -174,29 +180,13 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Edit Button
         private void EditOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            Order order = OrderCreationViewModel.GetOrder(OrdersListBox.SelectedItem as string);
+            // Leave method if they don't select an order
+            if (!(OrdersListBox.SelectedItem is string selectedOrder))
+                return;
 
+            Order order = OrderCreationViewModel.GetOrder(selectedOrder);
+                      
             List<Prescription> listPrescriptions = new List<Prescription>();
-
-            foreach (Item item in order.Items)
-            {
-                listPrescriptions.Add(new Prescription()
-                {
-                    FirstName   =   item.FirstName,
-                    LastName    =   item.LastName,
-                    Eye         =   item.Eye,
-                    Product     =   item.OrderDetail.Name,
-                    Quantity    =   item.Quantity,
-                    BaseCurve   =   item.OrderDetail._BaseCurve.Value,
-                    Diameter    =   item.OrderDetail._Diameter.Value,
-                    Sphere      =   item.OrderDetail._Sphere.Value,
-                    Cylinder    =   item.OrderDetail._Cylinder.Value,
-                    Axis        =   item.OrderDetail._Axis.Value,
-                    Add         =   item.OrderDetail._Add.Value,
-                    Color       =   item.OrderDetail._Color.Value,
-                    Multifocal  =   item.OrderDetail._Multifocal.Value
-                });
-            }
 
             foreach (Window window in Application.Current.Windows)
             {
@@ -211,12 +201,17 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Delete Button
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            Response response = OrderCreationViewModel.DeleteOrder(OrdersListBox.SelectedItem as string);
+            // Leave method if they don't select an order
+            if (!(OrdersListBox.SelectedItem is string selectedOrder))
+                return;
+
+            Response response = OrderCreationViewModel.DeleteOrder(selectedOrder);
 
             if (response.Status == "SUCCESS")
             {
-                SetUpOrdersDataGrid();
-                MessageBox.Show("\t\t\tOrder deleted!\t\t\t", "", MessageBoxButton.OK);
+                SetUpListOrders();
+                MessageWindow messageWindow = new MessageWindow("\t\tOrder deleted!");
+                messageWindow.Show();
             }
             else
             {

@@ -26,8 +26,15 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
 
         public OrderCreationViewModel(List<Prescription> listPrescriptions, string orderName)
         {
+            Order = null;
             Prescriptions = listPrescriptions;
             OrderName = orderName;
+        }
+
+        public OrderCreationViewModel(Order order, string orderName)
+        {
+            Order = order;
+            OrderName = OrderName;
         }
 
         public OrderCreationViewModel(Order order, List<Prescription> listPrescriptions,  string orderName)
@@ -48,7 +55,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
 
         public static Response CreateOrder(OutOrderWrapper outOrderWrapper)
         {
-            string endpoint = "http://localhost:56075/CompuClient/orders/submit/" + UserData._User?.Account;
+            string endpoint = "http://localhost:56075/CompuClient/orders/submit/";
             string strResponse = API.Post(endpoint, outOrderWrapper);
             Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
