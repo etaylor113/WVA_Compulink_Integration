@@ -4,45 +4,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WVA_Compulink_Integration.Models.ProductParameters;
 
 namespace WVA_Compulink_Integration.Models.Order.Out
 {
-    class OrderDetail
+    class ProductDetail
     {
         [JsonProperty("name")]
         public string Name { get; set; }
 
         [JsonProperty("wva_sku")]
-        public string SKU { get; set; }
+        public SKU _SKU { get; set; }
 
         [JsonProperty("product_key")]
-        public string ProductKey { get; set; }
+        public ProductKey _ProductKey { get; set; }
 
         [JsonProperty("upc")]
-        public string UPC { get; set; }
+        public UPC _UPC { get; set; }
 
         [JsonProperty("bc")]
-        public string BaseCurve { get; set; }
+        public BaseCurve _BaseCurve { get; set; }
 
         [JsonProperty("dia")]
-        public string Diameter { get; set; }
+        public Diameter _Diameter { get; set; }
 
         [JsonProperty("sph")]
-        public string Sphere { get; set; }
+        public Sphere _Sphere { get; set; }
 
         [JsonProperty("cyl")]
-        public string Cylinder { get; set; }
+        public Cylinder _Cylinder { get; set; }
 
         [JsonProperty("ax")]
-        public string Axis { get; set; }
+        public Axis _Axis { get; set; }
 
         [JsonProperty("add")]
-        public string Add { get; set; }
+        public Add _Add { get; set; }
 
         [JsonProperty("color")]
-        public string Color { get; set; }
+        public Color _Color { get; set; }
 
         [JsonProperty("multifocal")]
-        public string Multifocal { get; set; }
+        public Multifocal _Multifocal { get; set; }
     }
 }

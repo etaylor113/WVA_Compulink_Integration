@@ -169,7 +169,10 @@ namespace WVA_Compulink_Integration.Views.Orders
                     messageWindow.Show();
                 }
                 else
-                    throw new Exception($"Order creation failed. Error message: {response.Message}");
+                {
+                    MessageWindow messageWindow = new MessageWindow($"Order creation failed. Error message: {response.Message}");
+                    messageWindow.Show();
+                }
             }
             catch (Exception x)
             {

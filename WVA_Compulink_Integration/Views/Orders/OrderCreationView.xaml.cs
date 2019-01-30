@@ -111,6 +111,23 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
         }
 
+        private string GetShippingTypeID(string shipType)
+        {
+            switch (shipType)
+            {
+                case "Standard":
+                    return "1";
+                case "UPS Ground":
+                    return "D";
+                case "UPS 2nd Day Air":
+                    return "J";
+                case "UPS Next Day Air":
+                    return "P";
+                default:
+                    return "";                  
+            }
+        }
+
         private void SetUpOrdersDataGrid()
         {
             OrdersDataGrid.ItemsSource = OrderCreationViewModel.Prescriptions;
@@ -260,16 +277,16 @@ namespace WVA_Compulink_Integration.Views.Orders
                     LastName = OrderCreationViewModel.Order.Items[i].LastName,
                     Eye = OrderCreationViewModel.Order.Items[i].Eye,
                     Quantity = OrderCreationViewModel.Order.Items[i].Quantity,
-                    Product = OrderCreationViewModel.Order.Items[i].OrderDetail.Name,
-                    ProductCode = OrderCreationViewModel.Order.Items[i].OrderDetail._ProductKey.Value,
-                    BaseCurve = OrderCreationViewModel.Order.Items[i].OrderDetail._BaseCurve.Value,
-                    Diameter = OrderCreationViewModel.Order.Items[i].OrderDetail._Diameter.Value,
-                    Sphere = OrderCreationViewModel.Order.Items[i].OrderDetail._Sphere.Value,
-                    Cylinder = OrderCreationViewModel.Order.Items[i].OrderDetail._Cylinder.Value,
-                    Axis = OrderCreationViewModel.Order.Items[i].OrderDetail._Axis.Value,
-                    Add = OrderCreationViewModel.Order.Items[i].OrderDetail._Axis.Value,
-                    Color = OrderCreationViewModel.Order.Items[i].OrderDetail._Color.Value,
-                    Multifocal = OrderCreationViewModel.Order.Items[i].OrderDetail._Multifocal.Value
+                    Product = OrderCreationViewModel.Order.Items[i].ProductDetail.Name,
+                    ProductCode = OrderCreationViewModel.Order.Items[i].ProductDetail.ProductKey,
+                    BaseCurve = OrderCreationViewModel.Order.Items[i].ProductDetail.BaseCurve,
+                    Diameter = OrderCreationViewModel.Order.Items[i].ProductDetail.Diameter,
+                    Sphere = OrderCreationViewModel.Order.Items[i].ProductDetail.Sphere,
+                    Cylinder = OrderCreationViewModel.Order.Items[i].ProductDetail.Cylinder,
+                    Axis = OrderCreationViewModel.Order.Items[i].ProductDetail.Axis,
+                    Add = OrderCreationViewModel.Order.Items[i].ProductDetail.Axis,
+                    Color = OrderCreationViewModel.Order.Items[i].ProductDetail.Color,
+                    Multifocal = OrderCreationViewModel.Order.Items[i].ProductDetail.Multifocal
                 };
                 OrderCreationViewModel.Prescriptions.Add(prescription);
             }
@@ -549,15 +566,21 @@ namespace WVA_Compulink_Integration.Views.Orders
                 order.OrderedBy         =   OrderedByTextBox.Text;
                 order.OfficeName        =   OfficeNameTextBox.Text;
                 order.PoNumber          =   PoNumberTextBox.Text;
-                order.ShippingMethod    =   ShippingTypeComboBox.Text;
-                order.Name_1            =   AddresseeTextBox.Text;
-                order.StreetAddr_1      =   AddressTextBox.Text;
-                order.StreetAddr_2      =   Suite_AptTextBox.Text;
-                order.State             =   StateComboBox.Text;
-                order.City              =   CityTextBox.Text;
-                order.Zip               =   ZipTextBox.Text;              
-                order.Phone             =   PhoneTextBox.Text; 
-                
+                order.ShippingMethod    =   GetShippingTypeID(ShippingTypeComboBox.Text);
+                order.ShipToPatient     =   OrderCreationViewModel.Prescriptions[0].IsShipToPatient ? "Y" : "N";
+
+                if (StateComboBox.Visibility == Visibility.Visible)
+                {                   
+                    order.Name_1        =   AddresseeTextBox.Text;
+                    order.StreetAddr_1  =   AddressTextBox.Text;
+                    order.StreetAddr_2  =   Suite_AptTextBox.Text;
+                    order.State         =   StateComboBox.Text.Substring(StateComboBox.Text.Length - 2);
+                    order.City          =   CityTextBox.Text;
+                    order.Zip           =   ZipTextBox.Text;
+                    order.Phone         =   PhoneTextBox.Text;
+                    order.DoB           =   DoBTextBox.Text;
+                }
+                              
                 // Update order detail                
                 for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
                 {
@@ -565,26 +588,26 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                     order.Items.Add(new Item()
                     {                   
-                        FirstName       = prescription.FirstName,
-                        LastName        = prescription.LastName,
-                        PatientID       = prescription._CustomerID?.Value,
-                        Eye             = prescription.Eye,
-                        Quantity        = prescription.Quantity,
-                        ItemRetailPrice = prescription.Price,
-                        OrderDetail     = new OrderDetail()
+                        FirstName       =   prescription.FirstName,
+                        LastName        =   prescription.LastName,
+                        PatientID       =   prescription._CustomerID?.Value,
+                        Eye             =   prescription.Eye,
+                        Quantity        =   prescription.Quantity,
+                        ItemRetailPrice =   prescription.Price,
+                        ProductDetail   =   new OrderDetail()
                         {
-                            Name        =                             prescription.Product,
-                            _SKU        = new SKU()         { Value = prescription.SKU },
-                            _ProductKey = new ProductKey()  { Value = prescription.ProductCode },
-                            _UPC        = new UPC()         { Value = prescription.UPC },
-                            _BaseCurve  = new BaseCurve()   { Value = prescription.BaseCurve },
-                            _Diameter   = new Diameter()    { Value = prescription.Diameter },
-                            _Sphere     = new Sphere()      { Value = prescription.Sphere },
-                            _Cylinder   = new Cylinder()    { Value = prescription.Cylinder },
-                            _Axis       = new Axis()        { Value = prescription.Axis },
-                            _Add        = new Add()         { Value = prescription.Add },
-                            _Color      = new Color()       { Value = prescription.Color },
-                            _Multifocal = new Multifocal()  { Value = prescription.Multifocal },
+                            Name       =    prescription.Product,
+                            SKU        =    prescription.SKU,
+                            ProductKey =    prescription.ProductCode,
+                            UPC        =    prescription.UPC,
+                            BaseCurve  =    prescription.BaseCurve,
+                            Diameter   =    prescription.Diameter,
+                            Sphere     =    prescription.Sphere,
+                            Cylinder   =    prescription.Cylinder,
+                            Axis       =    prescription.Axis,
+                            Add        =    prescription.Add,
+                            Color      =    prescription.Color,
+                            Multifocal =    prescription.Multifocal,
                         }
                     });
                 }
@@ -601,7 +624,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 return outOrderWrapper;
             }
-            catch
+            catch (Exception x)
             {
                 return null;
             }

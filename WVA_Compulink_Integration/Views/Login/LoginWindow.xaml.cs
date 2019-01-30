@@ -19,6 +19,8 @@ using WVA_Compulink_Integration.Views.Error;
 using WVA_Compulink_Integration.Views.Registration;
 using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Cryptography;
+using System.IO;
+using WVA_Compulink_Integration.Utility.File;
 
 namespace WVA_Compulink_Integration.Views.Login
 {
@@ -34,10 +36,12 @@ namespace WVA_Compulink_Integration.Views.Login
         }
 
         private void SetUp()
-        {
+        {          
             UsernameTextBox.Focus();
+            string ipNumText = File.ReadAllText(Paths.IpNumFile);
+            IP_Config.IP = ipNumText;
         }
-  
+     
         private User LoginUser()
         {
             try
@@ -91,7 +95,7 @@ namespace WVA_Compulink_Integration.Views.Login
                 }               
                 else if (loginUserResponse.Status == "OK")
                 {
-                    // Set user data in memory to response items
+                    // Set user data in memory to response items                   
                     UserData._User = loginUserResponse;
 
                     // Let user continue into application

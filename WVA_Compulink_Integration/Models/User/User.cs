@@ -18,6 +18,6 @@ namespace WVA_Compulink_Integration.Models.User
         public string Account { get; set; }
         public string ApiKey { get; set; }
         public string Status { get; set; }  
-        public string Message { get; set; }
+        public string Message { get; set; }       
     }
 }

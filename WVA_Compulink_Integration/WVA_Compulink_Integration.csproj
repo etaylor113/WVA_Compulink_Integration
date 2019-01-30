@@ -62,14 +62,16 @@
     </ApplicationDefinition>
     <Compile Include="Cryptography\Crypto.cs" />
     <Compile Include="MatchFinder\WVA_Products.cs" />
+    <Compile Include="Memory\IP_Config.cs" />
     <Compile Include="Memory\Orders.cs" />
     <Compile Include="Memory\UserData.cs" />
     <Compile Include="Models\Order\ItemDetail.cs" />
     <Compile Include="Models\Order\Out\Item.cs" />
     <Compile Include="Models\Order\Out\Order.cs" />
-    <Compile Include="Models\Order\Out\OrderDetail.cs" />
+    <Compile Include="Models\Order\Out\ProductDetail.cs" />
     <Compile Include="Models\Order\Out\OutOrder.cs" />
     <Compile Include="Models\Order\Out\OutOrderWrapper.cs" />
+    <Compile Include="Models\Order\Out\OrderDetail.cs" />
     <Compile Include="Models\Order\ShippingTypes.cs" />
     <Compile Include="Models\Prescription\Prescription.cs" />
     <Compile Include="Models\ProductParameters\Children\Add.cs" />
@@ -109,6 +111,9 @@
     </Compile>
     <Compile Include="Views\Login\ForgotPasswordWindow.xaml.cs">
       <DependentUpon>ForgotPasswordWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Login\IpConfigWindow.xaml.cs">
+      <DependentUpon>IpConfigWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
@@ -177,6 +182,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Login\ForgotPasswordWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Login\IpConfigWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -264,9 +273,7 @@
   <ItemGroup>
     <None Include="Misc\App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Update\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\icons8-Minimize Window-64.png" />
   </ItemGroup>

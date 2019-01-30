@@ -50,7 +50,7 @@ namespace WVA_Compulink_Integration._API
             }
         }
 
-        static public string Post(string endpoint, string jsonString, string methodType)
+        static public string Post(string endpoint, string jsonString)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace WVA_Compulink_Integration._API
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(endpoint);
                 request.ContentLength = byteArray.Length;
                 request.ContentType = @"application/json";
-                request.Method = methodType;
+                request.Method = "POST";
 
                 using (Stream dataStream = request.GetRequestStream())
                 {

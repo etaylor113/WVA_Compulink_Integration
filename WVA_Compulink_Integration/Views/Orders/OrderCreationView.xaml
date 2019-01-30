@@ -537,6 +537,7 @@
                      Grid.Column="1"
                      HorizontalAlignment="Stretch" 
                      Height="24" 
+                     FontSize="15"
                      Margin="85,3,10,3" 
                      Grid.Row="1" 
                      TabIndex="7"
@@ -558,7 +559,8 @@
             <TextBox Name="AddressTextBox"
                      Grid.Column="1"
                      HorizontalAlignment="Stretch" 
-                     Height="24" 
+                     Height="24"
+                     FontSize="15"
                      Margin="85,3,10,3" 
                      Grid.Row="2" 
                      TabIndex="8"
@@ -581,6 +583,7 @@
                      Grid.Column="1"
                      HorizontalAlignment="Stretch" 
                      Height="24" 
+                     FontSize="15"
                      Margin="85,3,10,3" 
                      Grid.Row="3" 
                      TabIndex="9"
@@ -606,6 +609,7 @@
                      Margin="85,3,10,3" 
                      Grid.Row="4" 
                      TabIndex="10"
+                     FontSize="15"
                      TextWrapping="Wrap" 
                      VerticalAlignment="Center" 
                      Grid.ColumnSpan="3"/>
@@ -703,6 +707,7 @@
                      Height="24" 
                      Margin="40,3,10,3" 
                      Grid.Row="5" 
+                     FontSize="15"
                      TabIndex="12"
                      TextWrapping="Wrap" 
                      VerticalAlignment="Center"/>
@@ -723,6 +728,7 @@
                      Grid.Column="1"
                      HorizontalAlignment="Stretch" 
                      Height="24" 
+                     FontSize="15"
                      TabIndex="13"
                      Margin="85,3,0,3" 
                      Grid.Row="6" 
@@ -746,6 +752,7 @@
                      Height="24" 
                      Margin="40,3,10,3" 
                      Grid.Row="6" 
+                     FontSize="15"
                      TabIndex="14"
                      TextWrapping="Wrap" 
                      VerticalAlignment="Center"/>
@@ -901,9 +908,6 @@
                 </ComboBoxItem>
                 <ComboBoxItem>
                     UPS Next Day Air
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    Free Standard
                 </ComboBoxItem>
             </ComboBox>
 

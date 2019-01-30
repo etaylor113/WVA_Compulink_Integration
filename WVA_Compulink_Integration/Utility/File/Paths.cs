@@ -14,6 +14,10 @@ namespace WVA_Compulink_Integration.Utility.File
         
         public static string ActNumDir = $@"{AppDir}\ActNum\";
         public static string ActNumFile = $@"{AppDir}\ActNum\ActNum.txt";
+
+        public static string IpNumDir = $@"{AppDir}\ipConfig\";
+        public static string IpNumFile = $@"{AppDir}\ipConfig\ipConfig.txt";
+
         public static string ErrorLog = $@"{AppData}\WVA Compulink Integration\Errors\";
     }
 }

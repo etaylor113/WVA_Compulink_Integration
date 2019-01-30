@@ -31,6 +31,6 @@ namespace WVA_Compulink_Integration.Models.Order.Out
         public string ItemRetailPrice { get; set; }
 
         [JsonProperty("product")]
-        public OrderDetail OrderDetail { get; set; }
+        public OrderDetail ProductDetail { get; set; }
     }
 }

@@ -265,7 +265,7 @@
                           Grid.Column="1"
                           Text=""
                           IsEditable="True"
-                          IsReadOnly="True"
+                          IsReadOnly="False"
                           HorizontalAlignment="Stretch"
                           Margin="0,0,0,0" 
                           Grid.Row="2"
