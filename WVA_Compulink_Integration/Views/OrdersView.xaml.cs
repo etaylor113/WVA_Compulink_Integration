@@ -57,9 +57,13 @@ namespace WVA_Compulink_Integration.Views
                   
                     // Open order creation view with the order's saved data (edits the selected order)
                     if (order != null)
-                    {        
-                        // Don't add an STP item to an order and dont add a compulink order to a STP wva order
-                        if (prescriptions?[0].IsShipToPatient == true && order.ShipToPatient != "Y")
+                    {
+                        if (prescriptions.Count < 1)
+                        {
+                            OrdersContentControl.DataContext = new OrderCreationViewModel(order, prescriptions, orderName);
+                        }
+                        // Don't add a STP item to an order and dont add a compulink order to a STP wva order
+                        else if (prescriptions?[0].IsShipToPatient == true || order.ShipToPatient == "Y")
                         {                          
                             // Make sure user can't add a STP to another order
                             MessageBox.Show("Cannot add a Ship to Patient item to an existing WVA order!", "Compulink Integration", MessageBoxButton.OK);

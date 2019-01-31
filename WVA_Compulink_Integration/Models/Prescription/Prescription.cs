@@ -32,7 +32,7 @@ namespace WVA_Compulink_Integration.Models.Prescription
         public string Date { get; set; }
         public string Eye { get; set; }
         public string Product { get; set; }
-        public int Quantity { get; set; }
+        public int    Quantity { get; set; }
         public string BaseCurve { get; set; }
         public string Diameter { get; set; }
         public string Sphere { get; set; }

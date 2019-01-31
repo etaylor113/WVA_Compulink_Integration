@@ -21,6 +21,7 @@ using WVA_Compulink_Integration.Views.Search;
 using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
@@ -537,12 +538,255 @@ namespace WVA_Compulink_Integration.Views.Orders
         // ================================== CRUD Operations for Order ==========================================================
         // =======================================================================================================================
 
+        private bool ItemsAreValid()
+        {
+            // Left Column
+            if (AddresseeTextBox.Visibility == Visibility.Visible)
+            {
+                if (AddresseeTextBox.Text.Trim() == "")
+                {
+                    AddresseeLabel.Foreground = new SolidColorBrush(Colors.Red);
+                    MessageWindow messageWindow = new MessageWindow("\t'Addressee' cannot be blank!");
+                    messageWindow.Show();
+                    return false;
+                }
+                if (AddressTextBox.Text.Trim() == "")
+                {
+                    AddressLabel.Foreground = new SolidColorBrush(Colors.Red);
+                    MessageWindow messageWindow = new MessageWindow("\t'Address' cannot be blank!");
+                    messageWindow.Show();
+                    return false;
+                }
+                if (CityTextBox.Text.Trim() == "")
+                {
+                    CityLabel.Foreground = new SolidColorBrush(Colors.Red);
+                    MessageWindow messageWindow = new MessageWindow("\t'City' cannot be blank!");
+                    messageWindow.Show();
+                    return false;
+                }
+                if (StateComboBox.Text.Trim() == "")
+                {
+                    StateLabel.Foreground = new SolidColorBrush(Colors.Red);
+                    MessageWindow messageWindow = new MessageWindow("\t'State' cannot be blank!");
+                    messageWindow.Show();
+                    return false;
+                }
+                if (ZipTextBox.Text.Trim() == "")
+                {
+                    ZipLabel.Foreground = new SolidColorBrush(Colors.Red);
+                    MessageWindow messageWindow = new MessageWindow("\t'Zip' cannot be blank!");
+                    messageWindow.Show();
+                    return false;
+                }               
+             
+            }
+
+            // Right Column
+            if (OrderNameTextBox.Text.Trim() == "")
+            {
+                OrderNameLabel.Foreground = new SolidColorBrush(Colors.Red);
+                MessageWindow messageWindow = new MessageWindow("\t'Order Name' cannot be blank!");
+                messageWindow.Show();
+                return false;
+            }
+
+            if (AccountIDTextBox.Text.Trim() == "")
+            {
+                AccountIDLabel.Foreground = new SolidColorBrush(Colors.Red);
+                MessageWindow messageWindow = new MessageWindow("\t'Account ID' cannot be blank!");
+                messageWindow.Show();
+                return false;
+            }
+
+            if (OrderedByTextBox.Text.Trim() == "")
+            {
+                OrderedByLabel.Foreground = new SolidColorBrush(Colors.Red);
+                MessageWindow messageWindow = new MessageWindow("\t'Ordered By' cannot be blank!");
+                messageWindow.Show();
+                return false;
+            }
+
+            // Validate items
+            ValidationResponse validationResponse = GetValidationResponse();
+            List<ValidationDetail> listValidationDetail = validationResponse.Data.Products;
+            
+            foreach (ValidationDetail validationDetail in listValidationDetail)
+            {
+                if (!validationDetail._BaseCurve.IsValid)
+                {
+                    PostInvalidItem("BaseCurve");
+                    return false;
+                }
+                if (!validationDetail._Diameter.IsValid)
+                {
+                    PostInvalidItem("Diameter");
+                    return false;
+                }
+                if (!validationDetail._Sphere.IsValid)
+                {
+                    PostInvalidItem("Sphere");
+                    return false;
+                }
+                if (!validationDetail._Cylinder.IsValid)
+                {
+                    PostInvalidItem("Cylinder");
+                    return false;
+                }
+                if (!validationDetail._Axis.IsValid)
+                {
+                    PostInvalidItem("Axis");
+                    return false;
+                }
+                if (!validationDetail._Add.IsValid)
+                {
+                    PostInvalidItem("Add");
+                    return false;
+                }
+                if (!validationDetail._Color.IsValid)
+                {
+                    PostInvalidItem("Color");
+                    return false;
+                }
+                if (!validationDetail._Multifocal.IsValid)
+                {
+                    PostInvalidItem("Multifocal");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void PostInvalidItem(string param)
+        {
+            MessageWindow messageWindow = new MessageWindow($"\tA parameter '{param}' in the grid is not valid.");
+            messageWindow.Show();
+        }
+
+        private ValidationResponse GetValidationResponse()
+        {
+            List<ValidationDetail> listValidations = new List<ValidationDetail>();
+
+            IList rows = OrdersDataGrid.Items;
+
+            for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
+            {
+                Prescription prescription = (Prescription)rows[i];
+
+                listValidations.Add(new ValidationDetail()
+                {
+                    _PatientName = prescription.Patient,
+                    _Eye = prescription.Eye,
+                    _Quantity = prescription.Quantity.ToString(),
+                    _Description = prescription.Product,
+                    _Vendor = "",
+                    _Price = "",
+                    _ID = new ID() { Value = prescription.ID },
+                    _CustomerID = prescription._CustomerID,
+                    _SKU = new SKU() { Value = "" },
+                    _ProductKey = new ProductKey() { Value = prescription.ProductCode },
+                    _UPC = new UPC() { Value = "" },
+                    _BaseCurve = new BaseCurve() { Value = prescription.BaseCurve },
+                    _Diameter = new Diameter() { Value = prescription.Diameter },
+                    _Sphere = new Sphere() { Value = prescription.Sphere },
+                    _Cylinder = new Cylinder() { Value = prescription.Cylinder },
+                    _Axis = new Axis() { Value = prescription.Axis },
+                    _Add = new Add() { Value = prescription.Add },
+                    _Color = new Models.ProductParameters.Color() { Value = prescription.Color },
+                    _Multifocal = new Multifocal() { Value = prescription.Multifocal },
+                });
+            }
+
+            ValidationWrapper validationWrapper = new ValidationWrapper()
+            {
+                Request = new ProductValidation()
+                {
+                    Key = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
+                    ProductsToValidate = new List<ItemDetail>()
+                }
+            };
+
+            foreach (ValidationDetail validationDetail in listValidations)
+            {
+                validationWrapper.Request.ProductsToValidate.Add(new ValidationDetail(validationDetail));
+            }
+
+            string endpoint = "https://orders-qa.wisvis.com/validations";
+            string strValidatedProducts = API.Post(endpoint, validationWrapper);
+            ValidationResponse validationResponse = JsonConvert.DeserializeObject<ValidationResponse>(strValidatedProducts);
+
+            // Show changes in the datagrid and update ViewModels data to match response
+            var prods = validationResponse.Data.Products;
+            for (int i = 0; i < prods.Count(); i++)
+            {
+                // if product is null or invalid, keep old value, else change it to the new value from prods
+                Prescription prescription = new Prescription()
+                {
+                    // These properties don't need to be validated
+                    ProductImagePath = OrderCreationViewModel.Prescriptions[i].ProductImagePath,
+                    IsChecked = OrderCreationViewModel.Prescriptions[i].IsChecked,
+                    FirstName = OrderCreationViewModel.Prescriptions[i].FirstName,
+                    LastName = OrderCreationViewModel.Prescriptions[i].LastName,
+                    Patient = OrderCreationViewModel.Prescriptions[i].Patient,
+                    Eye = OrderCreationViewModel.Prescriptions[i].Eye,
+                    Quantity = OrderCreationViewModel.Prescriptions[i].Quantity,
+                    Date = OrderCreationViewModel.Prescriptions[i].Date,
+                    _CustomerID = OrderCreationViewModel.Prescriptions[i]._CustomerID,
+
+                    // If prods[i].Property.Value == null change field to old value, else change to new value
+                    CanBeValidated = prods[i].CanBeValidated,
+                    Product = prods[i]._Description ?? OrderCreationViewModel.Prescriptions[i].Product,
+                    ProductCode = Validator.CheckIfValid(prods[i]._ProductKey) ? prods[i]._ProductKey?.Value : OrderCreationViewModel.Prescriptions[i].ProductCode,
+
+                    // NOTE: to help explain ternary statements below for cell colors
+                    // If property is null || is blank && errorMessage is null then cell color = White 
+                    // If property isValid then cell color = Green
+                    // If property not isValid then cell color = Red
+                    BaseCurveValidItems = prods[i]._BaseCurve.ValidItems,
+                    BaseCurve = Validator.CheckIfValid(prods[i]._BaseCurve) ? prods[i]._BaseCurve.Value : OrderCreationViewModel.Prescriptions[i].BaseCurve,
+                    BaseCurveCellColor = AssignCellColor(prodValue: prods[i]._BaseCurve?.Value?.Trim(), isValid: prods[i]._BaseCurve.IsValid, errorMessage: prods[i]._BaseCurve.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
+
+                    DiameterValidItems = prods[i]._Diameter.ValidItems,
+                    Diameter = Validator.CheckIfValid(prods[i]._Diameter) ? prods[i]._Diameter.Value : OrderCreationViewModel.Prescriptions[i].Diameter,
+                    DiameterCellColor = AssignCellColor(prodValue: prods[i]._Diameter?.Value?.Trim(), isValid: prods[i]._Diameter.IsValid, errorMessage: prods[i]._Diameter.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
+
+                    SphereValidItems = prods[i]._Sphere.ValidItems,
+                    Sphere = Validator.CheckIfValid(prods[i]._Sphere) ? prods[i]._Sphere.Value : OrderCreationViewModel.Prescriptions[i].Sphere,
+                    SphereCellColor = AssignCellColor(prodValue: prods[i]._Sphere?.Value?.Trim(), isValid: prods[i]._Sphere.IsValid, errorMessage: prods[i]._Sphere.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
+
+                    CylinderValidItems = prods[i]._Cylinder.ValidItems,
+                    Cylinder = Validator.CheckIfValid(prods[i]._Cylinder) ? prods[i]._Cylinder.Value : OrderCreationViewModel.Prescriptions[i].Cylinder,
+                    CylinderCellColor = AssignCellColor(prodValue: prods[i]._Cylinder?.Value?.Trim(), isValid: prods[i]._Cylinder.IsValid, errorMessage: prods[i]._Cylinder.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
+
+                    AxisValidItems = prods[i]._Axis.ValidItems,
+                    Axis = Validator.CheckIfValid(prods[i]._Axis) ? prods[i]._Axis.Value : OrderCreationViewModel.Prescriptions[i].Axis,
+                    AxisCellColor = AssignCellColor(prodValue: prods[i]._Axis?.Value?.Trim(), isValid: prods[i]._Axis.IsValid, errorMessage: prods[i]._Axis.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
+
+                    AddValidItems = prods[i]._Add.ValidItems,
+                    Add = Validator.CheckIfValid(prods[i]._Add) ? prods[i]._Add.Value : OrderCreationViewModel.Prescriptions[i].Add,
+                    AddCellColor = AssignCellColor(prodValue: prods[i]._Add?.Value?.Trim(), isValid: prods[i]._Add.IsValid, errorMessage: prods[i]._Add.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
+
+                    ColorValidItems = prods[i]._Color.ValidItems,
+                    Color = Validator.CheckIfValid(prods[i]._Color) ? prods[i]._Color.Value : OrderCreationViewModel.Prescriptions[i].Color,
+                    ColorCellColor = AssignCellColor(prodValue: prods[i]._Color?.Value?.Trim(), isValid: prods[i]._Color.IsValid, errorMessage: prods[i]._Color.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
+
+                    MultifocalValidItems = prods[i]._Multifocal.ValidItems,
+                    Multifocal = Validator.CheckIfValid(prods[i]._Multifocal) ? prods[i]._Multifocal.Value : OrderCreationViewModel.Prescriptions[i].Multifocal,
+                    MultifocalCellColor = AssignCellColor(prodValue: prods[i]._Multifocal?.Value?.Trim(), isValid: prods[i]._Multifocal.IsValid, errorMessage: prods[i]._Multifocal.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
+                };
+
+                OrderCreationViewModel.Prescriptions[i] = prescription;
+            }
+
+            OrdersDataGrid.Items.Refresh();
+
+            return validationResponse;
+        }
+
         private OutOrderWrapper GetCompleteOrder()
         {
             try
-            {
-                // TODO: Check to be sure all items are valid
-
+            {              
                 Order order = OrderCreationViewModel.Order;
              
                 if (order == null)
@@ -566,15 +810,17 @@ namespace WVA_Compulink_Integration.Views.Orders
                 order.OrderedBy         =   OrderedByTextBox.Text;
                 order.OfficeName        =   OfficeNameTextBox.Text;
                 order.PoNumber          =   PoNumberTextBox.Text;
-                order.ShippingMethod    =   GetShippingTypeID(ShippingTypeComboBox.Text);
-                order.ShipToPatient     =   OrderCreationViewModel.Prescriptions[0].IsShipToPatient ? "Y" : "N";
+                order.ShippingMethod    =   ShippingTypeComboBox.Text;
+
+                try   { order.ShipToPatient = OrderCreationViewModel.Prescriptions[0].IsShipToPatient ? "Y" : "N"; }
+                catch { order.ShipToPatient = ""; }
 
                 if (StateComboBox.Visibility == Visibility.Visible)
                 {                   
                     order.Name_1        =   AddresseeTextBox.Text;
                     order.StreetAddr_1  =   AddressTextBox.Text;
                     order.StreetAddr_2  =   Suite_AptTextBox.Text;
-                    order.State         =   StateComboBox.Text.Substring(StateComboBox.Text.Length - 2);
+                    try { order.State   =   StateComboBox.Text.Substring(StateComboBox.Text.Length - 2); } catch { order.State = ""; }
                     order.City          =   CityTextBox.Text;
                     order.Zip           =   ZipTextBox.Text;
                     order.Phone         =   PhoneTextBox.Text;
@@ -627,8 +873,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             catch (Exception x)
             {
                 return null;
-            }
-            
+            }           
         }
 
         private void SaveOrder(OutOrderWrapper outOrderWrapper)
@@ -666,14 +911,28 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 MessageBox.Show("An error has occurred. Order not deleted.", "", MessageBoxButton.OK);
             }
-        }
+        }       
 
         private void CreateOrder()
         {
             try
             {
-                Response response = OrderCreationViewModel.CreateOrder(GetCompleteOrder());
+                // Get the completed order object
+                OutOrderWrapper outOrderWrapper = GetCompleteOrder();
 
+                if (outOrderWrapper == null)
+                {
+                    MessageWindow messageWindow = new MessageWindow("Please be sure all items are valid before submitting.");
+                    messageWindow.Show();
+                    return;
+                }
+                
+               Response response = OrderCreationViewModel.CreateOrder(outOrderWrapper);
+                            
+                if (response == null)
+                    throw new Exception("Null response from api on order creation.");
+
+                // Check response and handle accordingly
                 if (response.Status == "SUCCESS")
                 {
                     ClearView();
@@ -682,14 +941,15 @@ namespace WVA_Compulink_Integration.Views.Orders
                 }
                 else
                 {
-                    MessageWindow messageWindow = new MessageWindow("Order creation failed. Please see error log for details.");
+                    MessageWindow messageWindow = new MessageWindow($"Order creation has failed with the following message: {response.Message}");
                     messageWindow.Show();
-
-                    throw new Exception($"Order creation has failed. Error message: {response.Message}");
-                }
+                }                         
             }
             catch (Exception x)
             {
+                MessageWindow messageWindow = new MessageWindow("Order creation failed. Please see error log for details.");
+                messageWindow.Show();
+
                 AppError.PrintToLog(x);
             }
         }
@@ -810,119 +1070,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void VerifyOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            List<ValidationDetail> listValidations = new List<ValidationDetail>();
-
-            IList rows = OrdersDataGrid.Items;
-
-            for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
-            {
-                Prescription prescription = (Prescription)rows[i];
-
-                listValidations.Add(new ValidationDetail()
-                {
-                    _PatientName    = $"{prescription.Patient}",
-                    _Eye            = prescription.Eye,
-                    _Quantity       = prescription.Quantity.ToString(),
-                    _Description    = prescription.Product,
-                    _Vendor         = "",
-                    _Price          = "",
-                    _ID             = new ID()          { Value = prescription.ID },
-                    _CustomerID     = prescription._CustomerID,
-                    _SKU            = new SKU()         { Value = "" },
-                    _ProductKey     = new ProductKey()  { Value = prescription.ProductCode },
-                    _UPC            = new UPC()         { Value = "" },
-                    _BaseCurve      = new BaseCurve()   { Value = prescription.BaseCurve },
-                    _Diameter       = new Diameter()    { Value = prescription.Diameter },
-                    _Sphere         = new Sphere()      { Value = prescription.Sphere },
-                    _Cylinder       = new Cylinder()    { Value = prescription.Cylinder },
-                    _Axis           = new Axis()        { Value = prescription.Axis },
-                    _Add            = new Add()         { Value = prescription.Add },
-                    _Color          = new Color()       { Value = prescription.Color },
-                    _Multifocal     = new Multifocal()  { Value = prescription.Multifocal },
-                });
-            }
-
-            ValidationWrapper validationWrapper = new ValidationWrapper()
-            {
-                Request = new ProductValidation()
-                {
-                    Key = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
-                    ProductsToValidate = new List<ItemDetail>()
-                }
-            };
-
-            foreach (ValidationDetail validationDetail in listValidations)
-            {
-                validationWrapper.Request.ProductsToValidate.Add(new ValidationDetail(validationDetail));
-            }
-
-            string endpoint = "https://orders-qa.wisvis.com/validations";
-            string strValidatedProducts = API.Post(endpoint, validationWrapper);
-            var validatedProducts = JsonConvert.DeserializeObject<ValidationResponse>(strValidatedProducts);
-            var prods = validatedProducts.Data.Products;
-
-            for (int i = 0; i < prods.Count(); i++)
-            {
-                // if product is null or invalid, keep old value, else change it to the new value from prods
-                Prescription prescription = new Prescription()
-                {
-                    // These properties don't need to be validated
-                    ProductImagePath = OrderCreationViewModel.Prescriptions[i].ProductImagePath,
-                    IsChecked = OrderCreationViewModel.Prescriptions[i].IsChecked,
-                    FirstName = OrderCreationViewModel.Prescriptions[i].FirstName,
-                    LastName = OrderCreationViewModel.Prescriptions[i].LastName,
-                    Patient = OrderCreationViewModel.Prescriptions[i].Patient,
-                    Eye = OrderCreationViewModel.Prescriptions[i].Eye,
-                    Quantity = OrderCreationViewModel.Prescriptions[i].Quantity,
-                    Date = OrderCreationViewModel.Prescriptions[i].Date,
-                    _CustomerID = OrderCreationViewModel.Prescriptions[i]._CustomerID,
-
-                    // If prods[i].Property.Value == null change field to old value, else change to new value
-                    CanBeValidated = prods[i].CanBeValidated,
-                    Product = prods[i]._Description ?? OrderCreationViewModel.Prescriptions[i].Product,
-                    ProductCode = Validator.CheckIfValid(prods[i]._ProductKey) ? prods[i]._ProductKey?.Value : OrderCreationViewModel.Prescriptions[i].ProductCode,
-
-                    // NOTE: to help explain ternary statements below for cell colors
-                    // If property is null || is blank && errorMessage is null then cell color = White 
-                    // If property isValid then cell color = Green
-                    // If property not isValid then cell color = Red
-                    BaseCurveValidItems = prods[i]._BaseCurve.ValidItems,
-                    BaseCurve = Validator.CheckIfValid(prods[i]._BaseCurve) ? prods[i]._BaseCurve.Value : OrderCreationViewModel.Prescriptions[i].BaseCurve,
-                    BaseCurveCellColor = AssignCellColor(prodValue: prods[i]._BaseCurve?.Value?.Trim(), isValid: prods[i]._BaseCurve.IsValid, errorMessage: prods[i]._BaseCurve.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
-
-                    DiameterValidItems = prods[i]._Diameter.ValidItems,
-                    Diameter = Validator.CheckIfValid(prods[i]._Diameter) ? prods[i]._Diameter.Value : OrderCreationViewModel.Prescriptions[i].Diameter,
-                    DiameterCellColor = AssignCellColor(prodValue: prods[i]._Diameter?.Value?.Trim(), isValid: prods[i]._Diameter.IsValid, errorMessage: prods[i]._Diameter.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
-
-                    SphereValidItems = prods[i]._Sphere.ValidItems,
-                    Sphere = Validator.CheckIfValid(prods[i]._Sphere) ? prods[i]._Sphere.Value : OrderCreationViewModel.Prescriptions[i].Sphere,
-                    SphereCellColor = AssignCellColor(prodValue: prods[i]._Sphere?.Value?.Trim(), isValid: prods[i]._Sphere.IsValid, errorMessage: prods[i]._Sphere.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
-
-                    CylinderValidItems = prods[i]._Cylinder.ValidItems,
-                    Cylinder = Validator.CheckIfValid(prods[i]._Cylinder) ? prods[i]._Cylinder.Value : OrderCreationViewModel.Prescriptions[i].Cylinder,
-                    CylinderCellColor = AssignCellColor(prodValue: prods[i]._Cylinder?.Value?.Trim(), isValid: prods[i]._Cylinder.IsValid, errorMessage: prods[i]._Cylinder.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
-
-                    AxisValidItems = prods[i]._Axis.ValidItems,
-                    Axis = Validator.CheckIfValid(prods[i]._Axis) ? prods[i]._Axis.Value : OrderCreationViewModel.Prescriptions[i].Axis,
-                    AxisCellColor = AssignCellColor(prodValue: prods[i]._Axis?.Value?.Trim(), isValid: prods[i]._Axis.IsValid, errorMessage: prods[i]._Axis.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
-
-                    AddValidItems = prods[i]._Add.ValidItems,
-                    Add = Validator.CheckIfValid(prods[i]._Add) ? prods[i]._Add.Value : OrderCreationViewModel.Prescriptions[i].Add,
-                    AddCellColor = AssignCellColor(prodValue: prods[i]._Add?.Value?.Trim(), isValid: prods[i]._Add.IsValid, errorMessage: prods[i]._Add.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
-
-                    ColorValidItems = prods[i]._Color.ValidItems,
-                    Color = Validator.CheckIfValid(prods[i]._Color) ? prods[i]._Color.Value : OrderCreationViewModel.Prescriptions[i].Color,
-                    ColorCellColor = AssignCellColor(prodValue: prods[i]._Color?.Value?.Trim(), isValid: prods[i]._Color.IsValid, errorMessage: prods[i]._Color.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
-
-                    MultifocalValidItems = prods[i]._Multifocal.ValidItems,
-                    Multifocal = Validator.CheckIfValid(prods[i]._Multifocal) ? prods[i]._Multifocal.Value : OrderCreationViewModel.Prescriptions[i].Multifocal,
-                    MultifocalCellColor = AssignCellColor(prodValue: prods[i]._Multifocal?.Value?.Trim(), isValid: prods[i]._Multifocal.IsValid, errorMessage: prods[i]._Multifocal.ErrorMessage, canBeValidated: prods[i].CanBeValidated),
-                };
-
-                 OrderCreationViewModel.Prescriptions[i] = prescription;
-            }
-
-            OrdersDataGrid.Items.Refresh();
+            GetValidationResponse();                    
         }
 
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
@@ -938,14 +1086,9 @@ namespace WVA_Compulink_Integration.Views.Orders
         private void SubmitOrderButton_Click(object sender, RoutedEventArgs e)
         {
             try
-            {             
-                // Target a different endpoint depending on if this is a new order or a previous one the user is editing
-                if (ViewMode == "new")
-                    CreateOrder();
-                else if (ViewMode == "edit")
-                    SaveOrder(GetCompleteOrder());
-                else
-                    throw new Exception("ViewMode has not been set.");          
+            {                            
+                if (ItemsAreValid())
+                    CreateOrder();                      
             }
             catch (Exception x)
             {
@@ -978,6 +1121,56 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             OutOrderWrapper outOrderWrapper = GetCompleteOrder();
             OrderCreationViewModel.SaveOrder(outOrderWrapper);
+        }
+
+        private void OrderNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            OrderNameLabel.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        private void AccountIDTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AccountIDLabel.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        private void OrderedByTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            OrderedByLabel.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        private void AddresseeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AddresseeLabel.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        private void AddressTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AddressLabel.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        private void CityTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CityLabel.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        private void StateComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            StateLabel.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        private void ZipTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ZipLabel.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        private void PhoneTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            PhoneLabel.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        private void DoBTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            DoBLabel.Foreground = new SolidColorBrush(Colors.Black);
         }
     }
 }

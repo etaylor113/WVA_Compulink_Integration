@@ -543,7 +543,8 @@
                      TabIndex="7"
                      TextWrapping="Wrap" 
                      VerticalAlignment="Center" 
-                     Grid.ColumnSpan="3"/>
+                     Grid.ColumnSpan="3"
+                     TextChanged="AddresseeTextBox_TextChanged"/>
 
             <!-- Address -->
             <Label Name="AddressLabel"
@@ -566,7 +567,8 @@
                      TabIndex="8"
                      TextWrapping="Wrap" 
                      VerticalAlignment="Center" 
-                     Grid.ColumnSpan="3"/>
+                     Grid.ColumnSpan="3"
+                     TextChanged="AddressTextBox_TextChanged"/>
 
             <!-- Suite/ Apt. -->
             <Label Name="Suite_AptLabel"
@@ -612,7 +614,8 @@
                      FontSize="15"
                      TextWrapping="Wrap" 
                      VerticalAlignment="Center" 
-                     Grid.ColumnSpan="3"/>
+                     Grid.ColumnSpan="3"
+                     TextChanged="CityTextBox_TextChanged"/>
 
             <!-- State -->
             <Label Name="StateLabel"
@@ -637,7 +640,9 @@
                       Grid.Row="5"
                       TabIndex="11"
                       VerticalAlignment="Center"
-                      Height="24" Grid.ColumnSpan="2" >
+                      Height="24" 
+                      Grid.ColumnSpan="2" 
+                      SelectionChanged="StateComboBox_SelectionChanged">
                 <ComboBoxItem Content="Alabama - AL" />
                 <ComboBoxItem Content="Alaska - AK" />
                 <ComboBoxItem Content="Arizona - AZ" />
@@ -710,7 +715,8 @@
                      FontSize="15"
                      TabIndex="12"
                      TextWrapping="Wrap" 
-                     VerticalAlignment="Center"/>
+                     VerticalAlignment="Center"
+                     TextChanged="ZipTextBox_TextChanged"/>
 
             <!-- Phone -->
             <Label Name="PhoneLabel"
@@ -733,7 +739,9 @@
                      Margin="85,3,0,3" 
                      Grid.Row="6" 
                      TextWrapping="Wrap" 
-                     VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                     VerticalAlignment="Center"
+                     Grid.ColumnSpan="2"
+                     TextChanged="PhoneTextBox_TextChanged"/>
 
             <!-- Phone -->
             <Label Name="DoBLabel"
@@ -755,7 +763,8 @@
                      FontSize="15"
                      TabIndex="14"
                      TextWrapping="Wrap" 
-                     VerticalAlignment="Center"/>
+                     VerticalAlignment="Center"
+                     TextChanged="DoBTextBox_TextChanged"/>
 
             <!-- Order Name -->
             <Label Name="OrderNameLabel"
@@ -779,10 +788,12 @@
                      FontSize="15"
                      TabIndex="15"
                      TextWrapping="NoWrap"     
-                     VerticalAlignment="Center"/>
+                     VerticalAlignment="Center"
+                     TextChanged="OrderNameTextBox_TextChanged"/>
 
             <!-- Account ID -->
-            <Label Content="Account ID:" 
+            <Label Name="AccountIDLabel"
+                   Content="Account ID:" 
                    Grid.Column="4"
                    HorizontalAlignment="Left"
                    Grid.Row="2" 
@@ -802,10 +813,12 @@
                      FontSize="15"
                      TabIndex="16"
                      TextWrapping="NoWrap"     
-                     VerticalAlignment="Center"/>
+                     VerticalAlignment="Center"
+                     TextChanged="AccountIDTextBox_TextChanged"/>
 
             <!-- Ordered By -->
-            <Label Content="Ordered By:" 
+            <Label Name="OrderedByLabel"
+                   Content="Ordered By:" 
                    Grid.Column="4"
                    HorizontalAlignment="Left"
                    Grid.Row="3" 
@@ -824,7 +837,8 @@
                      FontSize="15"
                      TextWrapping="NoWrap"   
                      TabIndex="17"
-                     VerticalAlignment="Center"/>
+                     VerticalAlignment="Center"
+                     TextChanged="OrderedByTextBox_TextChanged"/>
 
             <!-- Ordered By -->
             <Label Name="PoNumberLabel"

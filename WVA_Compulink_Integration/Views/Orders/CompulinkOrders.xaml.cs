@@ -217,7 +217,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     // Notify user they can't create a mixed order
                     MessageBox.Show("Cannot create a mixed Ship to Patient/Ship to Office order!", "Compulink Integration", MessageBoxButton.OK);
                 }   
-                if (false)
+                else if (false)
                 {
                     // TODO: make sure user can't add more than 2 STPs or 2 different patient IDs
                 }
