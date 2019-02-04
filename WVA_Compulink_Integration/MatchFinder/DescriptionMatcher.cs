@@ -125,7 +125,6 @@ namespace WVA_Compulink_Integration.MatchFinder
                                            .Replace("1 d ", "1 day ")
                                            .Replace("1 da ", "1 day ")
                                            .Replace("1day ", "1 day ")
-                                           // Changed .Replace("pk","pack") with .Replace("pk",""). No longer correcting 'pack' just removing it from comparison
                                            .Replace("pk", "")
                                            .Replace("pak", "")
                                            .Replace("pack", "")
@@ -268,7 +267,7 @@ namespace WVA_Compulink_Integration.MatchFinder
             List<string> a_Words = a.Split(' ').ToList();
             List<string> b_Words = b.Split(' ').ToList();
 
-            // Remove spaces to improve match score
+            // Remove blanks to improve match score
             a_Words.RemoveAll(x => x.Equals(""));
             b_Words.RemoveAll(x => x.Equals(""));
 
@@ -320,6 +319,7 @@ namespace WVA_Compulink_Integration.MatchFinder
             double a_percentMatch = (double)a_Shared.Count / b_CharList.Count();
             double b_PercentMatch = (double)b_Shared.Count / a_CharList.Count();
 
+            // Gets the average of the two scores
             return (40 * ((a_percentMatch + b_PercentMatch) / 2));
         }
 

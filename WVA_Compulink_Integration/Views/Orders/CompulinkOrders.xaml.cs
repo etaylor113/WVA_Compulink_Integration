@@ -88,14 +88,12 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
-                //OrdersDataGrid.Items.Clear();
                 listPrescriptions.Clear();
 
                 List<Prescription> tempList = Memory.Orders.CompulinkOrders.Where(x => x.Patient.ToLower().Replace(",","").StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
                        
                 foreach (Prescription prescription in tempList)
                 {
-                    //OrdersDataGrid.Items.Add(prescription);
                     listPrescriptions.Add(prescription);
                 }
 
