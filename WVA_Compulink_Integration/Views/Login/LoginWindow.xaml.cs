@@ -50,7 +50,8 @@ namespace WVA_Compulink_Integration.Views.Login
                     Password = Crypto.ConvertToHash(PasswordTextBox.Password)           
                 };
 
-                string endpoint = "http://localhost:56075/CompuClient/User/login";
+                string dsn = File.ReadAllText(Paths.DSNFile).Trim();
+                string endpoint = $"http://{dsn}/api/User/login";
                 string loginResponse = API.Post(endpoint, user);
                 User userLoginResponse = JsonConvert.DeserializeObject<User>(loginResponse);
                            

@@ -4,27 +4,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Memory;
-using WVA_Compulink_Integration.Models.Order.Out;
-using WVA_Compulink_Integration.Models.Patient;
 using WVA_Compulink_Integration.Models.Prescription;
-using WVA_Compulink_Integration.Utility.File;
-using WVA_Compulink_Integration.ViewModels;
-using WVA_Compulink_Integration.ViewModels.Orders;
 using WVA_Compulink_Integration.Views.Search;
 
 namespace WVA_Compulink_Integration.Views.Orders
@@ -62,7 +51,8 @@ namespace WVA_Compulink_Integration.Views.Orders
                 WvaOrdersComboBox.Text = $"WVA Order {DateTime.Now.ToString("MM/dd/yy--HH:mm:ss")}";
 
                 // Get this account's open wva orders
-                string endpoint = "http://localhost:56075/CompuClient/orders/get-names/" +  UserData._User?.Account;
+                string dsn = UserData._User.DSN;
+                string endpoint = $"http://{dsn}/api/orders/get-names/" + UserData._User?.Account;
                 string strNames = API.Get(endpoint, out string httpStatus);
                 Dictionary<string, string> dictOrderNames = JsonConvert.DeserializeObject<Dictionary<string, string>>(strNames);
 
@@ -108,9 +98,8 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Asyncronously get Compulink Orders from server
         private async Task<List<Prescription>> GetCompulinkOrders()
         {
-            //string endpoint = $"http://10.1.4.66:44354/api/prescription/" + $"{patunique}";
-
-            string endpoint = "http://localhost:56075/CompuClient/prescriptions/";
+            string dsn = UserData._User.DSN;
+            string endpoint = $"http://{dsn}/api/prescriptions/";
             string strPrescriptions = API.Get(endpoint, out string httpStatus);
 
             if (strPrescriptions == null)

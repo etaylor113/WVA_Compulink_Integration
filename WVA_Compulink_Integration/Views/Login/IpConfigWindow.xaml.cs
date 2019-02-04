@@ -34,7 +34,7 @@ namespace WVA_Compulink_Integration.Views.Login
         {
             try
             {
-                string ipNumText = File.ReadAllText(Paths.IpNumFile);
+                string ipNumText = File.ReadAllText(Paths.DSNFile);
                 string apiKeyText = File.ReadAllText(Paths.apiKeyFile);
 
                 if (ipNumText.Trim() != "" && apiKeyText.Trim() != "")
@@ -83,14 +83,14 @@ namespace WVA_Compulink_Integration.Views.Login
         private void WriteToFiles()
         {
             // Write to ipConfig file
-            if (!File.Exists(Paths.IpNumFile))
+            if (!File.Exists(Paths.DSNFile))
             {
-                Directory.CreateDirectory(Paths.IpNumDir);
-                var ipNumFile = File.Create(Paths.IpNumFile);
+                Directory.CreateDirectory(Paths.DSNDir);
+                var ipNumFile = File.Create(Paths.DSNFile);
                 ipNumFile.Close();
             }
 
-            File.WriteAllText(Paths.IpNumFile, IpConfigTextBox.Text);
+            File.WriteAllText(Paths.DSNFile, IpConfigTextBox.Text.Trim());
 
             // Write to apiKey file
             if (!File.Exists(Paths.apiKeyFile))
@@ -100,7 +100,7 @@ namespace WVA_Compulink_Integration.Views.Login
                 apiKeyFile.Close();
             }
 
-            File.WriteAllText(Paths.apiKeyFile, ApiKeyTextBox.Text);
+            File.WriteAllText(Paths.apiKeyFile, ApiKeyTextBox.Text.Trim());
 
             CheckFields();
         }

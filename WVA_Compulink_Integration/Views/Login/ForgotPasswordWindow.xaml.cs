@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models;
 using WVA_Compulink_Integration.Models.User;
 using WVA_Compulink_Integration.Models.Validations.Emails;
+using WVA_Compulink_Integration.Utility.File;
 
 namespace WVA_Compulink_Integration.Views.Login
 {
@@ -55,8 +57,10 @@ namespace WVA_Compulink_Integration.Views.Login
             {
                 string email = "";
 
-                // Get the email from username            
-                 string getEmailEndpoint = "http://localhost:56075/CompuClient/User/GetEmail";
+                // Get the email from username     
+                string dsn = File.ReadAllText(Paths.DSNFile).Trim();
+                string getEmailEndpoint = $"http://{dsn}/api/User/GetEmail";
+                //string getEmailEndpoint = "http://localhost:56075/CompuClient/User/GetEmail";
                 User user = new User()
                 {
                     UserName = UserNameTextBox.Text
@@ -78,7 +82,7 @@ namespace WVA_Compulink_Integration.Views.Login
                     ShowError();
                 }
 
-                // Send the email
+                // Send the email               
                 string endpoint = "https://orders-qa.wisvis.com/mailers/reset";
                 EmailValidationSend emailValidation = new EmailValidationSend()
                 {

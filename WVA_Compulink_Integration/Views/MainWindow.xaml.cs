@@ -69,12 +69,12 @@ namespace WVA_Compulink_Integration.Views
 
         private void SetActNum()
         {
-            // Set account number, api key, IP:hostname to Mem user data
+            // Set account number, api key, DSN to Mem user data
             try
             {
-                UserData._User.Account = File.ReadAllText(Paths.ActNumFile);
-                UserData._User.ApiKey  = File.ReadAllText(Paths.apiKeyFile);
-                UserData._User.IP      = File.ReadAllText(Paths.IpNumFile);
+                UserData._User.Account = File.ReadAllText(Paths.ActNumFile).Trim();
+                UserData._User.ApiKey  = File.ReadAllText(Paths.apiKeyFile).Trim();
+                UserData._User.DSN     = File.ReadAllText(Paths.DSNFile).Trim();
             }
             catch (Exception x)
             {

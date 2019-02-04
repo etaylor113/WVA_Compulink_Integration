@@ -64,8 +64,9 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         // Asyncronously return this account's orders from the server 
         private List<Order> GetWVAOrders()
-        {       
-            string endpoint = $"http://localhost:56075/CompuClient/orders/get-orders/" + $"{UserData._User.Account}";
+        {
+            string dsn = UserData._User.DSN;
+            string endpoint = $"http://{dsn}/api/orders/get-orders/" + $"{UserData._User.Account}";
             string strOrders = API.Get(endpoint, out string httpStatus);
 
             if (strOrders == null)

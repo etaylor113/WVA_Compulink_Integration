@@ -19,13 +19,12 @@ namespace WVA_Compulink_Integration.MatchFinder
             ProductOut productOut = new ProductOut()
             {
                 Api_key = UserData._User.ApiKey,
-                AccountID = "44"           
+                AccountID = UserData._User.Account           
             };
 
             Out_Request request = new Out_Request()
             {
                 Request = productOut
-
             };
 
             return API.Post(endpoint, request);

@@ -22,6 +22,8 @@ using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.IO;
+using WVA_Compulink_Integration.Utility.File;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
@@ -223,6 +225,11 @@ namespace WVA_Compulink_Integration.Views.Orders
             DoBTextBox.Text = "";
         }
 
+        private void SetUpStpFields()
+        {
+            string endpoint = $"http://10.1.4.66:44354/api/prescription/" + $"{UserData._User?.Account ?? ""}";
+        }
+
         private void SetUpNewOrder()
         {
             // Autofill some user information      
@@ -233,6 +240,8 @@ namespace WVA_Compulink_Integration.Views.Orders
             // Hide STP fields if order not STP
             if (!OrderCreationViewModel.Prescriptions[0].IsShipToPatient)
                 HideStpItems();
+            else
+                SetUpStpFields();
         }
 
         private void SetUpEditOrder()
