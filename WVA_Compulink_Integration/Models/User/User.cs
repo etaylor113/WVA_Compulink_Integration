@@ -17,6 +17,7 @@ namespace WVA_Compulink_Integration.Models.User
         public string Email { get; set; }
         public string Account { get; set; }
         public string ApiKey { get; set; }
+        public string IP { get; set; }
         public string Status { get; set; }  
         public string Message { get; set; }       
     }

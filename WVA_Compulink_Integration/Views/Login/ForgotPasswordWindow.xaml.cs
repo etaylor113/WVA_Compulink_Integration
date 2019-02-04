@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Error;
+using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models;
 using WVA_Compulink_Integration.Models.User;
 using WVA_Compulink_Integration.Models.Validations.Emails;
@@ -82,7 +83,7 @@ namespace WVA_Compulink_Integration.Views.Login
                 EmailValidationSend emailValidation = new EmailValidationSend()
                 {
                     Email = email,
-                    ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285"
+                    ApiKey = UserData._User.ApiKey
                 };
 
                 string strResponse = API.Post(endpoint, emailValidation);
@@ -108,7 +109,7 @@ namespace WVA_Compulink_Integration.Views.Login
                 EmailValidationCode emailValidation = new EmailValidationCode()
                 {
                     EmailCode = CodeTextBox.Text.Trim(),
-                    ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285"
+                    ApiKey = UserData._User.ApiKey
                 };
 
                 string strResponse = API.Post(endpoint, emailValidation);

@@ -27,16 +27,17 @@ namespace WVA_Compulink_Integration.Views.Login
         {
             InitializeComponent();            
             IpConfigTextBox.Focus();
-            IsIpConfigSet();
+            CheckFields();
         }
 
-        private void IsIpConfigSet()
+        private void CheckFields()
         {
             try
             {
                 string ipNumText = File.ReadAllText(Paths.IpNumFile);
+                string apiKeyText = File.ReadAllText(Paths.apiKeyFile);
 
-                if (ipNumText.Trim() != "" && ipNumText != null)
+                if (ipNumText.Trim() != "" && apiKeyText.Trim() != "")
                 {
                     LoginWindow loginWindow = new LoginWindow();
                     loginWindow.Show();
@@ -55,16 +56,7 @@ namespace WVA_Compulink_Integration.Views.Login
             {
                 if (e.Key == Key.Enter)
                 {
-                    if (!File.Exists(Paths.IpNumFile))
-                    {
-                        Directory.CreateDirectory(Paths.IpNumDir);
-                        var ipNumFile = File.Create(Paths.IpNumFile);
-                        ipNumFile.Close();
-                    }
-
-                    File.WriteAllText(Paths.IpNumFile, IpConfigTextBox.Text);
-
-                    IsIpConfigSet();
+                    WriteToFiles();
                 }               
             }
             catch (Exception x)
@@ -72,5 +64,46 @@ namespace WVA_Compulink_Integration.Views.Login
                 AppError.PrintToLog(x);
             }
         }
+
+        private void ApiKeyTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Enter)
+                {
+                    WriteToFiles();
+                }
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }
+        }
+
+        private void WriteToFiles()
+        {
+            // Write to ipConfig file
+            if (!File.Exists(Paths.IpNumFile))
+            {
+                Directory.CreateDirectory(Paths.IpNumDir);
+                var ipNumFile = File.Create(Paths.IpNumFile);
+                ipNumFile.Close();
+            }
+
+            File.WriteAllText(Paths.IpNumFile, IpConfigTextBox.Text);
+
+            // Write to apiKey file
+            if (!File.Exists(Paths.apiKeyFile))
+            {
+                Directory.CreateDirectory(Paths.apiKeyDir);
+                var apiKeyFile = File.Create(Paths.apiKeyFile);
+                apiKeyFile.Close();
+            }
+
+            File.WriteAllText(Paths.apiKeyFile, ApiKeyTextBox.Text);
+
+            CheckFields();
+        }
+
     }
 }

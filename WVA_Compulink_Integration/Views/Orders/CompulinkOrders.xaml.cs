@@ -35,6 +35,7 @@ namespace WVA_Compulink_Integration.Views.Orders
     public partial class CompulinkOrders : UserControl
     {
         ToolTip toolTip = new ToolTip();
+        List<Prescription> listPrescriptions = new List<Prescription>();
 
         public CompulinkOrders()
         {
@@ -45,7 +46,8 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Do any setup after loading the view
         private void SetUp()
         {
-            OrdersDataGrid.ItemsSource = Memory.Orders.CompulinkOrders;
+            //OrdersDataGrid.ItemsSource = Memory.Orders.CompulinkOrders;
+
             IsVisibleChanged += new DependencyPropertyChangedEventHandler(LoginControl_IsVisibleChanged);
             SetUpOrdersDataGrid();
             GetWvaOrders();            
@@ -81,19 +83,23 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
         }
 
-        // Filters out orders in table by whatever the user enters in the search text box
+        // Filters out orders in table by whatever patient they search for in the searc box
         private void SearchOrders(string searchString)
         {
             try
             {
-                OrdersDataGrid.Items.Clear();
+                //OrdersDataGrid.Items.Clear();
+                listPrescriptions.Clear();
 
                 List<Prescription> tempList = Memory.Orders.CompulinkOrders.Where(x => x.Patient.ToLower().Replace(",","").StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
                        
                 foreach (Prescription prescription in tempList)
                 {
-                    OrdersDataGrid.Items.Add(prescription);
+                    //OrdersDataGrid.Items.Add(prescription);
+                    listPrescriptions.Add(prescription);
                 }
+
+                OrdersDataGrid.Items.Refresh();
             }
             catch (Exception x)
             {
@@ -103,7 +109,9 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         // Asyncronously get Compulink Orders from server
         private async Task<List<Prescription>> GetCompulinkOrders()
-        {           
+        {
+            //string endpoint = $"http://10.1.4.66:44354/api/prescription/" + $"{patunique}";
+
             string endpoint = "http://localhost:56075/CompuClient/prescriptions/";
             string strPrescriptions = API.Get(endpoint, out string httpStatus);
 
@@ -119,6 +127,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             try
             {
                 Memory.Orders.CompulinkOrders.Clear();
+                listPrescriptions.Clear();
 
                 var prescriptions = await GetCompulinkOrders();
 
@@ -127,6 +136,8 @@ namespace WVA_Compulink_Integration.Views.Orders
                     Memory.Orders.CompulinkOrders.Add(prescription);
                 }
 
+                listPrescriptions.AddRange(Memory.Orders.CompulinkOrders);
+                OrdersDataGrid.ItemsSource = listPrescriptions;
                 OrdersDataGrid.Items.Refresh();
             }
             catch (Exception x)
@@ -198,29 +209,50 @@ namespace WVA_Compulink_Integration.Views.Orders
                 int stpCount = 0;
                 int totalCount = 0;
                 List<Prescription> listPrescriptions = new List<Prescription>();
+                List<string> listSTP = new List<string>();
 
                 // Add only checked orders to list
                 foreach (Prescription prescription in rows)
                 {
                     if (prescription.IsChecked)
-                    {                       
+                    {
                         listPrescriptions.Add(prescription);
                         totalCount++;
                         if (prescription.IsShipToPatient)
+                        {
                             stpCount++;
-                    }                                         
+                            listSTP.Add(prescription.Patient);
+                        }
+                    }
                 }
+
+                // Make sure user can't add more than 2 different patients to STP order
+                if (listSTP.Count > 2)
+                {
+                    MessageBox.Show("Cannot add multiple patients to a STP order!", "Compulink Integration", MessageBoxButton.OK);
+                    return;
+                }
+
+                foreach (string patient in listSTP)
+                {
+                    if (listSTP.Count > 1)
+                    {
+                        List<Prescription> prescriptions = listPrescriptions.FindAll(x => x.Patient == patient);
+
+                        if (prescriptions.Count != 2)
+                        {
+                            MessageBox.Show("Cannot add different patients to a STP order!", "Compulink Integration", MessageBoxButton.OK);
+                            return;
+                        }
+                    }                 
+                }                             
 
                 // Make sure user can't create a mixed STP & STO order
                 if (stpCount > 0 && stpCount != totalCount)
                 {
                     // Notify user they can't create a mixed order
                     MessageBox.Show("Cannot create a mixed Ship to Patient/Ship to Office order!", "Compulink Integration", MessageBoxButton.OK);
-                }   
-                else if (false)
-                {
-                    // TODO: make sure user can't add more than 2 STPs or 2 different patient IDs
-                }
+                }                  
                 else if (totalCount == 0)
                 {
                     // Notify user they must select at least one Compulink order

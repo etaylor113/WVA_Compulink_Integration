@@ -18,6 +18,9 @@ namespace WVA_Compulink_Integration.Utility.File
         public static string IpNumDir = $@"{AppDir}\ipConfig\";
         public static string IpNumFile = $@"{AppDir}\ipConfig\ipConfig.txt";
 
+        public static string apiKeyDir = $@"{AppDir}\apiKey\";
+        public static string apiKeyFile = $@"{AppDir}\apiKey\apiKey.txt";
+
         public static string ErrorLog = $@"{AppData}\WVA Compulink Integration\Errors\";
     }
 }

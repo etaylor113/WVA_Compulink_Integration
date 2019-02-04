@@ -63,12 +63,18 @@ namespace WVA_Compulink_Integration.Views
                             OrdersContentControl.DataContext = new OrderCreationViewModel(order, prescriptions, orderName);
                         }
                         // Don't add a STP item to an order and dont add a compulink order to a STP wva order
-                        else if (prescriptions?[0].IsShipToPatient == true || order.ShipToPatient == "Y")
+                        else if (prescriptions?[0].IsShipToPatient == true)
                         {                          
                             // Make sure user can't add a STP to another order
                             MessageBox.Show("Cannot add a Ship to Patient item to an existing WVA order!", "Compulink Integration", MessageBoxButton.OK);
                             OrdersContentControl.DataContext = new CompulinkOrdersViewModel();                                                       
-                        }                                               
+                        }    
+                        else if (order.ShipToPatient == "Y")
+                        {
+                            // Make sure user can't add a STP to another order
+                            MessageBox.Show("Cannot add this item to a Ship to Patient order!", "Compulink Integration", MessageBoxButton.OK);
+                            OrdersContentControl.DataContext = new CompulinkOrdersViewModel();
+                        }
                         else
                             OrdersContentControl.DataContext = new OrderCreationViewModel(order, prescriptions, orderName);
                     }                       

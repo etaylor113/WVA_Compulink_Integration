@@ -140,46 +140,6 @@ namespace WVA_Compulink_Integration.Views.Orders
             Mouse.OverrideCursor = Cursors.Arrow;
         }
 
-        // Submit Button
-        private void SubmitButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                // Leave method if they don't select an order
-                if (!(OrdersListBox.SelectedItem is string selectedOrder))
-                    return;
-
-                // Create the complete order object 
-                OutOrderWrapper outOrderWrapper = new OutOrderWrapper()
-                {
-                    OutOrder = new OutOrder()
-                    {
-                        ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
-                        PatientOrder = OrderCreationViewModel.GetOrder(selectedOrder)
-                    }
-                };
-
-                Response response = OrderCreationViewModel.CreateOrder(outOrderWrapper);
-                
-                if (response.Status == "SUCCESS")
-                {
-                    SetUpListOrders();
-
-                    MessageWindow messageWindow = new MessageWindow("\t\tOrder created!");
-                    messageWindow.Show();
-                }
-                else
-                {
-                    MessageWindow messageWindow = new MessageWindow($"Order creation failed. Error message: {response.Message}");
-                    messageWindow.Show();
-                }
-            }
-            catch (Exception x)
-            {
-                AppError.PrintToLog(x);
-            }         
-        }
-
         // Edit Button
         private void EditOrderButton_Click(object sender, RoutedEventArgs e)
         {
@@ -221,6 +181,6 @@ namespace WVA_Compulink_Integration.Views.Orders
                 MessageBox.Show("An error has occurred. Order not deleted.", "", MessageBoxButton.OK);
             }
         }
-
+      
     }
 }

@@ -62,7 +62,6 @@
     </ApplicationDefinition>
     <Compile Include="Cryptography\Crypto.cs" />
     <Compile Include="MatchFinder\WVA_Products.cs" />
-    <Compile Include="Memory\IP_Config.cs" />
     <Compile Include="Memory\Orders.cs" />
     <Compile Include="Memory\UserData.cs" />
     <Compile Include="Models\Order\ItemDetail.cs" />

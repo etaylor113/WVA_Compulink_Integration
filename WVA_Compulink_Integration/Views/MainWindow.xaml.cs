@@ -20,6 +20,7 @@ using WVA_Compulink_Integration.Views;
 using WVA_Compulink_Integration.Memory;
 using System.IO;
 using WVA_Compulink_Integration.Utility.File;
+using WVA_Compulink_Integration.Error;
 
 namespace WVA_Compulink_Integration.Views
 {
@@ -68,9 +69,17 @@ namespace WVA_Compulink_Integration.Views
 
         private void SetActNum()
         {
-            // Set user account number in memory
-            try { UserData._User.Account = File.ReadAllText(Paths.ActNumFile); }
-            catch { }
+            // Set account number, api key, IP:hostname to Mem user data
+            try
+            {
+                UserData._User.Account = File.ReadAllText(Paths.ActNumFile);
+                UserData._User.ApiKey  = File.ReadAllText(Paths.apiKeyFile);
+                UserData._User.IP      = File.ReadAllText(Paths.IpNumFile);
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }
         }
 
         private bool AccountNumAvailable()

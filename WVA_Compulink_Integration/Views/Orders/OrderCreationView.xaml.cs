@@ -47,7 +47,8 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
             SetUpOrdersDataGrid();
-            CheckViewMode();         
+            CheckViewMode();
+            Verify();
         }
 
         private void CheckViewMode()
@@ -136,7 +137,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private string AssignCellColor(string prodValue, bool isValid, string errorMessage, bool canBeValidated)
         {
-            if (prodValue == null || prodValue == "" && errorMessage == null)
+            if (prodValue == null && errorMessage == null || prodValue == "" && errorMessage == null)
                 return "White";
             else if (!canBeValidated)
                 return "Yellow";
@@ -285,7 +286,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     Sphere = OrderCreationViewModel.Order.Items[i].ProductDetail.Sphere,
                     Cylinder = OrderCreationViewModel.Order.Items[i].ProductDetail.Cylinder,
                     Axis = OrderCreationViewModel.Order.Items[i].ProductDetail.Axis,
-                    Add = OrderCreationViewModel.Order.Items[i].ProductDetail.Axis,
+                    Add = OrderCreationViewModel.Order.Items[i].ProductDetail.Add,
                     Color = OrderCreationViewModel.Order.Items[i].ProductDetail.Color,
                     Multifocal = OrderCreationViewModel.Order.Items[i].ProductDetail.Multifocal
                 };
@@ -538,6 +539,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         // ================================== CRUD Operations for Order ==========================================================
         // =======================================================================================================================
 
+        // Check the validity of the prescription items and update the datagrid with these changes 
         private bool ItemsAreValid()
         {
             // Left Column
@@ -577,8 +579,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     MessageWindow messageWindow = new MessageWindow("\t'Zip' cannot be blank!");
                     messageWindow.Show();
                     return false;
-                }               
-             
+                }                            
             }
 
             // Right Column
@@ -606,8 +607,22 @@ namespace WVA_Compulink_Integration.Views.Orders
                 return false;
             }
 
+            // Make sure user has chosen a match
+            IList rows = OrdersDataGrid.Items;
+
+            for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
+            {
+                Prescription prescription = (Prescription)rows[i];
+                if (prescription.ProductImagePath == null)
+                {
+                    MessageWindow messageWindow = new MessageWindow($"\tMust find a match for product in row {i + 1}!");
+                    messageWindow.Show();
+                    return false;
+                }
+            }
+
             // Validate items
-            ValidationResponse validationResponse = GetValidationResponse();
+            ValidationResponse validationResponse = Verify();
             List<ValidationDetail> listValidationDetail = validationResponse.Data.Products;
             
             foreach (ValidationDetail validationDetail in listValidationDetail)
@@ -659,11 +674,11 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void PostInvalidItem(string param)
         {
-            MessageWindow messageWindow = new MessageWindow($"\tA parameter '{param}' in the grid is not valid.");
+            MessageWindow messageWindow = new MessageWindow($"A parameter '{param}' in the grid is not valid.");
             messageWindow.Show();
         }
 
-        private ValidationResponse GetValidationResponse()
+        private ValidationResponse Verify()
         {
             List<ValidationDetail> listValidations = new List<ValidationDetail>();
 
@@ -701,7 +716,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 Request = new ProductValidation()
                 {
-                    Key = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
+                    Key = UserData._User.ApiKey,
                     ProductsToValidate = new List<ItemDetail>()
                 }
             };
@@ -863,7 +878,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     OutOrder = new OutOrder()
                     {
-                        ApiKey = "426761f0-3e9d-4dfd-bdbf-0f35a232c285",
+                        ApiKey = UserData._User.ApiKey,
                         PatientOrder = order
                     }
                 };
@@ -1020,6 +1035,8 @@ namespace WVA_Compulink_Integration.Views.Orders
                     if (column == 12)
                         OrderCreationViewModel.Prescriptions[row].Multifocal = selectedItem;
                 }
+
+                Verify();
             }
             catch (Exception x)
             {
@@ -1033,7 +1050,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 if (e.EditAction == DataGridEditAction.Commit)
                 {
-                    int row = e.Row.GetIndex();
+                    int row = e.Row.GetIndex();   
 
                     FindProductMatches();
                     SetMenuItems();
@@ -1070,7 +1087,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void VerifyOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            GetValidationResponse();                    
+            Verify();                    
         }
 
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)

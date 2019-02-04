@@ -38,8 +38,6 @@ namespace WVA_Compulink_Integration.Views.Login
         private void SetUp()
         {          
             UsernameTextBox.Focus();
-            string ipNumText = File.ReadAllText(Paths.IpNumFile);
-            IP_Config.IP = ipNumText;
         }
      
         private User LoginUser()
