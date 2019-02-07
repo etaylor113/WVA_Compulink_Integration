@@ -31,9 +31,10 @@ namespace WVA_Compulink_Integration.Views.Orders
     /// </summary>
     public partial class WVAOrders : UserControl
     {
+ 
         ToolTip toolTip = new ToolTip();
         List<Order> ListOrders { get; set; }
-
+  
         public WVAOrders()
         {
             InitializeComponent();
@@ -66,7 +67,9 @@ namespace WVA_Compulink_Integration.Views.Orders
         private List<Order> GetWVAOrders()
         {
             string dsn = UserData._User.DSN;
-            string endpoint = $"http://{dsn}/api/orders/get-orders/" + $"{UserData._User.Account}";
+            //string endpoint = " http://10.1.4.66:44354/api/get-orders/44";
+            //string endpoint = $"http://localhost:44354/api/get-orders/44";
+            string endpoint = $"http://{dsn}/api/order/get-orders/" + $"{UserData._User.Account}";
             string strOrders = API.Get(endpoint, out string httpStatus);
 
             if (strOrders == null)

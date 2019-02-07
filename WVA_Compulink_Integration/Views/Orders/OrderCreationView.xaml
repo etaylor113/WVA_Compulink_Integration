@@ -244,8 +244,8 @@
                 </DataGrid.HorizontalGridLinesBrush>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Patient}"  MinWidth="90" Header="Patient" />
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=Eye}"      Header="Eye" MinWidth="30" MaxWidth="30"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Patient}"  MinWidth="110" Header="Patient" />
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=Eye}"      Header="Eye" MinWidth="40" MaxWidth="40"/>
                     <DataGridTemplateColumn Header=" " MinWidth="30" MaxWidth="30" IsReadOnly="True" >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -253,7 +253,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Width="210" Binding="{Binding Path=Product}"  Header="Product" />
+                    <DataGridTextColumn Width="200" Binding="{Binding Path=Product}"  Header="Product" />
                     <DataGridTextColumn Width="40" Binding="{Binding Path=Quantity}"  Header="Qty"/>
                     <DataGridTextColumn Width="*" Binding="{Binding Path=BaseCurve}"  MinWidth="70" Header="BaseCurve">
                         <DataGridTextColumn.CellStyle>

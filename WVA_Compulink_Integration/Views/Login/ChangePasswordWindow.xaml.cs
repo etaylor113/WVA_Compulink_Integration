@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +13,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WVA_Compulink_Integration._API;
+using WVA_Compulink_Integration.Memory;
+using WVA_Compulink_Integration.Models;
+using WVA_Compulink_Integration.Models.User;
+using WVA_Compulink_Integration.Utility.File;
 
 namespace WVA_Compulink_Integration.Views.Login
 {
@@ -19,9 +26,14 @@ namespace WVA_Compulink_Integration.Views.Login
     /// </summary>
     public partial class ChangePasswordWindow : Window
     {
-        public ChangePasswordWindow()
+        private string DSN { get; set; }
+        private string UserName { get; set; }
+
+        public ChangePasswordWindow(string userName)
         {
-            InitializeComponent();
+            DSN = File.ReadAllText(Paths.DSNFile).Trim();
+            UserName = userName;
+            InitializeComponent();          
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -31,15 +43,40 @@ namespace WVA_Compulink_Integration.Views.Login
 
         private void SubmitCodeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PasswordTextBox.Password != PasswordConfTextBox.Password)
+            if (PasswordTextBox.Password == PasswordConfTextBox.Password)
             {
-                MessageLabel.Visibility = Visibility.Visible;
+                Response response = ChangePassword();
+
+                if (response.Status == "SUCCESS")
+                {
+                    Close();
+                }
+                else
+                {
+                    MessageLabel.Visibility = Visibility.Visible;
+                    MessageLabel.Content = "An error has occurred. Password not updated";
+                }
             }
             else
             {
                 MessageLabel.Visibility = Visibility.Visible;
-                MessageLabel.Content = "Password Updated!";
+                MessageLabel.Content = "Passwords must match!";
             }
+        }
+
+        private Response ChangePassword()
+        {
+            string dsn = DSN;
+            string endpoint = $"http://localhost:56075/api/user/changePass/";
+
+            User changePassUser = new User()
+            {
+                Password = Cryptography.Crypto.ConvertToHash(PasswordTextBox.Password),
+                UserName = UserName
+            };
+
+            string strResponse = API.Post(endpoint, changePassUser);
+            return JsonConvert.DeserializeObject<Response>(strResponse);           
         }
 
     }

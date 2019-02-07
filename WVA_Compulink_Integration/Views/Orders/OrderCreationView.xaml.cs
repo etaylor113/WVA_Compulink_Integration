@@ -88,7 +88,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             int index = 0;
             foreach (Product product in compulinkProducts)
             {
-                List<MatchProduct> matchProducts = DescriptionMatcher.FindMatch(product.Description, List_WVA_Products.ListProducts, Convert.ToDouble(MinScoreAdjustSlider.Value));
+                List<MatchProduct> matchProducts = DescriptionMatcher.FindMatch(product.Description + product.Vendor, List_WVA_Products.ListProducts, Convert.ToDouble(MinScoreAdjustSlider.Value));
 
                 if (matchProducts.Count > 0)
                 {
@@ -896,6 +896,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
+                AppError.PrintToLog(x);
                 return null;
             }           
         }
@@ -1019,12 +1020,14 @@ namespace WVA_Compulink_Integration.Views.Orders
                     {
                         OrderCreationViewModel.Prescriptions[row].Product = selectedItem;
 
-                        if (ListMatchedProducts[row][selectedIndex].MatchScore > 92)
-                            OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\GreenBubble.png";
-                        else if (ListMatchedProducts[row][selectedIndex].MatchScore > 75)
-                            OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\YellowBubble.png";
-                        else
-                            OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\RedBubble.jpg";
+                        OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\CheckMarkCircle.png";
+
+                        //if (ListMatchedProducts[row][selectedIndex].MatchScore > 92)
+                        //    OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\GreenBubble.png";
+                        //else if (ListMatchedProducts[row][selectedIndex].MatchScore > 75)
+                        //    OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\YellowBubble.png";
+                        //else
+                        //    OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\RedBubble.jpg";
                     }
 
                     if (column == 5)

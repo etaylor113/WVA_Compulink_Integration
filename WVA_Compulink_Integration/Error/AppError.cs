@@ -25,13 +25,13 @@ namespace WVA_Compulink_Integration.Error
                     Directory.CreateDirectory(Paths.ErrorLog);
                 }
 
-                if (!File.Exists(Paths.ErrorLog + @"\Error_" + time + ".txt"))
+                if (!File.Exists(Paths.ErrorLog + $@"\Error_{time}.txt"))
                 {
-                    var file = File.Create(Paths.ErrorLog + @"\Error_" + time + ".txt");
+                    var file = File.Create(Paths.ErrorLog + $@"\Error_{time}.txt");
                     file.Close();
                 }
 
-                using (System.IO.StreamWriter writer = new System.IO.StreamWriter((Paths.ErrorLog + @"\ErrorLog.txt"), true))
+                using (System.IO.StreamWriter writer = new System.IO.StreamWriter((Paths.ErrorLog + $@"\Error_{time}.txt"), true))
                 {
                     writer.WriteLine("-----------------------------------------------------------------------------------");
                     writer.WriteLine("");
@@ -59,13 +59,13 @@ namespace WVA_Compulink_Integration.Error
                     Directory.CreateDirectory(Paths.ErrorLog);
                 }
                  
-                if (!File.Exists(Paths.ErrorLog + @"\Error_" + time + ".txt"))
+                if (!File.Exists(Paths.ErrorLog + $@"\Error_{time}.txt"))
                 {
-                    var file = File.Create(Paths.ErrorLog + @"\Error_" + time + ".txt");
+                    var file = File.Create(Paths.ErrorLog + $@"\Error_{time}.txt");
                     file.Close();
                 }
               
-                using (System.IO.StreamWriter writer = new System.IO.StreamWriter((Paths.ErrorLog + @"\ErrorLog.txt"), true))
+                using (System.IO.StreamWriter writer = new System.IO.StreamWriter((Paths.ErrorLog + $@"\Error_{time}.txt"), true))
                 {
                     writer.WriteLine("-----------------------------------------------------------------------------------");
                     writer.WriteLine("");

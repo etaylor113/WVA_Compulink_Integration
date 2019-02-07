@@ -28,9 +28,12 @@ namespace WVA_Compulink_Integration.Views.Login
     /// </summary>
     public partial class ForgotPasswordWindow : Window
     {
+        private string API_Key { get; set; }
+
         public ForgotPasswordWindow()
         {
             InitializeComponent();
+            API_Key = File.ReadAllText(Paths.apiKeyFile).Trim();
         }
 
         // Brings window to front without overlapping any following windows opened by user
@@ -55,6 +58,13 @@ namespace WVA_Compulink_Integration.Views.Login
         {
             try
             {
+                if (UserNameTextBox.Text.Trim() == "")
+                {
+                    MessageLabel.Visibility = Visibility.Visible;
+                    MessageLabel.Content = "Enter username!";
+                    return;
+                }
+
                 string email = "";
 
                 // Get the email from username     
@@ -69,11 +79,11 @@ namespace WVA_Compulink_Integration.Views.Login
                 string strEmail = API.Post(getEmailEndpoint, user);
                 User userResponse = JsonConvert.DeserializeObject<User>(strEmail);
 
-                if (userResponse.Status == "ERROR")
+                if (userResponse?.Status == "ERROR")
                 {
                     ShowError();
                 }
-                else if (userResponse.Email != null)
+                else if (userResponse?.Email != null)
                 {
                     email = userResponse.Email;
                 }
@@ -87,7 +97,7 @@ namespace WVA_Compulink_Integration.Views.Login
                 EmailValidationSend emailValidation = new EmailValidationSend()
                 {
                     Email = email,
-                    ApiKey = UserData._User.ApiKey
+                    ApiKey = API_Key
                 };
 
                 string strResponse = API.Post(endpoint, emailValidation);
@@ -109,11 +119,19 @@ namespace WVA_Compulink_Integration.Views.Login
         {
             try
             {
+                if (UserNameTextBox.Text.Trim() == "")
+                {
+                    MessageLabel.Visibility = Visibility.Visible;
+                    MessageLabel.Content = "Enter username!";
+                    return;
+                }
+
+
                 string endpoint = "https://orders-qa.wisvis.com/mailers/reset_check";
                 EmailValidationCode emailValidation = new EmailValidationCode()
                 {
                     EmailCode = CodeTextBox.Text.Trim(),
-                    ApiKey = UserData._User.ApiKey
+                    ApiKey = API_Key
                 };
 
                 string strResponse = API.Post(endpoint, emailValidation);
@@ -121,7 +139,7 @@ namespace WVA_Compulink_Integration.Views.Login
 
                 if (response.Status == "SUCCESS")
                 {
-                    new ChangePasswordWindow().Show();
+                    new ChangePasswordWindow(UserNameTextBox.Text.Trim()).Show();
                     Close();
                 }
                 else

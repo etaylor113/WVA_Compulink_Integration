@@ -47,7 +47,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
         public static Order GetOrder(string orderName)
         {
             string dsn = UserData._User.DSN;          
-            string endpoint = $"http://{dsn}/api/orders/exists/";
+            string endpoint = $"http://{dsn}/api/order/exists/";
             string strOrder = API.Post(endpoint, orderName);
             Order order = JsonConvert.DeserializeObject<Order>(strOrder);
 
@@ -57,7 +57,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
         public static Response CreateOrder(OutOrderWrapper outOrderWrapper)
         {
             string dsn = UserData._User.DSN;
-            string endpoint = $"http://{dsn}/api/orders/submit/";
+            string endpoint = $"http://{dsn}/api/order/submit/";
             string strResponse = API.Post(endpoint, outOrderWrapper);
             Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
@@ -67,7 +67,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
         public static Response DeleteOrder(string orderName)
         {
             string dsn = UserData._User.DSN;
-            string endpoint = $"http://{dsn}/api/orders/delete/";
+            string endpoint = $"http://{dsn}/api/order/delete/";
             string strResponse = API.Post(endpoint, orderName);
             Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
@@ -77,7 +77,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
         public static Response SaveOrder(OutOrderWrapper outOrderWrapper)
         {
             string dsn = UserData._User.DSN;
-            string endpoint = $"http://{dsn}/api/orders/save/";
+            string endpoint = $"http://{dsn}/api/order/save/";
             string strResponse = API.Post(endpoint, outOrderWrapper);
             Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 

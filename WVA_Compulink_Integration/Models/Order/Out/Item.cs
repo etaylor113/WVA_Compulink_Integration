@@ -25,7 +25,7 @@ namespace WVA_Compulink_Integration.Models.Order.Out
         public string Eye { get; set; }
 
         [JsonProperty("quantity")]
-        public int Quantity { get; set; }
+        public string Quantity { get; set; }
 
         [JsonProperty("item_retail_price")]
         public string ItemRetailPrice { get; set; }

@@ -73,6 +73,8 @@
     <Compile Include="Models\Order\Out\OrderDetail.cs" />
     <Compile Include="Models\Order\ShippingTypes.cs" />
     <Compile Include="Models\Prescription\Prescription.cs" />
+    <Compile Include="Models\Prescription\PrescriptionRequest.cs" />
+    <Compile Include="Models\Prescription\PrescriptionWrapper.cs" />
     <Compile Include="Models\ProductParameters\Children\Add.cs" />
     <Compile Include="Models\ProductParameters\Children\Axis.cs" />
     <Compile Include="Models\ProductParameters\Children\BaseCurve.cs" />
@@ -272,7 +274,6 @@
   <ItemGroup>
     <None Include="Misc\App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\icons8-Minimize Window-64.png" />
   </ItemGroup>
@@ -327,6 +328,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons8-available-updates-filled-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\CheckMarkCircle.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

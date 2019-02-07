@@ -51,8 +51,8 @@ namespace WVA_Compulink_Integration.Views.Orders
                 WvaOrdersComboBox.Text = $"WVA Order {DateTime.Now.ToString("MM/dd/yy--HH:mm:ss")}";
 
                 // Get this account's open wva orders
-                string dsn = UserData._User.DSN;
-                string endpoint = $"http://{dsn}/api/orders/get-names/" + UserData._User?.Account;
+                string dsn = UserData._User.DSN;    
+                string endpoint = $"http://{dsn}/api/order/get-names/" + UserData._User?.Account;
                 string strNames = API.Get(endpoint, out string httpStatus);
                 Dictionary<string, string> dictOrderNames = JsonConvert.DeserializeObject<Dictionary<string, string>>(strNames);
 
@@ -96,16 +96,17 @@ namespace WVA_Compulink_Integration.Views.Orders
         }
 
         // Asyncronously get Compulink Orders from server
-        private async Task<List<Prescription>> GetCompulinkOrders()
+        private async Task<PrescriptionWrapper> GetCompulinkOrders()
         {
             string dsn = UserData._User.DSN;
-            string endpoint = $"http://{dsn}/api/prescriptions/";
+            string actNum = UserData._User.Account;  
+            string endpoint = $"http://{dsn}/api/openorder/{actNum}";
             string strPrescriptions = API.Get(endpoint, out string httpStatus);
 
             if (strPrescriptions == null)
                 throw new NullReferenceException();
 
-            return JsonConvert.DeserializeObject<List<Prescription>>(strPrescriptions);           
+            return JsonConvert.DeserializeObject<PrescriptionWrapper>(strPrescriptions);           
         }
 
         // Set up items in OrdersDataGrid 
@@ -116,9 +117,10 @@ namespace WVA_Compulink_Integration.Views.Orders
                 Memory.Orders.CompulinkOrders.Clear();
                 listPrescriptions.Clear();
 
-                var prescriptions = await GetCompulinkOrders();
+                var prescriptionWrapper = await GetCompulinkOrders();
+                var products = prescriptionWrapper.Request.Products;
 
-                foreach (Prescription prescription in prescriptions)
+                foreach (Prescription prescription in products)
                 {
                     Memory.Orders.CompulinkOrders.Add(prescription);
                 }

@@ -47,6 +47,6 @@ C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integ
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration.pdb
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\MessageWindow.g.cs
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\MessageWindow.baml
-C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration.csprojAssemblyReference.cache
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Login\IpConfigWindow.g.cs
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Login\IpConfigWindow.baml
+C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration.csprojAssemblyReference.cache

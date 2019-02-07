@@ -33,7 +33,7 @@ namespace WVA_Compulink_Integration.Cryptography
 
                 // Define a string that is a chunk of the 'originalHash' based on the length of the input string
                 // NOTE: Password text field's max length is 20, so the inputString's length + 40 will never exceed the hash's max length
-                string hashChunk = originalHash.ToString().Substring(inputString.Length, inputString.Length + 39);
+                string hashChunk = originalHash.ToString().Substring(inputString.Length, inputString.Length + 40);
 
                 // Create the final hash
                 bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(salt + hashChunk));

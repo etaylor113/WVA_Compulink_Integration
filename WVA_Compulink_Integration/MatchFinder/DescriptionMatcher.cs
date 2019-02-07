@@ -151,9 +151,10 @@ namespace WVA_Compulink_Integration.MatchFinder
 
         static string AdjustSKUType(string originalString)
         {
+            originalString += " ";
             originalString = originalString.Replace("astig ", " astigmatism ")
                                            .Replace("asti ", " astigmatism ")
-                                           .Replace("astg ", " astigmatism ")
+                                           .Replace("astg", " astigmatism ")
                                            .Replace("toric", " astigmatism ")
                                            .Replace("tor ", " astigmatism ")
                                            .Replace("tori ", " astigmatism ")
@@ -164,7 +165,7 @@ namespace WVA_Compulink_Integration.MatchFinder
                                            .Replace("asph ", " aspheric ")
                                            .Replace("clr ", " color ");
 
-            return originalString;
+            return originalString.Trim();
         }
 
         static string AdjustProductName(string originalString)
