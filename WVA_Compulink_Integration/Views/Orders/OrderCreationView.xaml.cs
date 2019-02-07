@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.IO;
 using WVA_Compulink_Integration.Utility.File;
+using WVA_Compulink_Integration.Models.Patient;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
@@ -227,7 +228,20 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void SetUpStpFields()
         {
-            string endpoint = $"http://10.1.4.66:44354/api/prescription/" + $"{UserData._User?.Account ?? ""}";
+            string dsn = UserData._User?.DSN;
+            string act = UserData._User?.Account ?? "";
+            string endpoint = $"http://{dsn}/api/prescription/" + $"8237";
+            string strResponse = API.Get(endpoint, out string httpStatus);
+            var prescriptionWrapper = JsonConvert.DeserializeObject<PrescriptionWrapper>(strResponse);
+
+            string city = OrderCreationViewModel.Order.City;
+            string state = OrderCreationViewModel.Order.State;
+            string address = OrderCreationViewModel.Order.StreetAddr_1;
+            string addressee = OrderCreationViewModel.Order.Name_1;
+            string zip = OrderCreationViewModel.Order.Zip;
+            string dob = OrderCreationViewModel.Order.DoB;
+            string phone = OrderCreationViewModel.Order.Phone;
+            string address_2 = OrderCreationViewModel.Order.StreetAddr_2;
         }
 
         private void SetUpNewOrder()
