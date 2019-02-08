@@ -37,6 +37,9 @@ namespace WVA_Compulink_Integration.Models.Patient
         [JsonProperty("location")]
         public string Location { get; set; }
 
+        [JsonProperty("dob")]
+        public string DoB { get; set; }
+
         private string fullName;
 
         public string FullName

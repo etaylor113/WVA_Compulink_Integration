@@ -632,7 +632,7 @@
                       Grid.Column="1"
                       Text=""
                       IsEditable="True"
-                      IsReadOnly="True"
+                      IsReadOnly="False"
                       FontFamily="Sitka Text"
                       FontSize="15"
                       HorizontalAlignment="Stretch"
@@ -743,13 +743,14 @@
                      Grid.ColumnSpan="2"
                      TextChanged="PhoneTextBox_TextChanged"/>
 
-            <!-- Phone -->
+            <!-- Dob -->
             <Label Name="DoBLabel"
                    Content="DoB" 
                    Grid.Column="3"
                    HorizontalAlignment="Left"
                    Grid.Row="6" 
                    VerticalAlignment="Center" 
+                   Visibility="Hidden"
                    Height="30" 
                    Width="50"
                    FontSize="15"/>
@@ -763,7 +764,8 @@
                      FontSize="15"
                      TabIndex="14"
                      TextWrapping="Wrap" 
-                     VerticalAlignment="Center"
+                     Visibility="Hidden"
+                     VerticalAlignment="Center"                     
                      TextChanged="DoBTextBox_TextChanged"/>
 
             <!-- Order Name -->
