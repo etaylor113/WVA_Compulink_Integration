@@ -25,6 +25,7 @@ using System.Windows.Media;
 using System.IO;
 using WVA_Compulink_Integration.Utility.File;
 using WVA_Compulink_Integration.Models.Patient;
+using System.Diagnostics;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
@@ -347,6 +348,10 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     SelectedRow = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.CurrentItem);
                     SelectedColumn = OrdersDataGrid.CurrentColumn.DisplayIndex;
+                }
+                else
+                {
+                    Trace.WriteLine("Couldn't get index in SetMenuItems()!");
                 }
 
                 // If column IS 'BaseCurve'

@@ -29,11 +29,21 @@ namespace WVA_Compulink_Integration.Views.Login
     public partial class ForgotPasswordWindow : Window
     {
         private string API_Key { get; set; }
+        private string DSN { get; set; }
 
         public ForgotPasswordWindow()
         {
             InitializeComponent();
-            API_Key = File.ReadAllText(Paths.apiKeyFile).Trim();
+
+            try
+            {
+                API_Key = File.ReadAllText(Paths.apiKeyFile).Trim() ?? throw new NullReferenceException();
+                DSN = File.ReadAllText(Paths.DSNFile).Trim() ?? throw new NullReferenceException();
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }           
         }
 
         // Brings window to front without overlapping any following windows opened by user
@@ -66,11 +76,8 @@ namespace WVA_Compulink_Integration.Views.Login
                 }
 
                 string email = "";
-
-                // Get the email from username     
-                string dsn = File.ReadAllText(Paths.DSNFile).Trim();
-                string getEmailEndpoint = $"http://{dsn}/api/User/GetEmail";
-                //string getEmailEndpoint = "http://localhost:56075/CompuClient/User/GetEmail";
+                
+                string getEmailEndpoint = $"http://{DSN}/api/User/GetEmail";
                 User user = new User()
                 {
                     UserName = UserNameTextBox.Text

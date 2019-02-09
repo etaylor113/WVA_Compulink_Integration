@@ -72,6 +72,8 @@ namespace WVA_Compulink_Integration.Error
                     writer.WriteLine($"(ERROR.TIME_ENCOUNTERED: {time})");
                     writer.WriteLine($"(ERROR.MESSAGE: {exception.Message})");
                     writer.WriteLine($"(ERROR.INNER_EXCEPTION: {exception.InnerException})");
+                    writer.WriteLine($"(ERROR.DATA: {exception.Data})");
+                    writer.WriteLine($"(ERROR.HELP_LINK: {exception.HelpLink})");
                     writer.WriteLine($"(ERROR.SOURCE: {exception.Source})");
                     writer.WriteLine("");
                     writer.WriteLine("-----------------------------------------------------------------------------------");
