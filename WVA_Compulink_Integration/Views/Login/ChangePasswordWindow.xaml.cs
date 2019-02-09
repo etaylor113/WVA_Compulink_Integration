@@ -66,8 +66,7 @@ namespace WVA_Compulink_Integration.Views.Login
 
         private Response ChangePassword()
         {
-            string dsn = DSN;
-            string endpoint = $"http://localhost:56075/api/user/changePass/";
+            string endpoint = $"http://{DSN}/api/user/changePass";
 
             User changePassUser = new User()
             {

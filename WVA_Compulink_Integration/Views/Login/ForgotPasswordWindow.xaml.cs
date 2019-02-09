@@ -100,7 +100,8 @@ namespace WVA_Compulink_Integration.Views.Login
                 }
 
                 // Send the email               
-                string endpoint = "https://orders-qa.wisvis.com/mailers/reset";
+                string endpoint = $"http://{DSN}/api/user/reset-email";
+
                 EmailValidationSend emailValidation = new EmailValidationSend()
                 {
                     Email = email,
@@ -108,6 +109,7 @@ namespace WVA_Compulink_Integration.Views.Login
                 };
 
                 string strResponse = API.Post(endpoint, emailValidation);
+
                 Response response = JsonConvert.DeserializeObject<Response>(strResponse);
 
                 if (response.Status == "FAIL")
@@ -134,7 +136,7 @@ namespace WVA_Compulink_Integration.Views.Login
                 }
 
 
-                string endpoint = "https://orders-qa.wisvis.com/mailers/reset_check";
+                string endpoint = $"http://{DSN}/api/user/reset-email-check";
                 EmailValidationCode emailValidation = new EmailValidationCode()
                 {
                     EmailCode = CodeTextBox.Text.Trim(),
