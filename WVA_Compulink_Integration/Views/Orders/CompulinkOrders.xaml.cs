@@ -122,7 +122,18 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 foreach (Prescription prescription in products)
                 {
-                    Memory.Orders.CompulinkOrders.Add(prescription);
+                    var presc = prescription;
+
+                    // Clean up Compulink data
+                    presc.BaseCurve = prescription.BaseCurve.Trim().Replace(" ", "");
+                    presc.Diameter = prescription.Diameter.Trim().Replace(" ", "");
+                    presc.Add = prescription.Add.Trim().Replace(" ", "");
+                    presc.Axis = prescription.Axis.Trim().Replace(" ", "");
+                    presc.Multifocal = prescription.Multifocal.Trim().Replace(" ", "");
+                    presc.Sphere = prescription.Sphere.Trim().Replace(" ", "");
+                    presc.Cylinder = prescription.Cylinder.Trim().Replace(" ", "");
+
+                    Memory.Orders.CompulinkOrders.Add(presc);
                 }
 
                 listPrescriptions.AddRange(Memory.Orders.CompulinkOrders);
