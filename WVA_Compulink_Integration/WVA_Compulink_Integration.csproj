@@ -275,15 +275,6 @@
     <None Include="Misc\App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\icons8-Minimize Window-64.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\icons8-Multiply-64.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\icons8-Aspect Ratio-64.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\icons8-Reset-64.png" />
   </ItemGroup>
   <ItemGroup>
@@ -291,9 +282,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\QuestionImg.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Delete.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\logo-plain-vector-72-48x48.jpg" />
@@ -310,15 +298,6 @@
   <ItemGroup>
     <Resource Include="Resources\icons8-ask-question-48.png" />
     <Resource Include="Resources\icons8-help-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\YellowBubble.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\RedBubble.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\GreenBubble.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons8-available-updates-48.png" />
