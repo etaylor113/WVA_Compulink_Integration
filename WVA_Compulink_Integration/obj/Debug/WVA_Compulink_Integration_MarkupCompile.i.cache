@@ -16,5 +16,5 @@ C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integ
 16860080095
 Views\Error\ErrorWindow.xaml;Views\HelpView.xaml;Views\Login\ChangePasswordWindow.xaml;Views\Login\ForgotPasswordWindow.xaml;Views\Login\IpConfigWindow.xaml;Views\Login\LoginWindow.xaml;Views\MainWindow.xaml;Views\MessageWindow.xaml;Views\OrdersView.xaml;Views\AddToOrderView.xaml;Views\Orders\CompulinkOrders.xaml;Views\Orders\OrderCreationView.xaml;Views\Orders\WVAOrders.xaml;Views\Registration\RegistrationWindow.xaml;Views\ResourceDict\Styles.xaml;Views\LoadingWindow.xaml;Views\SettingsView.xaml;
 
-False
+True
 

@@ -139,11 +139,14 @@
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                 <GradientStop Color="#FF327EC3" Offset="1"/>
-                <GradientStop Color="White"/>
-                <GradientStop Color="#FF98BEE1" Offset="0.473"/>
+                <GradientStop Color="White" Offset="0.246"/>
+                <GradientStop Color="#FF98BEE1" Offset="0.724"/>
             </LinearGradientBrush>
         </Grid.Background>
 
+        <Image Source="/Resources/WVA_Scan_Banner.PNG"
+               Margin="0,0,0,0"
+               VerticalAlignment="Top"/>
 
         <StackPanel HorizontalAlignment="Center"
                    VerticalAlignment="Center">
