@@ -27,14 +27,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_FCC812708B520363895A891BC228BD8B"
-        "OwnerKey" = "8:_0EA7FFEC2E034B32808FB78F6CE2FA84"
+        "MsmKey" = "8:_E334F4C1A074402596F859165C649393"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FCC812708B520363895A891BC228BD8B"
+        "MsmKey" = "8:_FCC812708B520363895A891BC228BD8B"
+        "OwnerKey" = "8:_0EA7FFEC2E034B32808FB78F6CE2FA84"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -47,6 +47,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_E045D2F79A3ABD6B8D6602A0ABC53161"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_FCC812708B520363895A891BC228BD8B"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -67,6 +73,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -83,6 +105,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -141,6 +171,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E334F4C1A074402596F859165C649393"
+            {
+            "SourcePath" = "8:..\\WVA_Compulink_Integration\\Resources\\logo_plain_vector_72_48x48_C1K_icon.ico"
+            "TargetName" = "8:logo_plain_vector_72_48x48_C1K_icon.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_9B1D675E53F14BD1854D1C9CDA58B1D7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FCC812708B520363895A891BC228BD8B"
@@ -214,6 +264,72 @@
                 {
                 }
             }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_C17ED195C98248E5BDC23A5816FC2999"
+            {
+            "Name" = "8:#1915"
+            "AlwaysCreate" = "11:TRUE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:AppDataFolder"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_39174782BD8D4C9D9EC410C3763E29E2"
+                    {
+                    "Name" = "8:WVA_Compulink_Integration"
+                    "AlwaysCreate" = "11:TRUE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_7AA4117072CC49159150C80498BB64D8"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_22C4CC757B314D2C88B17E2B384A83B7"
+                            {
+                            "Name" = "8:IpConfig"
+                            "AlwaysCreate" = "11:TRUE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_F396BA56C3834262886052827D8BBE8C"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_3FEB2C9DBA6E41F989162784EAB907D4"
+                            {
+                            "Name" = "8:ApiKey"
+                            "AlwaysCreate" = "11:TRUE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_073A92EF978E4A89BE74533356C24396"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_6BBFEB953C3B4DCAA81EBCE073D9BE10"
+                            {
+                            "Name" = "8:ErrorLog"
+                            "AlwaysCreate" = "11:TRUE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_6017415DC4DE417FB4580F1B03D32213"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_A895BE0DE9A245D7A4BD56C815197D9A"
+                            {
+                            "Name" = "8:ActNum"
+                            "AlwaysCreate" = "11:TRUE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_CD8A69898B184BAAA6BA8A98B37BF5D6"
+                                "Folders"
+                                {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         "LaunchCondition"
         {
@@ -231,7 +347,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Setup"
         "ProductCode" = "8:{3A5F5575-120E-46C7-8885-21EA63E80DA7}"
-        "PackageCode" = "8:{71CD997B-2D6C-455C-9B90-846D57B1AB64}"
+        "PackageCode" = "8:{AAB9C631-1BD2-4B20-8974-4E7F9A8AE6E8}"
         "UpgradeCode" = "8:{9255E3D3-4758-49B1-95F4-64D34EDDF363}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -239,16 +355,16 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:Wisconsin Vision Associates"
+        "Manufacturer" = "8:WVA_Compulink_Integration"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:Setup"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Wisconsin Vision Associates"
-        "Keywords" = "8:"
+        "Keywords" = "8:WVA Compulink Integration"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:https://wisvis.com"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_E334F4C1A074402596F859165C649393"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -362,7 +478,7 @@
             "Target" = "8:_0EA7FFEC2E034B32808FB78F6CE2FA84"
             "Folder" = "8:_05A96C46808D446698CA6615193DAD1D"
             "WorkingFolder" = "8:_9B1D675E53F14BD1854D1C9CDA58B1D7"
-            "Icon" = "8:"
+            "Icon" = "8:_E334F4C1A074402596F859165C649393"
             "Feature" = "8:"
             }
         }

@@ -13,7 +13,7 @@
         MinHeight="550" 
         WindowStartupLocation="CenterScreen" 
         ResizeMode="CanResize" 
-        Icon="/WVA_Compulink_Integration;component/Resources/logo-plain-vector-72-48x48.jpg"
+        Icon="/WVA_Compulink_Integration;component/Resources/wva_square_logo.jpg"
         Closed="Window_Closed">
 
     <Window.Resources>

@@ -32,11 +32,35 @@ namespace WVA_Compulink_Integration.Views.Login
 
         private void CheckFields()
         {
-            try
-            {
-                string ipNumText = File.ReadAllText(Paths.DSNFile);
-                string apiKeyText = File.ReadAllText(Paths.apiKeyFile);
+            string ipNumText = "";
+            string apiKeyText = "";
 
+            try
+            {              
+                try // Try to read the DSN
+                {
+                    ipNumText = File.ReadAllText(Paths.DSNFile);
+                }
+                catch
+                {
+                    Directory.CreateDirectory(Paths.DSNDir);
+                    var dsnFile = File.Create(Paths.DSNFile);
+                    dsnFile.Close();
+                    ipNumText = File.ReadAllText(Paths.DSNFile);
+                }
+
+                try // Try to read the Api Key
+                {
+                    apiKeyText = File.ReadAllText(Paths.apiKeyFile);
+                }
+                catch
+                {
+                    Directory.CreateDirectory(Paths.apiKeyDir);
+                    var apiKeyFile = File.Create(Paths.apiKeyFile);
+                    apiKeyFile.Close();
+                    apiKeyText = File.ReadAllText(Paths.apiKeyFile);
+                }
+                               
                 if (ipNumText.Trim() != "" && apiKeyText.Trim() != "")
                 {
                     LoginWindow loginWindow = new LoginWindow();

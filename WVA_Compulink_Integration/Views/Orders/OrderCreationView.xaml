@@ -467,7 +467,7 @@
                     Grid.Row="2"
                     Maximum="100"
                     Minimum="0"
-                    Value="70"
+                    Value="60"
                     TabIndex="3"
                     VerticalAlignment="Top" 
                     Width="158"
