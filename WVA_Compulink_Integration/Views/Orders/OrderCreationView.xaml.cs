@@ -373,7 +373,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch
+                    catch (Exception x)
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -399,7 +399,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch
+                    catch (Exception x)
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -425,7 +425,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch
+                    catch (Exception x)
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -451,7 +451,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch
+                    catch (Exception x)
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -477,7 +477,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch
+                    catch (Exception x)
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -503,7 +503,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch
+                    catch (Exception x)
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -531,7 +531,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             throw new Exception("No Valid Items");
                         }
                     }
-                    catch
+                    catch (Exception x)
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -557,7 +557,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch
+                    catch (Exception x)
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);

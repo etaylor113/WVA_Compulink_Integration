@@ -149,7 +149,7 @@
 
         <StackPanel VerticalAlignment="Center" 
                     HorizontalAlignment="Center"
-                    Margin="0,50,0,0">
+                    Margin="0,20,0,0">
 
             <Label  Content="Username" 
                 HorizontalAlignment="Left" 
@@ -195,7 +195,7 @@
             <Button x:Name="LoginButton" 
                    Content="Login" 
                    HorizontalAlignment="Center" 
-                   Margin="0,5,0,0"
+                   Margin="0,10,0,0"
                    VerticalAlignment="Top"
                    Width="94"
                    FontSize="22"
@@ -203,8 +203,20 @@
                    TabIndex="3" 
                    Click="LoginButton_Click"
                    Panel.ZIndex="1"/>
+          
         </StackPanel>
-       
+
+        <TextBlock x:Name="NotifyLabel" 
+                       Text="" 
+                       HorizontalAlignment="Center"
+                       Margin="0,30,0,0" 
+                       VerticalAlignment="Bottom" 
+                       FontSize="15" 
+                       MaxWidth="260"
+                       Height="65"
+                       TextWrapping="Wrap"
+                       Visibility="Hidden"
+                       Focusable="False"/>
 
         <TextBlock x:Name="CreateAccountLink" 
                    Margin="0,0,5,5"                  
@@ -214,7 +226,7 @@
                    HorizontalAlignment="Right">             
             <Hyperlink Foreground="#FF062B7C" 
                        NavigateUri="http://search.msn.com"> 
-                       Create an account
+                       Create new user
               </Hyperlink>
         </TextBlock>
 
@@ -230,18 +242,6 @@
                          <Run Text="Forgot Password"/>
                    </Hyperlink>
         </TextBlock>
-
-        <TextBlock x:Name="NotifyLabel" 
-               Text="" 
-               HorizontalAlignment="Center"
-               Margin="0,260,0,0" 
-               VerticalAlignment="Top" 
-               FontSize="15" 
-               MaxWidth="260"
-               Height="70"
-               TextWrapping="Wrap"
-               Visibility="Hidden"
-               Focusable="False"/>
 
         <Button Style="{StaticResource ImageButtonStyle}" 
                 Click="CloseButton_Click" 
