@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,6 +42,30 @@ namespace WVA_Compulink_Integration.Views.Orders
             SetUpOrdersDataGrid();
             GetWvaOrders();            
         }
+
+        private string RemoveUnsafeChars(string originalString)
+        {
+            return originalString.Replace("<", "")
+                                 .Replace(">", "")
+                                 .Replace("'", "")
+                                 .Replace("\"", "")
+                                 .Replace("|", "")
+                                 .Replace(";", "")
+                                 .Replace("\\", "")
+                                 .Replace("~", "")
+                                 .Replace("{", "")
+                                 .Replace("}", "")
+                                 .Replace("[", "")
+                                 .Replace("]", "")
+                                 .Replace("%", "")
+                                 .Replace("*", "")
+                                 .Replace("=", "")
+                                 .Replace("^", "")
+                                 .Replace("$", "")
+                                 .Replace("+", "")
+                                 .Replace("?", "")
+                                 .Replace("&", "");            
+        }
       
         // Get wva orders for this user 
         private void GetWvaOrders()
@@ -48,8 +73,8 @@ namespace WVA_Compulink_Integration.Views.Orders
             try
             {
                 // Autofill new order display
-                WvaOrdersComboBox.Text = $"WVA Order {DateTime.Now.ToString("MM/dd/yy--HH:mm:ss")}";
-
+                WvaOrdersComboBox.Text = RemoveUnsafeChars($"[{UserData._User.UserName}]s order {DateTime.Now.ToString("MM/dd/yy--HH:mm:ss")}");
+                                        
                 // Get this account's open wva orders
                 string dsn = UserData._User.DSN;    
                 string endpoint = $"http://{dsn}/api/order/get-names/" + UserData._User?.Account;
@@ -265,7 +290,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     {
                         if (window.GetType() == typeof(MainWindow))
                         {
-                            (window as MainWindow).MainContentControl.DataContext = new OrdersView(listPrescriptions, WvaOrdersComboBox.Text,  "OrderCreation");                    
+                            (window as MainWindow).MainContentControl.DataContext = new OrdersView(listPrescriptions, RemoveUnsafeChars(WvaOrdersComboBox.Text),  "OrderCreation");                    
                             return;
                         }
                     }

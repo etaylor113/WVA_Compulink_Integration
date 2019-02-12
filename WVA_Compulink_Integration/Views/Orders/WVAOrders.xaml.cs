@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,30 +46,34 @@ namespace WVA_Compulink_Integration.Views.Orders
         private void SetUp()
         {
             IsVisibleChanged += new DependencyPropertyChangedEventHandler(LoginControl_IsVisibleChanged);
-            SetUpListOrders();
+            SetUpOrdersDataGrid();
         }
 
         private void SearchOrders(string searchString)
         {
+            List<Order> tempList = new List<Order>();
+
             try
             {
-                List<Order> tempList = ListOrders.Where(x => x.OrderName.ToLower().Contains(searchString.ToLower())).ToList();
+                
+                
+                tempList = ListOrders.Where(x => x.OrderName.ToLower().Contains(searchString.ToLower())).ToList();
 
-                OrdersListBox.Items.Clear();
+
+
+                WvaOrdersDataGrid.Items.Clear();
                 foreach (Order order in tempList)
                 {
-                    OrdersListBox.Items.Add(order.OrderName);
+                    WvaOrdersDataGrid.Items.Add(order.OrderName);
                 }
             }
             catch { }
         }
 
-        // Asyncronously return this account's orders from the server 
+        //  Return this account's orders from the server 
         private List<Order> GetWVAOrders()
         {
             string dsn = UserData._User.DSN;
-            //string endpoint = " http://10.1.4.66:44354/api/get-orders/44";
-            //string endpoint = $"http://localhost:44354/api/get-orders/44";
             string endpoint = $"http://{dsn}/api/order/get-orders/" + $"{UserData._User.Account}";
             string strOrders = API.Get(endpoint, out string httpStatus);
 
@@ -78,22 +83,31 @@ namespace WVA_Compulink_Integration.Views.Orders
             return JsonConvert.DeserializeObject<List<Order>>(strOrders);          
         }
 
-        private  void SetUpListOrders()
+        private void SetUpOrdersDataGrid()
         {
             try
             {
                 ListOrders = GetWVAOrders();
-                OrdersListBox.Items.Clear();
+                WvaOrdersDataGrid.Items.Clear();
 
                 foreach (Order order in ListOrders)
                 {
-                    OrdersListBox.Items.Add($"{order.OrderName}");
+                    WvaOrdersDataGrid.Items.Add(order);
                 }          
             }
             catch (Exception x)
             {
                 AppError.PrintToLog(x);
             }
+        }
+
+        private Order GetSelectedOrder()
+        {
+            // Get selected order
+            IList rows = WvaOrdersDataGrid.SelectedItems;
+            Order order = (Order)rows[0];
+
+            return order;
         }
 
         // Allow SearchTextBox to get focus
@@ -113,7 +127,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Search Text Box
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            SearchOrders(SearchTextBox.Text);
+            //SearchOrders(SearchTextBox.Text);
         }
 
         // Refresh Button
@@ -130,14 +144,14 @@ namespace WVA_Compulink_Integration.Views.Orders
             RefreshImage.Source = new BitmapImage(new Uri(@"/Resources/icons8-available-updates-filled-48.png", UriKind.Relative));
         }
 
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        private async void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             // Spawn a loading window and change cursor to waiting cursor
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.Show();
             Mouse.OverrideCursor = Cursors.Wait;
 
-            SetUpListOrders();
+            await Task.Run(() => SetUpOrdersDataGrid());
 
             // Close loading window and change cursor back to default arrow cursor
             loadingWindow.Close();
@@ -147,19 +161,17 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Edit Button
         private void EditOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            // Leave method if they don't select an order
-            if (!(OrdersListBox.SelectedItem is string selectedOrder))
-                return;
+            Order order = GetSelectedOrder();
 
-            Order order = OrderCreationViewModel.GetOrder(selectedOrder);
-                      
-            List<Prescription> listPrescriptions = new List<Prescription>();
+            // Leave method if they don't select an order
+            if (order == null)
+                return;
 
             foreach (Window window in Application.Current.Windows)
             {
                 if (window.GetType() == typeof(MainWindow))
                 {
-                    (window as MainWindow).MainContentControl.DataContext = new OrdersView(listPrescriptions, OrdersListBox.SelectedItem as string, "OrderCreation");
+                    (window as MainWindow).MainContentControl.DataContext = new OrdersView(new List<Prescription>(), order.OrderName, "OrderCreation");
                     return;
                 }
             }
@@ -168,15 +180,17 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Delete Button
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
         {
+            Order order = GetSelectedOrder();
+
             // Leave method if they don't select an order
-            if (!(OrdersListBox.SelectedItem is string selectedOrder))
+            if (order == null)
                 return;
 
-            Response response = OrderCreationViewModel.DeleteOrder(selectedOrder);
+            Response response = OrderCreationViewModel.DeleteOrder(order.OrderName);
 
             if (response.Status == "SUCCESS")
             {
-                SetUpListOrders();
+                SetUpOrdersDataGrid();
                 MessageWindow messageWindow = new MessageWindow("\t\tOrder deleted!");
                 messageWindow.Show();
             }

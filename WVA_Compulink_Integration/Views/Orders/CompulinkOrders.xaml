@@ -234,6 +234,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Binding="{Binding Path=Patient}"    Width="*"   Header="Patient"     MinWidth="110"/>
+                <DataGridTextColumn Binding="{Binding Path=Date}"       Width="*"   Header="Date"        MinWidth="60"/>
                 <DataGridTextColumn Binding="{Binding Path=Product}"    Width="*"   Header="Product"     MinWidth="100"/>
                 <DataGridTextColumn Binding="{Binding Path=Eye}"        Width="*"   Header="Eye"         MaxWidth="40" />
                 <DataGridTextColumn Binding="{Binding Path=Quantity}"   Width="*"   Header="Qty"         MinWidth="40" MaxWidth="40" />
