@@ -26,6 +26,7 @@ using System.IO;
 using WVA_Compulink_Integration.Utility.File;
 using WVA_Compulink_Integration.Models.Patient;
 using System.Diagnostics;
+using WVA_Compulink_Integration.Models.Response;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
@@ -213,7 +214,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             OrderNameTextBox.Text = "";
             AccountIDTextBox.Text = "";
             OrderedByTextBox.Text = "";
-            OfficeNameTextBox.Text = "";
+            //OfficeNameTextBox.Text = "";
             PoNumberTextBox.Text = "";
 
             // Clear left column
@@ -303,7 +304,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             OrderNameTextBox.Text = OrderCreationViewModel.Order.OrderName ?? "";
             AccountIDTextBox.Text = UserData._User?.Account;
             OrderedByTextBox.Text = OrderCreationViewModel.Order.OrderedBy ?? "";
-            OfficeNameTextBox.Text = OrderCreationViewModel.Order.OfficeName ?? "";
+            //OfficeNameTextBox.Text = OrderCreationViewModel.Order.OfficeName ?? "";
             PoNumberTextBox.Text = OrderCreationViewModel.Order.PoNumber ?? "";
             ShippingTypeComboBox.Text = OrderCreationViewModel.Order.ShippingMethod ?? "";
 
@@ -877,7 +878,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 order.OrderName         =   OrderNameTextBox.Text;
                 order.CustomerID        =   AccountIDTextBox.Text;
                 order.OrderedBy         =   OrderedByTextBox.Text;
-                order.OfficeName        =   OfficeNameTextBox.Text;
+                //order.OfficeName        =   OfficeNameTextBox.Text;
                 order.PoNumber          =   PoNumberTextBox.Text;
                 order.ShippingMethod    =   ShippingTypeComboBox.Text;
 
@@ -902,7 +903,8 @@ namespace WVA_Compulink_Integration.Views.Orders
                     Prescription prescription = (Prescription)rows[i];
 
                     order.Items.Add(new Item()
-                    {                   
+                    {       
+                        ID              =   Guid.NewGuid().ToString().Replace("-", ""),
                         FirstName       =   prescription.FirstName,
                         LastName        =   prescription.LastName,
                         PatientID       =   prescription._CustomerID?.Value,
@@ -997,8 +999,8 @@ namespace WVA_Compulink_Integration.Views.Orders
                     return;
                 }
                 
-               Response response = OrderCreationViewModel.CreateOrder(outOrderWrapper);
-                            
+               OrderResponse response = OrderCreationViewModel.CreateOrder(outOrderWrapper);
+                                       
                 if (response == null)
                     throw new Exception("Null response from api on order creation.");
 
@@ -1006,7 +1008,14 @@ namespace WVA_Compulink_Integration.Views.Orders
                 if (response.Status == "SUCCESS")
                 {
                     ClearView();
-                    MessageWindow messageWindow = new MessageWindow("\t\tOrder created!");
+
+                    string message = "";
+                    if (response?.Data?.Wva_order_id != null)
+                        message = $"Order created! WVA Order ID:{response.Data.Wva_order_id}";
+                    else
+                        message = "\t\tOrder created!";
+
+                    MessageWindow messageWindow = new MessageWindow(message);
                     messageWindow.Show();
                 }
                 else

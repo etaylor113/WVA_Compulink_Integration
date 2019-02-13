@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 
 namespace WVA_Compulink_Integration.Models.Response
 {
-    class Response
+    class ResponseData
     {
-        [JsonProperty("status")]
-        public string Status { get; set; }
+        [JsonProperty("order")]
+        public OrderErrors OrderErrors { get; set; } 
 
-        [JsonProperty("message")]
-        public string Message { get; set; }
-
+        public string Wva_order_id { get; set; }
     }
 }

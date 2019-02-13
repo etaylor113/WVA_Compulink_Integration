@@ -237,13 +237,13 @@
                 <DataGridTextColumn Binding="{Binding Path=Date}"       Width="*"   Header="Date"        MinWidth="60"/>
                 <DataGridTextColumn Binding="{Binding Path=Product}"    Width="*"   Header="Product"     MinWidth="100"/>
                 <DataGridTextColumn Binding="{Binding Path=Eye}"        Width="*"   Header="Eye"         MaxWidth="40" />
-                <DataGridTextColumn Binding="{Binding Path=Quantity}"   Width="*"   Header="Qty"         MinWidth="40" MaxWidth="40" />
-                <DataGridTextColumn Binding="{Binding Path=BaseCurve}"  Width="*"   Header="Base Curve"  MinWidth="70" MaxWidth="70" />
-                <DataGridTextColumn Binding="{Binding Path=Diameter}"   Width="*"   Header="Diameter"    MinWidth="65" MaxWidth="65" />
+                <DataGridTextColumn Binding="{Binding Path=Quantity}"   Width="*"   Header="Qty"         MinWidth="40" />
+                <DataGridTextColumn Binding="{Binding Path=BaseCurve}"  Width="*"   Header="Base Curve"  MinWidth="70" />
+                <DataGridTextColumn Binding="{Binding Path=Diameter}"   Width="*"   Header="Diameter"    MinWidth="60" />
                 <DataGridTextColumn Binding="{Binding Path=Sphere}"     Width="*"   Header="Sphere"/>
-                <DataGridTextColumn Binding="{Binding Path=Cylinder}"   Width="*"   Header="Cylinder"/>
-                <DataGridTextColumn Binding="{Binding Path=Axis}"       Width="*"   Header="Axis"/>
-                <DataGridTextColumn Binding="{Binding Path=Add}"        Width="*"   Header="Add"/>
+                <DataGridTextColumn Binding="{Binding Path=Cylinder}"   Width="*"   Header="Cylinder"    MinWidth="55"/>
+                <DataGridTextColumn Binding="{Binding Path=Axis}"       Width="*"   Header="Axis"        MinWidth="35"/>
+                <DataGridTextColumn Binding="{Binding Path=Add}"        Width="*"   Header="Add"         MinWidth="35"/>
                 <DataGridTextColumn Binding="{Binding Path=Color}"      Width="*"   Header="Color"/>
                 <DataGridTextColumn Binding="{Binding Path=Multifocal}" Width="*"   Header="Multifocal"  MinWidth="70" />
             </DataGrid.Columns>

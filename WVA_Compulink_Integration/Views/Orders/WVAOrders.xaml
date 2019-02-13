@@ -146,7 +146,7 @@
 
         <Grid Grid.Column="1"
               Grid.Row="0"
-              VerticalAlignment="Center"
+              VerticalAlignment="Bottom"
               HorizontalAlignment="Stretch"                 
               Margin="0,0,0,0">
 
@@ -168,10 +168,16 @@
             <ComboBox Name="SearchFilterComboBox"
                       HorizontalAlignment="Stretch"
                       Height="35"
+                      VerticalContentAlignment="Center"
+                      FontSize="16"
                       Margin="0,0,10,0"
-                      Grid.Column="1">
+                      Grid.Column="1"
+                      SelectedIndex="0">
                 <ComboBoxItem>
                     WVA Store ID
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    Order Name
                 </ComboBoxItem>
                 <ComboBoxItem>
                     Created Date
@@ -184,9 +190,6 @@
                 </ComboBoxItem>
                 <ComboBoxItem>
                     Ordered By
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    Qty
                 </ComboBoxItem>
                 <ComboBoxItem>
                     Status
@@ -244,9 +247,10 @@
                   HeadersVisibility="Column">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=WvaStoreID}"     Width="*"   Header="WVA Store ID" />
-                <DataGridTextColumn Binding="{Binding Path=CreatedDate}"    Width="*"   Header="Created Date" />
-                <DataGridTextColumn Binding="{Binding Path=ShipToPatient}"  Width="*"   Header="Ship To Patient" />
+                <DataGridTextColumn Binding="{Binding Path=WvaStoreID}"     Width="85"   Header="WVA Store ID" />
+                <DataGridTextColumn Binding="{Binding Path=OrderName}"      Width="*"   Header="Order Name" MinWidth="180"/>
+                <DataGridTextColumn Binding="{Binding Path=CreatedDate}"    Width="*"   Header="Created Date" MinWidth="120"/>
+                <DataGridTextColumn Binding="{Binding Path=ShipToPatient}"  Width="35"  Header="STP" />
                 <DataGridTextColumn Binding="{Binding Path=PoNumber}"       Width="*"   Header="PO Number" />
                 <DataGridTextColumn Binding="{Binding Path=OrderedBy}"      Width="*"   Header="Ordered By" />
                 <DataGridTextColumn Binding="{Binding Path=NumberItems}"    Width="*"   Header="Qty" />

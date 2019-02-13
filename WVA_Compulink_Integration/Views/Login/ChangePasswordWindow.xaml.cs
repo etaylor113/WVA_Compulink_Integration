@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Memory;
-using WVA_Compulink_Integration.Models;
+using WVA_Compulink_Integration.Models.Response;
 using WVA_Compulink_Integration.Models.User;
 using WVA_Compulink_Integration.Utility.File;
 

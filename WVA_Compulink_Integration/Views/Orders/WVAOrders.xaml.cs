@@ -18,10 +18,9 @@ using System.Windows.Threading;
 using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Memory;
-using WVA_Compulink_Integration.Models;
 using WVA_Compulink_Integration.Models.Order.Out;
-using WVA_Compulink_Integration.Models.Patient;
 using WVA_Compulink_Integration.Models.Prescription;
+using WVA_Compulink_Integration.Models.Response;
 using WVA_Compulink_Integration.ViewModels.Orders;
 using WVA_Compulink_Integration.Views.Search;
 
@@ -55,16 +54,35 @@ namespace WVA_Compulink_Integration.Views.Orders
 
             try
             {
+                switch (SearchFilterComboBox.SelectedIndex)
+                {
+                    case 0:
+                        tempList = ListOrders.Where(x => x.WvaStoreID.ToLower().Contains(searchString.ToLower())).ToList();
+                        break;
+                    case 1:
+                        tempList = ListOrders.Where(x => x.OrderName.ToLower().Contains(searchString.ToLower())).ToList();
+                        break;
+                    case 2:
+                        tempList = ListOrders.Where(x => x.CreatedDate.ToLower().Contains(searchString.ToLower())).ToList();
+                        break;
+                    case 3:
+                        tempList = ListOrders.Where(x => x.ShipToPatient.ToLower().Contains(searchString.ToLower())).ToList();
+                        break;
+                    case 4:
+                        tempList = ListOrders.Where(x => x.PoNumber.ToLower().Contains(searchString.ToLower())).ToList();
+                        break;
+                    case 5:
+                        tempList = ListOrders.Where(x => x.OrderedBy.ToLower().Contains(searchString.ToLower())).ToList();
+                        break;
+                    case 6:
+                        tempList = ListOrders.Where(x => x.Status.ToLower().Contains(searchString.ToLower())).ToList();
+                        break;
+                }
                 
-                
-                tempList = ListOrders.Where(x => x.OrderName.ToLower().Contains(searchString.ToLower())).ToList();
-
-
-
                 WvaOrdersDataGrid.Items.Clear();
                 foreach (Order order in tempList)
                 {
-                    WvaOrdersDataGrid.Items.Add(order.OrderName);
+                    WvaOrdersDataGrid.Items.Add(order);
                 }
             }
             catch { }
@@ -73,14 +91,21 @@ namespace WVA_Compulink_Integration.Views.Orders
         //  Return this account's orders from the server 
         private List<Order> GetWVAOrders()
         {
-            string dsn = UserData._User.DSN;
-            string endpoint = $"http://{dsn}/api/order/get-orders/" + $"{UserData._User.Account}";
-            string strOrders = API.Get(endpoint, out string httpStatus);
+            try
+            {
+                string dsn = UserData._User.DSN;
+                string endpoint = $"http://{dsn}/api/order/get-orders/" + $"{UserData._User.Account}";
+                string strOrders = API.Get(endpoint, out string httpStatus);
 
-            if (strOrders == null)
-                throw new NullReferenceException();
+                if (strOrders == null)
+                    throw new NullReferenceException();
 
-            return JsonConvert.DeserializeObject<List<Order>>(strOrders);          
+                return JsonConvert.DeserializeObject<List<Order>>(strOrders);
+            }
+            catch 
+            {
+                return null;
+            }                 
         }
 
         private void SetUpOrdersDataGrid()
@@ -88,6 +113,10 @@ namespace WVA_Compulink_Integration.Views.Orders
             try
             {
                 ListOrders = GetWVAOrders();
+
+                if (ListOrders == null)
+                    return;
+
                 WvaOrdersDataGrid.Items.Clear();
 
                 foreach (Order order in ListOrders)
@@ -101,13 +130,21 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
         }
 
-        private Order GetSelectedOrder()
+        private List<Order> GetSelectedOrders()
         {
             // Get selected order
+            List<Order> listOrders = new List<Order>();
             IList rows = WvaOrdersDataGrid.SelectedItems;
-            Order order = (Order)rows[0];
 
-            return order;
+
+            // Leave if no items selected
+            if (rows.Count == 0)
+                return null;
+
+            for (int i = 0; i < rows.Count; i++)
+                listOrders.Add((Order)rows[i]);
+           
+            return listOrders;
         }
 
         // Allow SearchTextBox to get focus
@@ -127,7 +164,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Search Text Box
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //SearchOrders(SearchTextBox.Text);
+            SearchOrders(SearchTextBox.Text);
         }
 
         // Refresh Button
@@ -161,43 +198,43 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Edit Button
         private void EditOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            Order order = GetSelectedOrder();
+            List<Order> order = GetSelectedOrders();
 
-            // Leave method if they don't select an order
-            if (order == null)
+            // Leave method if they don't select an order or if order has already been submitted
+            if (order == null || order[0].Status.ToLower() == "submitted")
                 return;
 
             foreach (Window window in Application.Current.Windows)
             {
                 if (window.GetType() == typeof(MainWindow))
-                {
-                    (window as MainWindow).MainContentControl.DataContext = new OrdersView(new List<Prescription>(), order.OrderName, "OrderCreation");
-                    return;
-                }
+                    (window as MainWindow).MainContentControl.DataContext = new OrdersView(new List<Prescription>(), order[0].OrderName, "OrderCreation");
             }
         }
 
         // Delete Button
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            Order order = GetSelectedOrder();
+            List<Order> listOrders = GetSelectedOrders();
 
             // Leave method if they don't select an order
-            if (order == null)
+            if (listOrders == null)
                 return;
 
-            Response response = OrderCreationViewModel.DeleteOrder(order.OrderName);
+            foreach (var order in listOrders)
+            {
+                Response response = OrderCreationViewModel.DeleteOrder(order.OrderName);
 
-            if (response.Status == "SUCCESS")
-            {
-                SetUpOrdersDataGrid();
-                MessageWindow messageWindow = new MessageWindow("\t\tOrder deleted!");
-                messageWindow.Show();
+                //if (response.Status == "SUCCESS")
+                //{                    
+                //    MessageWindow messageWindow = new MessageWindow("\t\tOrder deleted!");
+                //    messageWindow.Show();
+                //}
+                //else
+                //{
+                //    MessageBox.Show("An error has occurred. Order not deleted.", "", MessageBoxButton.OK);
+                //}               
             }
-            else
-            {
-                MessageBox.Show("An error has occurred. Order not deleted.", "", MessageBoxButton.OK);
-            }
+            SetUpOrdersDataGrid();
         }
       
     }

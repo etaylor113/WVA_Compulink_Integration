@@ -109,6 +109,9 @@
     <Compile Include="Models\ProductParameters\Parent\Parameter.cs" />
     <Compile Include="Memory\List_WVA_Products.cs" />
     <Compile Include="Models\Request\Out_Request.cs" />
+    <Compile Include="Models\Response\OrderErrors.cs" />
+    <Compile Include="Models\Response\OrderResponse.cs" />
+    <Compile Include="Models\Response\ResponseData.cs" />
     <Compile Include="Models\Validations\Emails\EmailValidationCode.cs" />
     <Compile Include="Models\Validations\Emails\EmailValidationSend.cs" />
     <Compile Include="Models\Validations\ProductValidation.cs" />

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Memory;
-using WVA_Compulink_Integration.Models;
+using WVA_Compulink_Integration.Models.Response;
 using WVA_Compulink_Integration.Models.Order.Out;
 using WVA_Compulink_Integration.Models.Patient;
 using WVA_Compulink_Integration.Models.Prescription;
@@ -54,32 +54,32 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
             return order;
         }
 
-        public static Response CreateOrder(OutOrderWrapper outOrderWrapper)
+        public static OrderResponse CreateOrder(OutOrderWrapper outOrderWrapper)
         {
             string dsn = UserData._User.DSN;
             string endpoint = $"http://{dsn}/api/order/submit/";
             string strResponse = API.Post(endpoint, outOrderWrapper);
-            Response response = JsonConvert.DeserializeObject<Response>(strResponse);
+            OrderResponse response = JsonConvert.DeserializeObject<OrderResponse>(strResponse);
 
             return response;
         }
 
-        public static Response DeleteOrder(string orderName)
+        public static OrderResponse DeleteOrder(string orderName)
         {
             string dsn = UserData._User.DSN;
             string endpoint = $"http://{dsn}/api/order/delete/";
             string strResponse = API.Post(endpoint, orderName);
-            Response response = JsonConvert.DeserializeObject<Response>(strResponse);
+            OrderResponse response = JsonConvert.DeserializeObject<OrderResponse>(strResponse);
 
             return response;
         }
 
-        public static Response SaveOrder(OutOrderWrapper outOrderWrapper)
+        public static OrderResponse SaveOrder(OutOrderWrapper outOrderWrapper)
         {
             string dsn = UserData._User.DSN;
             string endpoint = $"http://{dsn}/api/order/save/";
             string strResponse = API.Post(endpoint, outOrderWrapper);
-            Response response = JsonConvert.DeserializeObject<Response>(strResponse);
+            OrderResponse response = JsonConvert.DeserializeObject<OrderResponse>(strResponse);
 
             return response;
         }

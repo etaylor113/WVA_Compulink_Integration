@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Memory;
-using WVA_Compulink_Integration.Models;
+using WVA_Compulink_Integration.Models.Response;
 using WVA_Compulink_Integration.Models.User;
 using WVA_Compulink_Integration.Models.Validations.Emails;
 using WVA_Compulink_Integration.Utility.File;

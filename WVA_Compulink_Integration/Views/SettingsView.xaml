@@ -128,14 +128,14 @@
         <StackPanel HorizontalAlignment="Center"
                     VerticalAlignment="Center">
             
-            <Label Content="Account Number:"
+            <Label Content="WVA Account Number:"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    FontFamily="Sitka Text"
-                   FontSize="30" /> 
+                   FontSize="26" /> 
 
             <TextBox Name="AccountTextBox"
-                     Width="250"
+                     Width="280"
                      Height="35"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
