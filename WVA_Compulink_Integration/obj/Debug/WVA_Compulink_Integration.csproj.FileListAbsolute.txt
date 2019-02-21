@@ -4,6 +4,7 @@ C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integ
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\Newtonsoft.Json.dll
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\Newtonsoft.Json.pdb
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\Newtonsoft.Json.xml
+C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\ResourceDict\Styles.baml
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Error\ErrorWindow.g.cs
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\HelpView.g.cs
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Login\ChangePasswordWindow.g.cs
@@ -39,7 +40,6 @@ C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integ
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\OrderCreationView.baml
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\WVAOrders.baml
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Registration\RegistrationWindow.baml
-C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\ResourceDict\Styles.baml
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\LoadingWindow.baml
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\SettingsView.baml
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration.g.resources

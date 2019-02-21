@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WVA_Compulink_Integration.Models.Product;
 using WVA_Compulink_Integration.ViewModels;
 using WVA_Compulink_Integration.ViewModels.Orders;
 using WVA_Compulink_Integration.Views.Search;
@@ -21,6 +20,8 @@ using WVA_Compulink_Integration.Memory;
 using System.IO;
 using WVA_Compulink_Integration.Utility.File;
 using WVA_Compulink_Integration.Error;
+using WVA_Compulink_Integration.Models.Product;
+using System.Threading;
 
 namespace WVA_Compulink_Integration.Views
 {
@@ -29,37 +30,38 @@ namespace WVA_Compulink_Integration.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bool DidLoad { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
             SetUpApp();          
         }
 
-        private async void SetUpApp()
-        {
-            // Set the main data context to the Compulink orders view if their account number is set
-            if (AccountNumAvailable())
+        private void SetUpApp()
+        {          
+            try
             {
-                MainContentControl.DataContext = new OrdersViewModel();
+                // Set the main data context to the Compulink orders view if their account number is set
+                if (AccountNumAvailable())
+                {
+                    TryLoadOrderView();
+                }                    
+                else
+                {
+                    new MessageWindow("You must set your account number in the settings tab before continuing.").Show();
+                    MainContentControl.DataContext = new SettingsViewModel();
+                }                                                                 
             }
-            else
+            catch (Exception x)
             {
-                MessageWindow messageWindow = new MessageWindow("You must set your account number in the settings tab before continuing.");
-                messageWindow.Show();
-                return;
+               
             }
-            
-            // Spawn a loading window and change cursor to waiting cursor
-            LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.Show();
-            Mouse.OverrideCursor = Cursors.Wait;
-           
-            // Load product list into memory for match algorithm
-            await Task.Run(() => List_WVA_Products.LoadProducts());
+        }
 
-            // Close loading window and change cursor back to default arrow cursor
-            loadingWindow.Close();
-            Mouse.OverrideCursor = Cursors.Arrow;
+        private async void LoadProducts()
+        {
+            DidLoad = List_WVA_Products.LoadProducts();
         }
 
         /// <summary>
@@ -67,11 +69,57 @@ namespace WVA_Compulink_Integration.Views
         /// </summary>
         /// 
 
-        private void SetActNum()
+        private async void TryLoadOrderView()
+        {
+            LoadingWindow loadingWindow = new LoadingWindow();
+
+            try
+            {                
+                // Spawn a loading window and change cursor to waiting cursor               
+                loadingWindow.Show();
+                Mouse.OverrideCursor = Cursors.Wait;
+
+                // Load product list into memory for match algorithm. If products to not load, Notify user.                
+                await Task.Run(() => LoadProducts());
+
+                // Close loading window and change cursor back to default arrow cursor
+                loadingWindow.Close();
+                Mouse.OverrideCursor = Cursors.Arrow;
+
+                // Open a message window and notify user that products didn't load correctly
+                if (!DidLoad)
+                {
+                    new MessageWindow("WVA products not loaded! Please see error log in 'AppData\\Roaming\\WVA Compulink Integration\\ErrorLog' for more details.").Show();
+                    return;
+                }
+                else
+                {
+                    MainContentControl.DataContext = new OrdersViewModel();
+                }
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+                loadingWindow.Close();
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
+        }
+
+        private void SetUserData()
         {
             // Set account number, api key, DSN to Mem user data
             try
             {
+                // Create ActNum file path if not already
+                if (!Directory.Exists(Paths.ActNumDir))
+                    Directory.CreateDirectory(Paths.ActNumDir);
+                                       
+                if (!File.Exists(Paths.ActNumFile))
+                {
+                    var file = File.Create(Paths.ActNumFile);
+                    file.Close();
+                }
+
                 UserData._User.Account = File.ReadAllText(Paths.ActNumFile).Trim();
                 UserData._User.ApiKey  = File.ReadAllText(Paths.apiKeyFile).Trim();
                 UserData._User.DSN     = File.ReadAllText(Paths.DSNFile).Trim();
@@ -86,7 +134,7 @@ namespace WVA_Compulink_Integration.Views
         {
             try
             {
-                SetActNum();
+                SetUserData();
                 if (UserData._User?.Account != null && UserData._User.Account.Trim() != "")
                     return true;
                 else
@@ -102,7 +150,7 @@ namespace WVA_Compulink_Integration.Views
         {
             if (AccountNumAvailable())
             {
-                MainContentControl.DataContext = new OrdersViewModel();
+                TryLoadOrderView();
             }
             else
             {

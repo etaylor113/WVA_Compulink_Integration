@@ -169,7 +169,7 @@
                       HorizontalAlignment="Stretch"
                       Height="35"
                       VerticalContentAlignment="Center"
-                      FontSize="16"
+                      FontSize="18"
                       Margin="0,0,10,0"
                       Grid.Column="1"
                       SelectedIndex="0">
@@ -253,7 +253,7 @@
                 <DataGridTextColumn Binding="{Binding Path=ShipToPatient}"  Width="35"  Header="STP" />
                 <DataGridTextColumn Binding="{Binding Path=PoNumber}"       Width="*"   Header="PO Number" />
                 <DataGridTextColumn Binding="{Binding Path=OrderedBy}"      Width="*"   Header="Ordered By" />
-                <DataGridTextColumn Binding="{Binding Path=NumberItems}"    Width="*"   Header="Qty" />
+                <DataGridTextColumn Binding="{Binding Path=Quantity}"       Width="*"   Header="Qty" />
                 <DataGridTextColumn Binding="{Binding Path=Status}"         Width="*"   Header="Status" />
             </DataGrid.Columns>
         </DataGrid>

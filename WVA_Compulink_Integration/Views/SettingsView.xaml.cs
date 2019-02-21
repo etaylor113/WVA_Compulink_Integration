@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Utility.File;
 
@@ -33,16 +34,32 @@ namespace WVA_Compulink_Integration.Views
         {
             try
             {
-                AccountTextBox.Focus();
+                // Subscribe to AccountTextBox event delegate
+                IsVisibleChanged += new DependencyPropertyChangedEventHandler(AccountTextBox_IsVisibleChanged);
 
                 string actNumText = File.ReadAllText(Paths.ActNumFile);            
                 AccountTextBox.Text = actNumText;
             }
-            catch
+            catch (Exception x)
             {
-
+                AppError.PrintToLog(x);
             }         
         }
+
+        // Allow SearchTextBox to get focus
+        void AccountTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if ((bool)e.NewValue == true)
+            {
+                Dispatcher.BeginInvoke(
+                DispatcherPriority.ContextIdle,
+                new Action(delegate ()
+                {
+                    AccountTextBox.Focus();
+                }));
+            }
+        }
+
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {

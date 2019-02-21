@@ -129,5 +129,14 @@ namespace WVA_Compulink_Integration.Views.Login
             CheckFields();
         }
 
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        {
+            WriteToFiles();
+        }
     }
 }

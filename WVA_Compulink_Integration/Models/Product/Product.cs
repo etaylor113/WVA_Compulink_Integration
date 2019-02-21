@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WVA_Compulink_Integration.Models.Product
 {
-    class Product
+    public class Product
     {
         [JsonProperty("description")]
         public string Description { get; set; }

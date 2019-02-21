@@ -113,6 +113,16 @@ namespace WVA_Compulink_Integration.Views.Orders
             try
             {
                 ListOrders = GetWVAOrders();
+              
+                // Set quantity in dataGrid 
+                foreach (Order order in ListOrders)
+                {
+                    int quantity = 0;
+                    foreach (Item item in order.Items)
+                        quantity += Convert.ToInt32(item.Quantity);                       
+
+                    order.Quantity = quantity;                   
+                }
 
                 if (ListOrders == null)
                     return;
@@ -214,6 +224,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Delete Button
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
         {
+            // Get the selected orders in the datagrid
             List<Order> listOrders = GetSelectedOrders();
 
             // Leave method if they don't select an order
@@ -221,19 +232,8 @@ namespace WVA_Compulink_Integration.Views.Orders
                 return;
 
             foreach (var order in listOrders)
-            {
-                Response response = OrderCreationViewModel.DeleteOrder(order.OrderName);
-
-                //if (response.Status == "SUCCESS")
-                //{                    
-                //    MessageWindow messageWindow = new MessageWindow("\t\tOrder deleted!");
-                //    messageWindow.Show();
-                //}
-                //else
-                //{
-                //    MessageBox.Show("An error has occurred. Order not deleted.", "", MessageBoxButton.OK);
-                //}               
-            }
+                OrderCreationViewModel.DeleteOrder(order.OrderName);      
+            
             SetUpOrdersDataGrid();
         }
       

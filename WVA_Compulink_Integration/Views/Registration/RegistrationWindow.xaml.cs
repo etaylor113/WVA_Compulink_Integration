@@ -63,6 +63,7 @@ namespace WVA_Compulink_Integration.Views.Registration
         {
             try
             {
+                // Check if string is in an email-like format
                 var addr = new System.Net.Mail.MailAddress(email);
                 return addr.Address == email;
             }
@@ -70,6 +71,32 @@ namespace WVA_Compulink_Integration.Views.Registration
             {
                 return false;
             }
+        }
+
+        private bool IsComplexPassword(string password)
+        {
+            // Password must be at least 8 characters
+            if (password.Length < 8)             
+                return false;
+
+            bool hasCapitalLetter = false;
+            bool hasNumber = false;
+
+            foreach (char letter in password)
+            {            
+                // Check password for capital letters
+                if (char.IsUpper(letter) && char.IsLetter(letter))
+                    hasCapitalLetter = true;
+
+                // Check password for numbers
+                if (char.IsNumber(letter))
+                    hasNumber = true;             
+            }
+
+            if (hasCapitalLetter && hasNumber)
+                return true;
+            else
+                return false;
         }
 
         private void BackToLogin()
@@ -85,27 +112,34 @@ namespace WVA_Compulink_Integration.Views.Registration
                 //
                 // Pre API reponse check
                 //
-                if (!IsValidEmail(EmailTextBox.Text))
+
+                string password = PasswordTextBox.Password.ToString();
+                string confirmPassword = ConfirmPasswordTextBox.Password.ToString();
+                string email = EmailTextBox.Text;
+                string username = UserNameTextBox.Text;
+
+                if (!IsValidEmail(email))
                 {
                     MessageSetup("Email is not valid!");
                     return;
                 }
                 // Make sure password length isn't to short 
-                if (PasswordTextBox.Password.ToString().Length < 6)
-                {
-                    MessageSetup("Password must be at least 6 characters!");
-                    return;
-                }
+               
                 // Check if password and confirm password match 
-                else if (PasswordTextBox.Password.ToString() != ConfirmPasswordTextBox.Password.ToString())
+                if (password != confirmPassword)
                 {
                     MessageSetup("Passwords must match!");
                     return;
                 }
                 // Check for blank fields 
-                else if (EmailTextBox.Text.Trim() == "" || UserNameTextBox.Text.Trim() == "" || PasswordTextBox.Password.ToString().Trim() == "" || ConfirmPasswordTextBox.Password.ToString().Trim() == "")
+                else if (email.Trim() == "" || username.Trim() == "" || password.Trim() == "" || confirmPassword.Trim() == "")
                 {
                     MessageSetup("Field cannot be blank!");
+                    return;
+                }
+                else if (!IsComplexPassword(password))
+                {
+                    MessageSetup("Password must be a minimum of 8 characters, have one capital letter, and contain at least one number.");
                     return;
                 }
 
@@ -115,9 +149,9 @@ namespace WVA_Compulink_Integration.Views.Registration
 
                 User user = new User()
                 {
-                    UserName = UserNameTextBox.Text,
-                    Password = Crypto.ConvertToHash(PasswordTextBox.Password),
-                    Email = EmailTextBox.Text,
+                    UserName = username,
+                    Password = Crypto.ConvertToHash(password),
+                    Email = email,
                     ApiKey = ""
                 };
 

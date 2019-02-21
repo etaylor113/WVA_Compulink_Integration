@@ -6,18 +6,29 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WVA_Compulink_Integration.MatchFinder;
+using WVA_Compulink_Integration.Models.Product;
+using WVA_Compulink_Integration.Models.Product.ProductIn;
+using WVA_Compulink_Integration.Views;
 
-namespace WVA_Compulink_Integration.Models.Product
+namespace WVA_Compulink_Integration.Memory
 {
     class List_WVA_Products
     {
         public static List<Product> ListProducts; 
 
-        private static ProductIn.ProductIn ListProductsObject = JsonConvert.DeserializeObject<ProductIn.ProductIn>(WVA_Products.GetProducts());
+        private static ProductIn ListProductsObject = WVA_Products.GetProducts();
 
-        public static void LoadProducts()
+        public static bool LoadProducts()
         {
-            ListProducts = ListProductsObject.Products;           
+            if (ListProductsObject != null)
+            {
+                ListProducts = ListProductsObject.Products;
+                return true;
+            }
+            else
+            {
+                return false;
+            }                   
         }
     }
 }

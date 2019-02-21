@@ -18,6 +18,9 @@ namespace WVA_Compulink_Integration.Models.Order.Out
         [JsonProperty("created_date")]
         public string CreatedDate { get; set; }
 
+        [JsonProperty("quantity")]
+        public int Quantity { get; set; }
+
         [JsonProperty("wva_store_id")]
         public string WvaStoreID { get; set; }
 

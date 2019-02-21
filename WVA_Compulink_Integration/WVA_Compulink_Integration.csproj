@@ -50,7 +50,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\logo_plain_vector_72_48x48_C1K_icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\logo_plain_vector_72_white_TMD_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -302,23 +302,10 @@
     <Resource Include="Resources\WarningSign.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\QuestionImg.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\CloseButton.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\icons8-ask-question-48.png" />
-    <Resource Include="Resources\icons8-help-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\icons8-available-updates-48.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\WVA_Scan_Banner.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\icons8-available-updates-filled-48.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\CheckMarkCircle.png" />
@@ -346,6 +333,18 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\logo_plain_vector_72_P0X_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\logo_plain_vector_72_white_TMD_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons8-available-updates-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons8-available-updates-filled-48.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WVA_Compulink_Integration.Models.Validations
 {
-    class ValidationResponse
+    class ValidationResponse : Response.Response
     {
         [JsonProperty("data")]
         public ValidationProducts Data { get; set; }

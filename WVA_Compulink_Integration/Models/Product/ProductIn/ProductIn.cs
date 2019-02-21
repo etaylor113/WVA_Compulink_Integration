@@ -8,7 +8,7 @@ using WVA_Compulink_Integration.Models.Response;
 
 namespace WVA_Compulink_Integration.Models.Product.ProductIn
 {
-    class ProductIn : Response.Response
+    public class ProductIn : Response.Response
     {
         [JsonProperty("data")]
         public List<Product> Products { get; set; }

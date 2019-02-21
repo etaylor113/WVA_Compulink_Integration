@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WVA_Compulink_Integration", "WVA_Compulink_Integration\WVA_Compulink_Integration.csproj", "{5241BCD1-3A1E-4640-8972-6570888717A0}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{6389A2DF-998B-49D2-A9F4-3710F58B0A57}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{A173DFC8-9749-41B9-B88C-0F0A02A36795}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,8 +17,8 @@ Global
 		{5241BCD1-3A1E-4640-8972-6570888717A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5241BCD1-3A1E-4640-8972-6570888717A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5241BCD1-3A1E-4640-8972-6570888717A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6389A2DF-998B-49D2-A9F4-3710F58B0A57}.Debug|Any CPU.ActiveCfg = Debug
-		{6389A2DF-998B-49D2-A9F4-3710F58B0A57}.Release|Any CPU.ActiveCfg = Release
+		{A173DFC8-9749-41B9-B88C-0F0A02A36795}.Debug|Any CPU.ActiveCfg = Debug
+		{A173DFC8-9749-41B9-B88C-0F0A02A36795}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

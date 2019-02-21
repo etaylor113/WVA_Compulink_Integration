@@ -12,15 +12,15 @@ namespace WVA_Compulink_Integration.Utility.File
         public static string Program_x86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
         public static string AppDir = Environment.CurrentDirectory;
         
-        public static string ActNumDir  = $@"{AppData}\WVA_Compulink_Integration\ActNum\";
-        public static string ActNumFile = $@"{AppData}\WVA_Compulink_Integration\ActNum\ActNum.txt";
+        public static string ActNumDir  = $@"{AppData}\WVA Compulink Integration\ActNum\";
+        public static string ActNumFile = $@"{AppData}\WVA Compulink Integration\ActNum\ActNum.txt";
 
-        public static string DSNDir   = $@"{AppData}\WVA_Compulink_Integration\IpConfig\";
-        public static string DSNFile  = $@"{AppData}\WVA_Compulink_Integration\IpConfig\IpConfig.txt";
+        public static string DSNDir   = $@"{AppData}\WVA Compulink Integration\IpConfig\";
+        public static string DSNFile  = $@"{AppData}\WVA Compulink Integration\IpConfig\IpConfig.txt";
 
-        public static string apiKeyDir  = $@"{AppData}\WVA_Compulink_Integration\ApiKey\";
-        public static string apiKeyFile = $@"{AppData}\WVA_Compulink_Integration\ApiKey\ApiKey.txt";
+        public static string apiKeyDir  = $@"{AppData}\WVA Compulink Integration\ApiKey\";
+        public static string apiKeyFile = $@"{AppData}\WVA Compulink Integration\ApiKey\ApiKey.txt";
 
-        public static string ErrorLog   = $@"{AppData}\WVA_Compulink_Integration\ErrorLog\";
+        public static string ErrorLog   = $@"{AppData}\WVA Compulink Integration\ErrorLog\";
     }
 }

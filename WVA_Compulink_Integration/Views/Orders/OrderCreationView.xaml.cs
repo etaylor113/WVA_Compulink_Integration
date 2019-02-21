@@ -91,7 +91,12 @@ namespace WVA_Compulink_Integration.Views.Orders
             int index = 0;
             foreach (Product product in compulinkProducts)
             {
-                List<MatchProduct> matchProducts = DescriptionMatcher.FindMatch(product.Description + product.Vendor, List_WVA_Products.ListProducts, Convert.ToDouble(MinScoreAdjustSlider.Value));
+                List<Product> products = List_WVA_Products.ListProducts;
+
+                if (products == null)
+                    return;
+
+                List<MatchProduct> matchProducts = DescriptionMatcher.FindMatch(product.Description + product.Vendor, products, Convert.ToDouble(MinScoreAdjustSlider.Value));
 
                 if (matchProducts.Count > 0)
                 {
@@ -340,7 +345,12 @@ namespace WVA_Compulink_Integration.Views.Orders
         private void SetMenuItems()
         {
             try
-            {
+            {                
+                // If products list isn't loaded or an error occurs in DescriptionMatcher and 
+                // 'ListMatchedProducts' can't be loaded then leave so no errors will occur
+                if (ListMatchedProducts == null || ListMatchedProducts.Count == 0)
+                    return;
+
                 // Reset the products ContextMenu
                 WVA_OrdersContextMenu.Items.Clear();
 
@@ -374,7 +384,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch (Exception x)
+                    catch 
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -400,7 +410,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch (Exception x)
+                    catch
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -426,7 +436,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch (Exception x)
+                    catch 
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -452,7 +462,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch (Exception x)
+                    catch 
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -478,7 +488,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch (Exception x)
+                    catch 
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -504,7 +514,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch (Exception x)
+                    catch
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -532,7 +542,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             throw new Exception("No Valid Items");
                         }
                     }
-                    catch (Exception x)
+                    catch 
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -558,7 +568,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         else
                             throw new Exception("No Valid Items");
                     }
-                    catch (Exception x)
+                    catch 
                     {
                         MenuItem menuItem = new MenuItem() { Header = "Not Available" };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
@@ -746,7 +756,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         _Vendor = "",
                         _Price = "",
                         _ID = new ID() { Value = prescription.ID },
-                        _CustomerID = prescription._CustomerID,
+                        _CustomerID = new CustomerID() { Value = AccountIDTextBox.Text },
                         _SKU = new SKU() { Value = "" },
                         _ProductKey = new ProductKey() { Value = prescription.ProductCode },
                         _UPC = new UPC() { Value = "" },
@@ -775,9 +785,12 @@ namespace WVA_Compulink_Integration.Views.Orders
                     validationWrapper.Request.ProductsToValidate.Add(new ValidationDetail(validationDetail));
                 }
 
-                string endpoint = "https://orders-qa.wisvis.com/validations";
+                string endpoint = "https://orders.wisvis.com/validations";
                 string strValidatedProducts = API.Post(endpoint, validationWrapper);
                 ValidationResponse validationResponse = JsonConvert.DeserializeObject<ValidationResponse>(strValidatedProducts);
+
+                if (validationResponse.Status == "FAIL" && validationResponse.Message != "Invalid")
+                    throw new Exception($"An error has occurred while validating products. Status: {validationResponse.Status} -- Message: {validationResponse.Message}");
 
                 // Show changes in the datagrid and update ViewModels data to match response
                 var prods = validationResponse.Data.Products;
@@ -1073,15 +1086,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     if (column <= 4)
                     {
                         OrderCreationViewModel.Prescriptions[row].Product = selectedItem;
-
-                        OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\CheckMarkCircle.png";
-
-                        //if (ListMatchedProducts[row][selectedIndex].MatchScore > 92)
-                        //    OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\GreenBubble.png";
-                        //else if (ListMatchedProducts[row][selectedIndex].MatchScore > 75)
-                        //    OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\YellowBubble.png";
-                        //else
-                        //    OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"C:\Users\evan\Desktop\Images\RedBubble.jpg";
+                        OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"/Resources/CheckMarkCircle.png";
                     }
 
                     if (column == 5)
@@ -1116,7 +1121,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 if (e.EditAction == DataGridEditAction.Commit)
                 {
-                    int row = e.Row.GetIndex();   
+                    int row = e.Row.GetIndex();
 
                     FindProductMatches();
                     SetMenuItems();
@@ -1135,7 +1140,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 FindProductMatches();
                 SetMenuItems();
             }
-            catch
+            catch (Exception x)
             {
 
             }           
