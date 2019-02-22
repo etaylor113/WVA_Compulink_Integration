@@ -50,3 +50,5 @@ C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integ
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration.exe
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration.pdb
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration.csprojAssemblyReference.cache
+C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Interop.IWshRuntimeLibrary.dll
+C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration.csproj.ResolveComReference.cache

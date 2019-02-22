@@ -45,7 +45,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         private void SetUp()
         {
             IsVisibleChanged += new DependencyPropertyChangedEventHandler(LoginControl_IsVisibleChanged);
-            SetUpOrdersDataGrid();
+            RefreshOrders();
         }
 
         private void SearchOrders(string searchString)
@@ -108,7 +108,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }                 
         }
 
-        private void SetUpOrdersDataGrid()
+        private List<Order> SetUpOrdersDataGrid()
         {
             try
             {
@@ -124,20 +124,34 @@ namespace WVA_Compulink_Integration.Views.Orders
                     order.Quantity = quantity;                   
                 }
 
-                if (ListOrders == null)
-                    return;
-
-                WvaOrdersDataGrid.Items.Clear();
-
-                foreach (Order order in ListOrders)
-                {
-                    WvaOrdersDataGrid.Items.Add(order);
-                }          
+                return ListOrders;
             }
             catch (Exception x)
             {
                 AppError.PrintToLog(x);
+                return null;
             }
+        }
+
+        private async void RefreshOrders()
+        {
+            // Spawn a loading window and change cursor to waiting cursor
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.Show();
+            Mouse.OverrideCursor = Cursors.Wait;
+
+            List<Order> orders = await Task.Run(() => SetUpOrdersDataGrid());
+
+            WvaOrdersDataGrid.Items.Clear();
+
+            foreach (Order order in ListOrders)
+            {
+                WvaOrdersDataGrid.Items.Add(order);
+            }
+
+            // Close loading window and change cursor back to default arrow cursor
+            loadingWindow.Close();
+            Mouse.OverrideCursor = Cursors.Arrow;
         }
 
         private List<Order> GetSelectedOrders()
@@ -191,18 +205,9 @@ namespace WVA_Compulink_Integration.Views.Orders
             RefreshImage.Source = new BitmapImage(new Uri(@"/Resources/icons8-available-updates-filled-48.png", UriKind.Relative));
         }
 
-        private async void RefreshButton_Click(object sender, RoutedEventArgs e)
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
-            // Spawn a loading window and change cursor to waiting cursor
-            LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.Show();
-            Mouse.OverrideCursor = Cursors.Wait;
-
-            await Task.Run(() => SetUpOrdersDataGrid());
-
-            // Close loading window and change cursor back to default arrow cursor
-            loadingWindow.Close();
-            Mouse.OverrideCursor = Cursors.Arrow;
+            RefreshOrders();
         }
 
         // Edit Button
@@ -234,7 +239,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             foreach (var order in listOrders)
                 OrderCreationViewModel.DeleteOrder(order.OrderName);      
             
-            SetUpOrdersDataGrid();
+            RefreshOrders();
         }
       
     }

@@ -51,14 +51,14 @@ namespace WVA_Compulink_Integration.Views.Login
 
                 try // Try to read the Api Key
                 {
-                    apiKeyText = File.ReadAllText(Paths.apiKeyFile);
+                    apiKeyText = File.ReadAllText(Paths.ApiKeyFile);
                 }
                 catch
                 {
-                    Directory.CreateDirectory(Paths.apiKeyDir);
-                    var apiKeyFile = File.Create(Paths.apiKeyFile);
+                    Directory.CreateDirectory(Paths.ApiKeyDir);
+                    var apiKeyFile = File.Create(Paths.ApiKeyFile);
                     apiKeyFile.Close();
-                    apiKeyText = File.ReadAllText(Paths.apiKeyFile);
+                    apiKeyText = File.ReadAllText(Paths.ApiKeyFile);
                 }
                                
                 if (ipNumText.Trim() != "" && apiKeyText.Trim() != "")
@@ -117,14 +117,14 @@ namespace WVA_Compulink_Integration.Views.Login
             File.WriteAllText(Paths.DSNFile, IpConfigTextBox.Text.Trim());
 
             // Write to apiKey file
-            if (!File.Exists(Paths.apiKeyFile))
+            if (!File.Exists(Paths.ApiKeyFile))
             {
-                Directory.CreateDirectory(Paths.apiKeyDir);
-                var apiKeyFile = File.Create(Paths.apiKeyFile);
+                Directory.CreateDirectory(Paths.ApiKeyDir);
+                var apiKeyFile = File.Create(Paths.ApiKeyFile);
                 apiKeyFile.Close();
             }
 
-            File.WriteAllText(Paths.apiKeyFile, ApiKeyTextBox.Text.Trim());
+            File.WriteAllText(Paths.ApiKeyFile, ApiKeyTextBox.Text.Trim());
 
             CheckFields();
         }

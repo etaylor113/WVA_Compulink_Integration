@@ -192,7 +192,7 @@
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
+            "Hidden" = "11:TRUE"
             "System" = "11:FALSE"
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
@@ -249,7 +249,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -280,7 +280,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -315,28 +315,6 @@
                             "Condition" = "8:"
                             "Transitive" = "11:FALSE"
                             "Property" = "8:_2049CC13AE474EB68FE07DA29B6EEE29"
-                                "Folders"
-                                {
-                                }
-                            }
-                            "{9EF0B969-E518-4E46-987F-47570745A589}:_27E23B3115E84AC299BCC155BFEA7B8C"
-                            {
-                            "Name" = "8:ApiKey"
-                            "AlwaysCreate" = "11:TRUE"
-                            "Condition" = "8:"
-                            "Transitive" = "11:FALSE"
-                            "Property" = "8:_876D551C6FFF43A0999F6FCAADFBD386"
-                                "Folders"
-                                {
-                                }
-                            }
-                            "{9EF0B969-E518-4E46-987F-47570745A589}:_BAE2E307F9F64C659F6E3A88F43809DC"
-                            {
-                            "Name" = "8:IpConfig"
-                            "AlwaysCreate" = "11:TRUE"
-                            "Condition" = "8:"
-                            "Transitive" = "11:FALSE"
-                            "Property" = "8:_E6C9374A922744059D4A9F8F99BB0748"
                                 "Folders"
                                 {
                                 }
@@ -418,7 +396,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:WVA Compulink Integration"
         "ProductCode" = "8:{569E1548-B783-47D2-BDEF-0BA33FFEC7AD}"
-        "PackageCode" = "8:{13344506-F400-4FB8-87FE-51938893444A}"
+        "PackageCode" = "8:{AB775FD5-796B-4463-8E3B-001CC8D2058E}"
         "UpgradeCode" = "8:{C6B2BE97-B8AE-4260-BEB2-BFCB68E66E5B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -963,7 +941,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B6111FD0DF5F46C88222BF3353A0B9DD"
             {
-            "SourcePath" = "8:"
+            "SourcePath" = "8:..\\WVA_Compulink_Integration\\obj\\Debug\\WVA_Compulink_Integration.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_698D98AF25BA4D14BDC35DF0B83E531F"

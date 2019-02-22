@@ -121,7 +121,7 @@ namespace WVA_Compulink_Integration.Views
                 }
 
                 UserData._User.Account = File.ReadAllText(Paths.ActNumFile).Trim();
-                UserData._User.ApiKey  = File.ReadAllText(Paths.apiKeyFile).Trim();
+                UserData._User.ApiKey  = File.ReadAllText(Paths.ApiKeyFile).Trim();
                 UserData._User.DSN     = File.ReadAllText(Paths.DSNFile).Trim();
             }
             catch (Exception x)

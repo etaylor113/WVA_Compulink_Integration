@@ -37,7 +37,7 @@ namespace WVA_Compulink_Integration.Views.Login
 
             try
             {
-                API_Key = File.ReadAllText(Paths.apiKeyFile).Trim() ?? throw new NullReferenceException();
+                API_Key = File.ReadAllText(Paths.ApiKeyFile).Trim() ?? throw new NullReferenceException();
                 DSN = File.ReadAllText(Paths.DSNFile).Trim() ?? throw new NullReferenceException();
             }
             catch (Exception x)

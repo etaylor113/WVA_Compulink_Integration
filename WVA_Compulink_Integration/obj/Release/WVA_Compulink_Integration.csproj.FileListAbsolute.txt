@@ -49,3 +49,5 @@ C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integ
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\WVA_Compulink_Integration.csproj.CopyComplete
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\WVA_Compulink_Integration.exe
 C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\WVA_Compulink_Integration.pdb
+C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Interop.IWshRuntimeLibrary.dll
+C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\WVA_Compulink_Integration.csproj.ResolveComReference.cache

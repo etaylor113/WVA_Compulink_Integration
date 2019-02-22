@@ -120,6 +120,7 @@
     <Compile Include="Models\Validations\ValidationResponse.cs" />
     <Compile Include="Models\Validations\ValidationWrapper.cs" />
     <Compile Include="Models\Validations\Validator.cs" />
+    <Compile Include="Updates\Update.cs" />
     <Compile Include="Utility\UI_Tools\DatagridTools.cs" />
     <Compile Include="ViewModels\AddToOrderViewModel.cs" />
     <Compile Include="ViewModels\Orders\CompulinkOrdersViewModel.cs" />
@@ -345,6 +346,20 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons8-available-updates-filled-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="IWshRuntimeLibrary">
+      <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
