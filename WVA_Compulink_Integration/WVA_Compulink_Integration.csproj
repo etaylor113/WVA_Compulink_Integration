@@ -112,6 +112,7 @@
     <Compile Include="Models\Response\OrderErrors.cs" />
     <Compile Include="Models\Response\OrderResponse.cs" />
     <Compile Include="Models\Response\ResponseData.cs" />
+    <Compile Include="Models\Updates\UpdateOutput.cs" />
     <Compile Include="Models\Validations\Emails\EmailValidationCode.cs" />
     <Compile Include="Models\Validations\Emails\EmailValidationSend.cs" />
     <Compile Include="Models\Validations\ProductValidation.cs" />
@@ -122,10 +123,10 @@
     <Compile Include="Models\Validations\Validator.cs" />
     <Compile Include="Updates\Update.cs" />
     <Compile Include="Utility\UI_Tools\DatagridTools.cs" />
-    <Compile Include="ViewModels\AddToOrderViewModel.cs" />
-    <Compile Include="ViewModels\Orders\CompulinkOrdersViewModel.cs" />
-    <Compile Include="ViewModels\Orders\OrderCreationViewModel.cs" />
-    <Compile Include="ViewModels\Orders\WVAOrdersViewModel.cs" />
+    <Compile Include="Views\ViewModels\AddToOrderViewModel.cs" />
+    <Compile Include="Views\ViewModels\Orders\CompulinkOrdersViewModel.cs" />
+    <Compile Include="Views\ViewModels\Orders\OrderCreationViewModel.cs" />
+    <Compile Include="Views\ViewModels\Orders\WVAOrdersViewModel.cs" />
     <Compile Include="Views\AddToOrderView.xaml.cs">
       <DependentUpon>AddToOrderView.xaml</DependentUpon>
     </Compile>
@@ -168,9 +169,9 @@
     <Compile Include="Models\User\User.cs" />
     <Compile Include="Models\User\VerifyUser.cs" />
     <Compile Include="Utility\File\Paths.cs" />
-    <Compile Include="ViewModels\HelpViewModel.cs" />
-    <Compile Include="ViewModels\OrdersViewModel.cs" />
-    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Views\ViewModels\HelpViewModel.cs" />
+    <Compile Include="Views\ViewModels\OrdersViewModel.cs" />
+    <Compile Include="Views\ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\Error\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>

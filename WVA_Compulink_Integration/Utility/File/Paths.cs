@@ -8,13 +8,24 @@ namespace WVA_Compulink_Integration.Utility.File
 {
     class Paths
     {
-        public static string AppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        public static string Program_x86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+        public static string AppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);       
         public static string PublicDocs = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments);
         public static string Desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        public static string AppDir = Environment.CurrentDirectory;
+        public static string RunningEXE = $@"{ProgramFiles}\WVA Compulink Server Integration\WVA Compulink Server Integration.exe";
+        
 
-        public static string ResourcesDir = $@"{AppDir}\Resources\";
+        public static string ProgramFiles
+        {
+            get {
+                if (Environment.Is64BitOperatingSystem)
+                    return Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+                else
+                    return Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);              
+            }
+            set { ProgramFiles = value; }
+        }
+
+        public static string ResourcesDir = $@"{ProgramFiles}\WVA Compulink Server Integration\Resources\";
         public static string ShortcutIcon = $@"{ResourcesDir}\logo_plain_vector_72_white_TMD_icon.ico";
 
         //  PUBLIC DOCUMENTS
@@ -25,6 +36,7 @@ namespace WVA_Compulink_Integration.Utility.File
         public static string ApiKeyFile = $@"{PublicDocs}\WVA Compulink Integration\ApiKey\ApiKey.txt";
 
         public static string TempDir = $@"{PublicDocs}\Temp";
+        public static string DownloadName = $@"{TempDir}\WVA_CDI_Setup.msi";
 
         // APP DATA
         public static string ActNumDir = $@"{AppData}\WVA Compulink Integration\ActNum\";
