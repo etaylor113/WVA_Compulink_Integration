@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("WVA_Compulink_Integration")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Wisconsin Vision Associates")]
 [assembly: AssemblyProduct("WVA_Compulink_Integration")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCopyright("Copyright © Wisconsin Vision Associates 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -40,6 +40,8 @@ using System.Windows;
                                               // app, or any theme specific resource dictionaries)
 )]
 
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+[assembly: Guid("001488ca-d150-4b9a-ab41-5b270b2fc610")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -53,3 +55,9 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: NeutralResourcesLanguage("en")]
+
+
+
+

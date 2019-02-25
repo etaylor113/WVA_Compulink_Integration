@@ -14,6 +14,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,7 +27,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -112,7 +112,6 @@
     <Compile Include="Models\Response\OrderErrors.cs" />
     <Compile Include="Models\Response\OrderResponse.cs" />
     <Compile Include="Models\Response\ResponseData.cs" />
-    <Compile Include="Models\Updates\UpdateOutput.cs" />
     <Compile Include="Models\Validations\Emails\EmailValidationCode.cs" />
     <Compile Include="Models\Validations\Emails\EmailValidationSend.cs" />
     <Compile Include="Models\Validations\ProductValidation.cs" />
@@ -121,7 +120,6 @@
     <Compile Include="Models\Validations\ValidationResponse.cs" />
     <Compile Include="Models\Validations\ValidationWrapper.cs" />
     <Compile Include="Models\Validations\Validator.cs" />
-    <Compile Include="Updates\Update.cs" />
     <Compile Include="Utility\UI_Tools\DatagridTools.cs" />
     <Compile Include="Views\ViewModels\AddToOrderViewModel.cs" />
     <Compile Include="Views\ViewModels\Orders\CompulinkOrdersViewModel.cs" />

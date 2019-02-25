@@ -11,7 +11,7 @@ namespace WVA_Compulink_Integration.Utility.File
         public static string AppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);       
         public static string PublicDocs = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments);
         public static string Desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        public static string RunningEXE = $@"{ProgramFiles}\WVA Compulink Server Integration\WVA Compulink Server Integration.exe";
+        public static string RunningEXE = $@"{ProgramFiles}\WVA Compulink Integration\WVA_Compulink_Integration.exe";
         
 
         public static string ProgramFiles
@@ -35,7 +35,7 @@ namespace WVA_Compulink_Integration.Utility.File
         public static string ApiKeyDir  = $@"{PublicDocs}\WVA Compulink Integration\ApiKey\";
         public static string ApiKeyFile = $@"{PublicDocs}\WVA Compulink Integration\ApiKey\ApiKey.txt";
 
-        public static string TempDir = $@"{PublicDocs}\Temp";
+        public static string TempDir = $@"{PublicDocs}\WVA Compulink Integration\Temp";
         public static string DownloadName = $@"{TempDir}\WVA_CDI_Setup.msi";
 
         // APP DATA

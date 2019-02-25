@@ -395,12 +395,12 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:WVA Compulink Integration"
-        "ProductCode" = "8:{569E1548-B783-47D2-BDEF-0BA33FFEC7AD}"
-        "PackageCode" = "8:{AB775FD5-796B-4463-8E3B-001CC8D2058E}"
-        "UpgradeCode" = "8:{C6B2BE97-B8AE-4260-BEB2-BFCB68E66E5B}"
+        "ProductCode" = "8:{A478F22A-FE30-4347-B7A5-46E5F780DA81}"
+        "PackageCode" = "8:{C006C6F9-A42A-451E-A580-1848EAAEFE2B}"
+        "UpgradeCode" = "8:{F65FE69E-0AB4-4393-A1F0-FAC987B68D83}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
@@ -413,7 +413,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_670D986EB31A460384753874846C95DE"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -516,20 +516,6 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_30FB92C2369143F28E62FFA5A1891C01"
-            {
-            "Name" = "8:WVA Compulink Integration"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_B6111FD0DF5F46C88222BF3353A0B9DD"
-            "Folder" = "8:_3CA3FB4BA9994B76A0E6A5A799B31CFE"
-            "WorkingFolder" = "8:_698D98AF25BA4D14BDC35DF0B83E531F"
-            "Icon" = "8:_670D986EB31A460384753874846C95DE"
-            "Feature" = "8:"
-            }
         }
         "UserInterface"
         {

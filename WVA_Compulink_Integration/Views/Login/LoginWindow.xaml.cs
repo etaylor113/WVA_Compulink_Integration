@@ -21,7 +21,6 @@ using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Cryptography;
 using System.IO;
 using WVA_Compulink_Integration.Utility.File;
-using WVA_Compulink_Integration.Updates;
 
 namespace WVA_Compulink_Integration.Views.Login
 {
@@ -32,7 +31,6 @@ namespace WVA_Compulink_Integration.Views.Login
     {
         public LoginWindow()
         {
-            Update.PerformUpdate();
             InitializeComponent();
             SetUp();           
         }
