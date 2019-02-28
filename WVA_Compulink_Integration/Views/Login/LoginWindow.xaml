@@ -170,6 +170,7 @@
                      Width="231" 
                      FontSize="18" 
                      TabIndex="1"
+                     KeyUp="UsernameTextBox_KeyUp"
                      TextChanged="UsernameTextBox_TextChanged"/>
 
             <Label Content="Password" 
@@ -190,6 +191,7 @@
                          Width="231" 
                          FontSize="16" 
                          TabIndex="2"
+                         KeyUp="PasswordTextBox_KeyUp"
                          PasswordChanged="PasswordTextBox_PasswordChanged"/>
                             
             <Button x:Name="LoginButton" 

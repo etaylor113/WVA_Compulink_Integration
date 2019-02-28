@@ -128,8 +128,8 @@ namespace WVA_Compulink_Integration.Views.Orders
             string endpoint = $"http://{dsn}/api/openorder/{actNum}";
             string strPrescriptions = API.Get(endpoint, out string httpStatus);
 
-            if (strPrescriptions == null)
-                throw new NullReferenceException();
+            if (strPrescriptions == null || strPrescriptions.Trim() == "")
+                throw new NullReferenceException("Response from open orders is null or empty");
 
             return JsonConvert.DeserializeObject<PrescriptionWrapper>(strPrescriptions);           
         }

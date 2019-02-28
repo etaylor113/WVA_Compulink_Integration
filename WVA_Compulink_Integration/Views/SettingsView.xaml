@@ -127,43 +127,33 @@
         
         <StackPanel HorizontalAlignment="Center"
                     VerticalAlignment="Center">
-            
-            <Label Content="WVA Account Number:"
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="WVA Account Number:"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    FontFamily="Sitka Text"
-                   FontSize="26" /> 
+                   FontSize="26" />
 
-            <TextBox Name="AccountTextBox"
-                     Width="280"
-                     Height="35"
-                     HorizontalAlignment="Center"
-                     VerticalAlignment="Center"
-                     FontFamily="Sitka Text"
-                     FontSize="26"
-                     TextChanged="AccountTextBox_TextChanged"/>
-
-            <!-- Submit -->
-            <Button x:Name="SubmitButton"
-                    Content="Submit" 
-                    HorizontalAlignment="Center" 
-                    Margin="0,10,0,0" 
-                    VerticalAlignment="Top"
-                    Grid.Row="5"
-                    Width="95"
-                    Height="30" 
-                    FontSize="18"
-                    Click="SubmitButton_Click"/>
-            
-            <Label Name="NotifyLabel"
-                   Content="Account number set!"
-                   Margin="0,10,0,0"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   FontFamily="Sitka Text"
-                   FontSize="22" 
-                   Visibility="Hidden"/>
-
+                <ComboBox Name="AvailableActsComboBox"
+                          Height="35"
+                          FontFamily="Sitka Text"
+                          FontSize="22" 
+                          Width="80"
+                          Margin="5,0,0,0" 
+                          SelectionChanged="AvailableActsComboBox_SelectionChanged"/>
+            </StackPanel>
+                           
+            <TextBlock Name="NotifyLabel"
+                       Text="Error getting account numbers! See error log for details."
+                       TextWrapping="Wrap"
+                       Margin="0,10,0,0"
+                       Width="350"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontFamily="Sitka Text"
+                       FontSize="22" 
+                       Visibility="Hidden"/>
 
         </StackPanel>
        

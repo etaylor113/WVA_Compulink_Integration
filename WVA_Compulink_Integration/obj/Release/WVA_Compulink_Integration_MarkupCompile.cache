@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\
 WVA_Compulink_Integration
 none
 false
 TRACE
-C:\Users\evan\Desktop\Languages\C#\WVA_Compulink_Integration\WVA_Compulink_Integration\Misc\App.xaml
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Misc\App.xaml
 171468663879
 
 88-1413106765
-17-1960754675
+17195804802
 Views\Error\ErrorWindow.xaml;Views\HelpView.xaml;Views\Login\ChangePasswordWindow.xaml;Views\Login\ForgotPasswordWindow.xaml;Views\Login\IpConfigWindow.xaml;Views\Login\LoginWindow.xaml;Views\MainWindow.xaml;Views\MessageWindow.xaml;Views\OrdersView.xaml;Views\AddToOrderView.xaml;Views\Orders\CompulinkOrders.xaml;Views\Orders\OrderCreationView.xaml;Views\Orders\WVAOrders.xaml;Views\Registration\RegistrationWindow.xaml;Views\ResourceDict\Styles.xaml;Views\LoadingWindow.xaml;Views\SettingsView.xaml;
 
 False

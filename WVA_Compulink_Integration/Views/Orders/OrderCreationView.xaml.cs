@@ -27,6 +27,7 @@ using WVA_Compulink_Integration.Utility.File;
 using WVA_Compulink_Integration.Models.Patient;
 using System.Diagnostics;
 using WVA_Compulink_Integration.Models.Response;
+using WVA_Compulink_Integration.MatchFinder.ProductPredictions;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
@@ -91,12 +92,22 @@ namespace WVA_Compulink_Integration.Views.Orders
             int index = 0;
             foreach (Product product in compulinkProducts)
             {
-                List<Product> products = List_WVA_Products.ListProducts;
+                List<Product> wvaProducts = List_WVA_Products.ListProducts;
 
-                if (products == null)
-                    return;
+                if (wvaProducts == null || wvaProducts.Count == 0)
+                    throw new Exception("List<WVA_Products> is null or empty!");
 
-                List<MatchProduct> matchProducts = DescriptionMatcher.FindMatch(product.Description + product.Vendor, products, Convert.ToDouble(MinScoreAdjustSlider.Value));
+                
+
+                // Run match finder for product and return results based on numPicks (number of times same product has been chosen)
+                List<MatchProduct> matchProducts = ProductPrediction.GetPredictionMatches(product.Description + product.Vendor, Convert.ToDouble(MinScoreAdjustSlider.Value), wvaProducts);
+
+
+
+
+
+                // matchString format == (description + vendor) 
+                //List<MatchProduct> matchProducts = DescriptionMatcher.FindMatch(product.Description + product.Vendor, wvaProducts, Convert.ToDouble(MinScoreAdjustSlider.Value));
 
                 if (matchProducts.Count > 0)
                 {
@@ -304,7 +315,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             ZipTextBox.Text = OrderCreationViewModel.Order.Zip ?? "";
             PhoneTextBox.Text = OrderCreationViewModel.Order.Phone ?? "";
             DoBTextBox.Text = OrderCreationViewModel.Order.DoB ?? "";
-
+            
             // Right column
             OrderNameTextBox.Text = OrderCreationViewModel.Order.OrderName ?? "";
             AccountIDTextBox.Text = UserData._User?.Account;
@@ -355,7 +366,8 @@ namespace WVA_Compulink_Integration.Views.Orders
                 WVA_OrdersContextMenu.Items.Clear();
 
                 // Sets 'ClickedIndex' to the index of selected cell
-                if (OrdersDataGrid.Items.IndexOf(OrdersDataGrid.CurrentItem) > -1)
+                int index = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.CurrentItem);
+                if (index > -1)
                 {
                     SelectedRow = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.CurrentItem);
                     SelectedColumn = OrdersDataGrid.CurrentColumn.DisplayIndex;
@@ -365,7 +377,17 @@ namespace WVA_Compulink_Integration.Views.Orders
                     Trace.WriteLine("Couldn't get index in SetMenuItems()!");
                 }
 
-                // If column IS 'BaseCurve'
+                // If column is a 'Product'
+                if (SelectedColumn == 3)
+                {
+                    foreach (MatchProduct match in ListMatchedProducts[SelectedRow])
+                    {
+                        MenuItem menuItem = new MenuItem() { Header = match.Name };
+                        menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
+                        WVA_OrdersContextMenu.Items.Add(menuItem);
+                    }
+                }
+                // If column is a 'BaseCurve'
                 if (SelectedColumn == 5)
                 {
                     try
@@ -391,7 +413,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         WVA_OrdersContextMenu.Items.Add(menuItem);
                     }
                 }
-                // If column IS 'Diameter'
+                // If column is a 'Diameter'
                 else if (SelectedColumn == 6)
                 {
                     try
@@ -417,7 +439,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         WVA_OrdersContextMenu.Items.Add(menuItem);
                     }
                 }
-                // If column IS 'Sphere'
+                // If column is a 'Sphere'
                 else if (SelectedColumn == 7)
                 {
                     try
@@ -443,7 +465,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         WVA_OrdersContextMenu.Items.Add(menuItem);
                     }
                 }
-                // If column IS 'Cylinder'
+                // If column is a 'Cylinder'
                 else if (SelectedColumn == 8)
                 {
                     try
@@ -469,7 +491,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         WVA_OrdersContextMenu.Items.Add(menuItem);
                     }
                 }
-                // If column IS 'Axis'
+                // If column is a 'Axis'
                 else if (SelectedColumn == 9)
                 {
                     try
@@ -495,7 +517,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         WVA_OrdersContextMenu.Items.Add(menuItem);
                     }
                 }
-                // If column IS 'Add'
+                // If column is a 'Add'
                 else if (SelectedColumn == 10)
                 {
                     try
@@ -521,7 +543,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         WVA_OrdersContextMenu.Items.Add(menuItem);
                     }
                 }
-                // If column IS 'Color'
+                // If column is a 'Color'
                 else if (SelectedColumn == 11)
                 {
                     try
@@ -538,9 +560,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                             }
                         }
                         else
-                        {
                             throw new Exception("No Valid Items");
-                        }
                     }
                     catch 
                     {
@@ -549,7 +569,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         WVA_OrdersContextMenu.Items.Add(menuItem);
                     }
                 }
-                // If column IS 'Multifocal'
+                // If column is a 'Multifocal'
                 else if (SelectedColumn == 12)
                 {
                     try
@@ -578,12 +598,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 // Normal match product list
                 else
                 {
-                    foreach (MatchProduct match in ListMatchedProducts[SelectedRow])
-                    {
-                        MenuItem menuItem = new MenuItem() { Header = match.Name };
-                        menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                        WVA_OrdersContextMenu.Items.Add(menuItem);
-                    }
+                    
                 }
             }
             catch (Exception x)
@@ -809,6 +824,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         Quantity = OrderCreationViewModel.Prescriptions[i].Quantity,
                         Date = OrderCreationViewModel.Prescriptions[i].Date,
                         _CustomerID = OrderCreationViewModel.Prescriptions[i]._CustomerID,
+                        IsShipToPatient = OrderCreationViewModel.Prescriptions[i].IsShipToPatient,
 
                         // If prods[i].Property.Value == null change field to old value, else change to new value
                         CanBeValidated = prods[i].CanBeValidated,
@@ -1069,6 +1085,11 @@ namespace WVA_Compulink_Integration.Views.Orders
                         break;
                     }
                 }
+            
+                if (selectedItem == "More Results")
+                {
+                    // Run match FindMatch again with higher tolerances
+                }
 
                 // Get selected prescription object in data grid
                 IList rows = OrdersDataGrid.SelectedItems;
@@ -1081,6 +1102,9 @@ namespace WVA_Compulink_Integration.Views.Orders
                 // Only want to change 'Products' column 
                 if (selectedItem != "No Matches Found" && selectedItem != "Not Available")
                 {
+                    string compulinkProduct = (OrdersDataGrid.CurrentItem as Prescription).Product;
+                    ProductPrediction.LearnProduct(compulinkProduct, selectedItem);
+
                     OrdersDataGrid.GetCell(row, column).Content = selectedItem;
 
                     if (column <= 4)
@@ -1088,7 +1112,6 @@ namespace WVA_Compulink_Integration.Views.Orders
                         OrderCreationViewModel.Prescriptions[row].Product = selectedItem;
                         OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"/Resources/CheckMarkCircle.png";
                     }
-
                     if (column == 5)
                         OrderCreationViewModel.Prescriptions[row].BaseCurve = selectedItem;
                     if (column == 6)
@@ -1107,6 +1130,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         OrderCreationViewModel.Prescriptions[row].Multifocal = selectedItem;
                 }
 
+                
                 Verify();
             }
             catch (Exception x)
@@ -1142,7 +1166,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-
+                AppError.PrintToLog(x);
             }           
         }
 

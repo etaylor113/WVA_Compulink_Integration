@@ -9,6 +9,9 @@ namespace WVA_Compulink_Integration.Models.Validations.Emails
 {
     class EmailValidationCode 
     {
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
         [JsonProperty("email_code")]
         public string EmailCode { get; set; }
 

@@ -28,6 +28,7 @@ namespace WVA_Compulink_Integration.Views.Login
     /// </summary>
     public partial class ForgotPasswordWindow : Window
     {
+        private string UserEmail { get; set; }
         private string API_Key { get; set; }
         private string DSN { get; set; }
 
@@ -75,7 +76,7 @@ namespace WVA_Compulink_Integration.Views.Login
                     return;
                 }
 
-                string email = "";
+                UserEmail = "";
                 
                 string getEmailEndpoint = $"http://{DSN}/api/User/GetEmail";
                 User user = new User()
@@ -92,7 +93,7 @@ namespace WVA_Compulink_Integration.Views.Login
                 }
                 else if (userResponse?.Email != null)
                 {
-                    email = userResponse.Email;
+                    UserEmail = userResponse.Email;
                 }
                 else
                 {
@@ -104,7 +105,7 @@ namespace WVA_Compulink_Integration.Views.Login
 
                 EmailValidationSend emailValidation = new EmailValidationSend()
                 {
-                    Email = email,
+                    Email = UserEmail,
                     ApiKey = API_Key
                 };
 
@@ -139,6 +140,7 @@ namespace WVA_Compulink_Integration.Views.Login
                 string endpoint = $"http://{DSN}/api/user/reset-email-check";
                 EmailValidationCode emailValidation = new EmailValidationCode()
                 {
+                    Email = UserEmail,
                     EmailCode = CodeTextBox.Text.Trim(),
                     ApiKey = API_Key
                 };

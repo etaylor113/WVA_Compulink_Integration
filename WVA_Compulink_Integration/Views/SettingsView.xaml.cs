@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,7 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Error;
+using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Utility.File;
 
 namespace WVA_Compulink_Integration.Views
@@ -35,19 +38,41 @@ namespace WVA_Compulink_Integration.Views
             try
             {
                 // Subscribe to AccountTextBox event delegate
-                IsVisibleChanged += new DependencyPropertyChangedEventHandler(AccountTextBox_IsVisibleChanged);
+                IsVisibleChanged += new DependencyPropertyChangedEventHandler(AvailableActsComboBox_IsVisibleChanged);
+            
+                // Populate AvailableActComboBox with user's accounts
+                List<string> availableActs = GetAvailableAccounts();
+                foreach (string account in availableActs)
+                    AvailableActsComboBox.Items.Add(account);
 
-                string actNumText = File.ReadAllText(Paths.ActNumFile);            
-                AccountTextBox.Text = actNumText;
+                // Pull account number from file if its there
+                string actNum = File.ReadAllText(Paths.ActNumFile).Trim();
+
+                // Select their account number if it's been set already in the drop down
+                for (int i = 0; i < availableActs.Count; i++)
+                {
+                    if (availableActs[i] == actNum)
+                    {
+                        AvailableActsComboBox.SelectedIndex = i;
+                    }
+                }                       
             }
             catch (Exception x)
             {
+                NotifyLabel.Visibility = Visibility.Visible;
                 AppError.PrintToLog(x);
             }         
         }
 
+        private List<string> GetAvailableAccounts()
+        {
+            string endpoint = $"http://{UserData._User?.DSN}/api/user/get-acts";
+            string response = API.Get(endpoint, out string httpStatus);
+            return JsonConvert.DeserializeObject<List<string>>(response);
+        }
+
         // Allow SearchTextBox to get focus
-        void AccountTextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        void AvailableActsComboBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if ((bool)e.NewValue == true)
             {
@@ -55,39 +80,30 @@ namespace WVA_Compulink_Integration.Views
                 DispatcherPriority.ContextIdle,
                 new Action(delegate ()
                 {
-                    AccountTextBox.Focus();
+                    AvailableActsComboBox.Focus();
                 }));
             }
         }
 
-
-        private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        private void AvailableActsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                if (File.Exists(Paths.ActNumFile))
-                {
-                    File.WriteAllText(Paths.ActNumFile, AccountTextBox.Text);
-                }
-                else
+                if (!File.Exists(Paths.ActNumFile))
                 {
                     Directory.CreateDirectory(Paths.ActNumDir);
                     var actNumFile = File.Create(Paths.ActNumFile);
                     actNumFile.Close();
-                    File.WriteAllText(Paths.ActNumFile, AccountTextBox.Text);
                 }
 
-                NotifyLabel.Visibility = Visibility.Visible;
+                File.WriteAllText(Paths.ActNumFile, (sender as ComboBox).SelectedItem as string);              
             }
             catch (Exception x)
             {
+                NotifyLabel.Visibility = Visibility.Visible;
                 AppError.PrintToLog(x);
-            }        
+            }
         }
 
-        private void AccountTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            NotifyLabel.Visibility = Visibility.Hidden;
-        }
     }
 }

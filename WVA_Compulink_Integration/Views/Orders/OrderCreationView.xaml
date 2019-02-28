@@ -814,7 +814,7 @@
                      Grid.Column="4" 
                      HorizontalAlignment="Stretch"
                      Height="24"                      
-                     IsReadOnly="False"
+                     IsReadOnly="true"
                      Margin="100,3,0,3"
                      Grid.Row="2" 
                      MaxLength="40"
@@ -840,6 +840,7 @@
                      Grid.Column="4" 
                      HorizontalAlignment="Stretch"
                      Height="24" 
+                     IsReadOnly="True"
                      Margin="100,3,0,3"
                      Grid.Row="3" 
                      FontSize="15"
@@ -925,13 +926,13 @@
                     Standard
                 </ComboBoxItem>
                 <ComboBoxItem>
-                    UPS Ground
+                    Ground
                 </ComboBoxItem>
                 <ComboBoxItem>
-                    UPS 2nd Day Air
+                    2nd Day Air
                 </ComboBoxItem>
                 <ComboBoxItem>
-                    UPS Next Day Air
+                    Next Day Air
                 </ComboBoxItem>
             </ComboBox>
 

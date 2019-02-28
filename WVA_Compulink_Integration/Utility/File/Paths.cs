@@ -38,6 +38,9 @@ namespace WVA_Compulink_Integration.Utility.File
         public static string TempDir = $@"{PublicDocs}\WVA Compulink Integration\Temp";
         public static string DownloadName = $@"{TempDir}\WVA_CDI_Setup.msi";
 
+        public static string ProductDatabaseDir = $@"{PublicDocs}\WVA Compulink Integration\Data\";
+        public static string ProductDatabaseFile = $@"{ProductDatabaseDir}\ProductPrediction.sqlite";
+
         // APP DATA
         public static string ActNumDir = $@"{AppData}\WVA Compulink Integration\ActNum\";
         public static string ActNumFile = $@"{AppData}\WVA Compulink Integration\ActNum\ActNum.txt";

@@ -178,6 +178,7 @@
                  VerticalAlignment="Bottom"
                  Width="233" 
                  FontSize="16"
+                 KeyUp="EmailTextBox_KeyUp"
                  TextChanged="EmailTextBox_TextChanged"/>
     
         <!-- UserName -->
@@ -198,6 +199,7 @@
                  VerticalAlignment="Bottom"
                  Width="233" 
                  FontSize="16"
+                 KeyUp="UserNameTextBox_KeyUp"
                  TextChanged="UserNameTextBox_TextChanged"/>
 
         <!-- Password -->
@@ -216,6 +218,7 @@
                      Grid.Row="3"
                      Height="28" 
                      Width="233"
+                     KeyUp="PasswordTextBox_KeyUp"
                      PasswordChanged="PasswordTextBox_PasswordChanged"/>
 
         <!-- Confirm Password -->
@@ -234,6 +237,7 @@
                      VerticalAlignment="Bottom" 
                      Height="28"
                      Width="233"
+                     KeyUp="ConfirmPasswordTextBox_KeyUp"
                      PasswordChanged="ConfirmPasswordTextBox_PasswordChanged"/>
 
         <!-- Submit -->

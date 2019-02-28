@@ -105,7 +105,7 @@ namespace WVA_Compulink_Integration.Views.Registration
             Close();
         }
 
-        private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        private void Register()
         {
             try
             {
@@ -124,7 +124,7 @@ namespace WVA_Compulink_Integration.Views.Registration
                     return;
                 }
                 // Make sure password length isn't to short 
-               
+
                 // Check if password and confirm password match 
                 if (password != confirmPassword)
                 {
@@ -157,9 +157,9 @@ namespace WVA_Compulink_Integration.Views.Registration
 
                 string dsn = File.ReadAllText(Paths.DSNFile).Trim();
                 string endpoint = $"http://{dsn}/api/User/register";
-                string registerResponse = _API.API.Post(endpoint, user);        
+                string registerResponse = _API.API.Post(endpoint, user);
                 User userRegisterResponse = JsonConvert.DeserializeObject<User>(registerResponse);
-           
+
                 // Check if email exists
                 if (userRegisterResponse.Message == "Email already exists")
                 {
@@ -185,6 +185,11 @@ namespace WVA_Compulink_Integration.Views.Registration
                 AppError.PrintToLog(x);
                 MessageSetup("An error has occurred. If the problem persists, please contact IT.");
             }
+        }
+
+        private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Register();
         }
 
         private void BackToLoginLink_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -227,6 +232,66 @@ namespace WVA_Compulink_Integration.Views.Registration
         private void ConfirmPasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             ChangeToDefault();
+        }
+
+        private void ConfirmPasswordTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Enter)
+                {
+                    Register();
+                }
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }
+        }
+
+        private void PasswordTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Enter)
+                {
+                    Register();
+                }
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }
+        }
+
+        private void UserNameTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Enter)
+                {
+                    Register();
+                }
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }
+        }
+
+        private void EmailTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Enter)
+                {
+                    Register();
+                }
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }
         }
     }
 }

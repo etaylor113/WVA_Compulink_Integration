@@ -75,7 +75,8 @@ namespace WVA_Compulink_Integration.Views.Login
         // Form events called from LoginWindow 
         // ===========================================================================================================================
     
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
+
+        private void Login()
         {
             try
             {
@@ -83,7 +84,7 @@ namespace WVA_Compulink_Integration.Views.Login
                 NotifyLabel.Visibility = Visibility.Visible;
 
                 // Verify user's credentials through the api and return verifiedUser object. 
-                User loginUserResponse = LoginUser();             
+                User loginUserResponse = LoginUser();
 
                 // Check login credentials                 
                 if (loginUserResponse.Status == "ERROR" || loginUserResponse.Status == "FAIL")
@@ -91,7 +92,7 @@ namespace WVA_Compulink_Integration.Views.Login
                     NotifyLabel.Visibility = Visibility.Visible;
                     NotifyLabel.Text = $"{loginUserResponse.Message}";
                     return;
-                }               
+                }
                 else if (loginUserResponse.Status == "OK")
                 {
                     // Set user data in memory to response items                   
@@ -112,6 +113,11 @@ namespace WVA_Compulink_Integration.Views.Login
                 NotifyLabel.Visibility = Visibility.Visible;
                 NotifyLabel.Text = "An error has occurred. If the problem persists, please contact IT.";
             }
+        }
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            Login();
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -166,6 +172,36 @@ namespace WVA_Compulink_Integration.Views.Login
         private void PasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             NotifyLabel.Visibility = Visibility.Hidden;
+        }
+
+        private void UsernameTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Enter)
+                {
+                    Login();
+                }
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }
+        }
+
+        private void PasswordTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Enter)
+                {
+                    Login();
+                }
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }
         }
     }
 }
