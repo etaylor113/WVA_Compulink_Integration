@@ -22,6 +22,8 @@ using WVA_Compulink_Integration.Utility.File;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Models.Product;
 using System.Threading;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace WVA_Compulink_Integration.Views
 {
@@ -42,6 +44,9 @@ namespace WVA_Compulink_Integration.Views
         {          
             try
             {
+                // Set app version at bottom of view
+                AppVersionLabel.Content = $"Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion}";
+
                 // Set the main data context to the Compulink orders view if their account number is set
                 if (AccountNumAvailable())
                 {

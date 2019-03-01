@@ -207,12 +207,13 @@
                       CanUserReorderColumns="False"
                       CanUserSortColumns="False" 
                       CanUserAddRows="False"
-                      IsReadOnly="False"                       
-                      SelectionChanged="OrdersDataGrid_SelectionChanged" 
-                      CellEditEnding="OrdersDataGrid_CellEditEnding">
+                      IsReadOnly="False"                         
+                      CellEditEnding="OrdersDataGrid_CellEditEnding" 
+                      CurrentCellChanged="OrdersDataGrid_CurrentCellChanged">
 
                 <DataGrid.ContextMenu>
-                    <ContextMenu Name="WVA_OrdersContextMenu">
+                    <ContextMenu Name="WVA_OrdersContextMenu"
+                                 MaxHeight="300">
                     </ContextMenu>
                 </DataGrid.ContextMenu>
 

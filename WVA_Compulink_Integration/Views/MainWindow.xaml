@@ -190,7 +190,16 @@
                         Visibility="Hidden"
                         Click="TabHelp_Click" />
             </StackPanel>
-        
+
+            <Label Name="AppVersionLabel"
+                   Content=""
+                   Grid.Row="99"
+                   HorizontalAlignment="Left"
+                   FontFamily="Sitka Text"
+                   FontSize="13"
+                   Margin="0,0,0,0"
+                   Height="22"
+                   VerticalAlignment="Bottom"/>
         </Grid>
 
         <!-- Main Content Area-->

@@ -54,6 +54,8 @@ namespace WVA_Compulink_Integration.Views.Orders
             MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
             SetUpOrdersDataGrid();
             CheckViewMode();
+            FindProductMatches();
+            Verify();
             Verify();
         }
 
@@ -96,15 +98,9 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 if (wvaProducts == null || wvaProducts.Count == 0)
                     throw new Exception("List<WVA_Products> is null or empty!");
-
-                
-
+             
                 // Run match finder for product and return results based on numPicks (number of times same product has been chosen)
                 List<MatchProduct> matchProducts = ProductPrediction.GetPredictionMatches(product.Description + product.Vendor, Convert.ToDouble(MinScoreAdjustSlider.Value), wvaProducts);
-
-
-
-
 
                 // matchString format == (description + vendor) 
                 //List<MatchProduct> matchProducts = DescriptionMatcher.FindMatch(product.Description + product.Vendor, wvaProducts, Convert.ToDouble(MinScoreAdjustSlider.Value));
@@ -364,17 +360,21 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 // Reset the products ContextMenu
                 WVA_OrdersContextMenu.Items.Clear();
-
+               
                 // Sets 'ClickedIndex' to the index of selected cell
                 int index = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.CurrentItem);
+                int idx = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.SelectedItem);
                 if (index > -1)
                 {
-                    SelectedRow = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.CurrentItem);
+                    SelectedRow = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.CurrentItem);                
                     SelectedColumn = OrdersDataGrid.CurrentColumn.DisplayIndex;
                 }
                 else
                 {
+                    index = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.CurrentItem);
+                    idx = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.SelectedItem);
                     Trace.WriteLine("Couldn't get index in SetMenuItems()!");
+                    return;
                 }
 
                 // If column is a 'Product'
@@ -392,7 +392,15 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].BaseCurveValidItems.Count;
+                        int ValidItemsCount;
+
+                        if (OrderCreationViewModel.Prescriptions[SelectedRow].BaseCurveValidItems != null)
+                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].BaseCurveValidItems.Count;
+                        else
+                        {
+                            SetNotAvailableMenuItem();
+                            return;
+                        }
 
                         if (ValidItemsCount > 0)
                         {
@@ -418,7 +426,15 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].DiameterValidItems.Count;
+                        int ValidItemsCount;
+
+                        if (OrderCreationViewModel.Prescriptions[SelectedRow].DiameterValidItems != null)
+                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].DiameterValidItems.Count;
+                        else
+                        {
+                            SetNotAvailableMenuItem();
+                            return;
+                        }
 
                         if (ValidItemsCount > 0)
                         {
@@ -444,7 +460,15 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].SphereValidItems.Count;
+                        int ValidItemsCount;
+
+                        if (OrderCreationViewModel.Prescriptions[SelectedRow].SphereValidItems != null)
+                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].SphereValidItems.Count;
+                        else
+                        {
+                            SetNotAvailableMenuItem();
+                            return;
+                        }
 
                         if (ValidItemsCount > 0)
                         {
@@ -470,7 +494,15 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].CylinderValidItems.Count;
+                        int ValidItemsCount;
+
+                        if (OrderCreationViewModel.Prescriptions[SelectedRow].CylinderValidItems != null)
+                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].CylinderValidItems.Count;
+                        else
+                        {
+                            SetNotAvailableMenuItem();
+                            return;
+                        }
 
                         if (ValidItemsCount > 0)
                         {
@@ -496,7 +528,15 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].AxisValidItems.Count;
+                        int ValidItemsCount;
+
+                        if (OrderCreationViewModel.Prescriptions[SelectedRow].AxisValidItems != null)
+                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].AxisValidItems.Count;
+                        else
+                        {
+                            SetNotAvailableMenuItem();
+                            return;
+                        }
 
                         if (ValidItemsCount > 0)
                         {
@@ -522,7 +562,15 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].AddValidItems.Count;
+                        int ValidItemsCount;
+
+                        if (OrderCreationViewModel.Prescriptions[SelectedRow].AddValidItems != null)
+                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].AddValidItems.Count;
+                        else
+                        {
+                            SetNotAvailableMenuItem();
+                            return;
+                        }
 
                         if (ValidItemsCount > 0)
                         {
@@ -548,7 +596,15 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].ColorValidItems.Count;
+                        int ValidItemsCount;
+
+                        if (OrderCreationViewModel.Prescriptions[SelectedRow].ColorValidItems != null)
+                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].ColorValidItems.Count;
+                        else
+                        {
+                            SetNotAvailableMenuItem();
+                            return;
+                        }
 
                         if (ValidItemsCount > 0)
                         {
@@ -564,9 +620,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     }
                     catch 
                     {
-                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
-                        menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                        WVA_OrdersContextMenu.Items.Add(menuItem);
+                        SetNotAvailableMenuItem();
                     }
                 }
                 // If column is a 'Multifocal'
@@ -574,7 +628,15 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     try
                     {
-                        int ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].MultifocalValidItems.Count;
+                        int ValidItemsCount;
+
+                        if (OrderCreationViewModel.Prescriptions[SelectedRow].MultifocalValidItems != null)
+                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].MultifocalValidItems.Count;
+                        else
+                        {
+                            SetNotAvailableMenuItem();
+                            return;
+                        }
 
                         if (ValidItemsCount > 0)
                         {
@@ -590,22 +652,22 @@ namespace WVA_Compulink_Integration.Views.Orders
                     }
                     catch 
                     {
-                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
-                        menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                        WVA_OrdersContextMenu.Items.Add(menuItem);
+                        SetNotAvailableMenuItem();
                     }
-                }
-                // Normal match product list
-                else
-                {
-                    
                 }
             }
             catch (Exception x)
             {
                 AppError.PrintToLog(x);
             }
-        }    
+        }  
+        
+        private void SetNotAvailableMenuItem()
+        {
+            MenuItem menuItem = new MenuItem() { Header = "Not Available" };
+            menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
+            WVA_OrdersContextMenu.Items.Add(menuItem);
+        }
 
         // =======================================================================================================================
         // ================================== CRUD Operations for Order ==========================================================
@@ -1103,14 +1165,14 @@ namespace WVA_Compulink_Integration.Views.Orders
                 if (selectedItem != "No Matches Found" && selectedItem != "Not Available")
                 {
                     string compulinkProduct = (OrdersDataGrid.CurrentItem as Prescription).Product;
-                    ProductPrediction.LearnProduct(compulinkProduct, selectedItem);
-
+                    
                     OrdersDataGrid.GetCell(row, column).Content = selectedItem;
 
                     if (column <= 4)
                     {
                         OrderCreationViewModel.Prescriptions[row].Product = selectedItem;
                         OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"/Resources/CheckMarkCircle.png";
+                        ProductPrediction.LearnProduct(compulinkProduct, selectedItem);
                     }
                     if (column == 5)
                         OrderCreationViewModel.Prescriptions[row].BaseCurve = selectedItem;
@@ -1129,8 +1191,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     if (column == 12)
                         OrderCreationViewModel.Prescriptions[row].Multifocal = selectedItem;
                 }
-
-                
+               
                 Verify();
             }
             catch (Exception x)
@@ -1157,17 +1218,17 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
         }
 
-        private void OrdersDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OrdersDataGrid_CurrentCellChanged(object sender, EventArgs e)
         {
             try
-            {
-                FindProductMatches();
+            {                
+                FindProductMatches();               
                 SetMenuItems();
             }
-            catch (Exception x)
+            catch (Exception ex)
             {
-                AppError.PrintToLog(x);
-            }           
+                AppError.PrintToLog(ex);
+            }          
         }
 
         private void MinScoreAdjustSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
@@ -1284,6 +1345,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             DoBLabel.Foreground = new SolidColorBrush(Colors.Black);
         }
+
     }
 }
 
