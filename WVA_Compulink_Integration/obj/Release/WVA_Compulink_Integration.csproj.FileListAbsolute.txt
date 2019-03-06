@@ -62,7 +62,6 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\WVA_Compulink_Integration.csproj.ResolveComReference.cache
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\ResourceDict\Styles.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Error\ErrorWindow.g.cs
-C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\HelpView.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Login\ChangePasswordWindow.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Login\ForgotPasswordWindow.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Login\IpConfigWindow.g.cs
@@ -70,7 +69,6 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\MainWindow.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\MessageWindow.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\OrdersView.g.cs
-C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\AddToOrderView.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Orders\CompulinkOrders.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Orders\OrderCreationView.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Orders\WVAOrders.g.cs
@@ -83,7 +81,6 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\WVA_Compulink_Integration_MarkupCompile.lref
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Misc\App.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Error\ErrorWindow.baml
-C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\HelpView.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Login\ChangePasswordWindow.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Login\ForgotPasswordWindow.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Login\IpConfigWindow.baml
@@ -91,7 +88,6 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\MainWindow.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\MessageWindow.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\OrdersView.baml
-C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\AddToOrderView.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Orders\CompulinkOrders.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Orders\OrderCreationView.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Orders\WVAOrders.baml
@@ -105,4 +101,16 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\WVA_Compulink_Integration.csproj.CopyComplete
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\WVA_Compulink_Integration.exe
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\WVA_Compulink_Integration.pdb
-C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\WVA_Compulink_Integration.csprojAssemblyReference.cache
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\EntityFramework.dll
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\System.Data.SQLite.dll
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\System.Data.SQLite.EF6.dll
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\System.Data.SQLite.Linq.dll
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\EntityFramework.xml
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\System.Data.SQLite.xml
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\System.Data.SQLite.dll.config
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml

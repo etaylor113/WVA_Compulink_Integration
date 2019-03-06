@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Models.Product;
 
 namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
@@ -14,10 +15,14 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
 
         public static List<MatchProduct> GetPredictionMatches(string compulinkProduct, double matchScore, List<Product> wvaProducts)
         {
+            // Check for nulls
             if (compulinkProduct == null || compulinkProduct.Trim() == "")
-                throw new Exception("string 'compulinkProduct' cannot be null or blank");
+                throw new Exception("string 'compulinkProduct' cannot be null or blank.");
 
-            // Inital setup 
+            if (wvaProducts == null || wvaProducts?.Count < 1)
+                throw new Exception("List of WVA products cannot be null or empty.");
+
+            // Make sure database is set up
             Database.SetUpDatabase();
             MatchScore = matchScore;
 
@@ -26,11 +31,21 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             // Get wva products that are similarly matched with the compulink product
             listMatches = GetMatches(compulinkProduct, wvaProducts);
 
-            return listMatches;         
+            return listMatches;
         }
 
         public static void LearnProduct(string compulinkProduct, string wvaProduct)
         {
+            // Make sure database is set up 
+            Database.SetUpDatabase();
+
+            // Check for nulls
+            if (compulinkProduct == null || compulinkProduct?.Trim() == "")
+                throw new Exception("'compulinkProduct' cannot be null or blank.");
+
+            if (wvaProduct == null || wvaProduct?.Trim() == "")
+                throw new Exception("'wvaProduct' cannot be null or blank");
+
             // Increase number of times this product has been picked or create a new object if it has not been used already
             if (Database.ProductMatchExists(compulinkProduct: compulinkProduct, wvaProduct: wvaProduct))
             {
@@ -114,17 +129,27 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             List<MatchProduct> listMatches = new List<MatchProduct>();
 
             if (suggestedProduct != null)
-                listMatches.Add(new MatchProduct(name: Database.ReturnWvaProductFor(compulinkProduct), matchScore: 100));
+            {
+                string wvaProd = Database.ReturnWvaProductFor(compulinkProduct);
+                listMatches.Add(new MatchProduct(name: wvaProd, matchScore: 100));
+
+                // Find product code for  
+                foreach (Product prod in wvaProducts)
+                {
+                    if (prod.Description == wvaProd)
+                    {
+                        listMatches[0].ProductKey = prod.ProductKey;
+                    }
+                }
+            }              
 
             if (wvaProducts != null)
                 listMatches.AddRange(DescriptionMatcher.FindMatch(compulinkProduct, wvaProducts, MatchScore));
-
+          
             // Remove match product in list that is the same as the suggested product
             if (listMatches.Count > 1)
             {
-                listMatches.Remove((from a in listMatches
-                                    where a.Name == listMatches[0].Name && a.MatchScore != 100
-                                    select a).First());
+                listMatches = listMatches.GroupBy(x => x.Name).Select(x => x.First()).ToList();          
             }
 
             // Get only top x matches

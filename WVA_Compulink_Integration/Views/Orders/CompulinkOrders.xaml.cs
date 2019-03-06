@@ -66,7 +66,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                                  .Replace("?", "")
                                  .Replace("&", "");            
         }
-      
+
         // Get wva orders for this user 
         private void GetWvaOrders()
         {

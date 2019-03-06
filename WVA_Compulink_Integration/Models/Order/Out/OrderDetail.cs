@@ -12,6 +12,9 @@ namespace WVA_Compulink_Integration.Models.Order.Out
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("product_reviewed")]
+        public bool ProductReviewed { get; set; }
+
         [JsonProperty("wva_sku")]
         public string SKU { get; set; }
 

@@ -61,6 +61,12 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.1.4.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.1.4.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -141,13 +147,9 @@
     <Compile Include="Models\Validations\ValidationWrapper.cs" />
     <Compile Include="Models\Validations\Validator.cs" />
     <Compile Include="Utility\UI_Tools\DatagridTools.cs" />
-    <Compile Include="Views\ViewModels\AddToOrderViewModel.cs" />
-    <Compile Include="Views\ViewModels\Orders\CompulinkOrdersViewModel.cs" />
-    <Compile Include="Views\ViewModels\Orders\OrderCreationViewModel.cs" />
-    <Compile Include="Views\ViewModels\Orders\WVAOrdersViewModel.cs" />
-    <Compile Include="Views\AddToOrderView.xaml.cs">
-      <DependentUpon>AddToOrderView.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="ViewModels\Orders\CompulinkOrdersViewModel.cs" />
+    <Compile Include="ViewModels\Orders\OrderCreationViewModel.cs" />
+    <Compile Include="ViewModels\Orders\WVAOrdersViewModel.cs" />
     <Compile Include="Views\Login\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
@@ -187,14 +189,10 @@
     <Compile Include="Models\User\User.cs" />
     <Compile Include="Models\User\VerifyUser.cs" />
     <Compile Include="Utility\File\Paths.cs" />
-    <Compile Include="Views\ViewModels\HelpViewModel.cs" />
-    <Compile Include="Views\ViewModels\OrdersViewModel.cs" />
-    <Compile Include="Views\ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\OrdersViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\Error\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\HelpView.xaml.cs">
-      <DependentUpon>HelpView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Login\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
@@ -212,10 +210,6 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\Error\ErrorWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\HelpView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -252,10 +246,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\OrdersView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AddToOrderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

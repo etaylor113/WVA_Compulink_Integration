@@ -48,7 +48,7 @@ namespace WVA_Compulink_Integration.Models.Prescription
         // This is the property that determines if an order is a STO or STP
         public bool IsShipToPatient { get; set; } = false;
 
-        // Change this string to the path of the Red, Yellow, or Green bubble image to change a row's product match status 
+        // Change this string to the path of the green check mark to show that the item has been validated
         public string ProductImagePath { get; set; }
 
         // Assign these "White", "Green", or "Red" to change the corresponding cell's background color

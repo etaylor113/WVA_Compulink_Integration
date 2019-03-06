@@ -28,6 +28,7 @@ using WVA_Compulink_Integration.Models.Patient;
 using System.Diagnostics;
 using WVA_Compulink_Integration.Models.Response;
 using WVA_Compulink_Integration.MatchFinder.ProductPredictions;
+using System.Threading;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
@@ -143,10 +144,10 @@ namespace WVA_Compulink_Integration.Views.Orders
                 case "UPS Next Day Air":
                     return "P";
                 default:
-                    return "";                  
+                    return shipType;                  
             }
         }
-
+        
         private void SetUpOrdersDataGrid()
         {
             OrdersDataGrid.ItemsSource = OrderCreationViewModel.Prescriptions;
@@ -329,7 +330,8 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 Prescription prescription = new Prescription()
                 {
-
+                    // If product has been reviewed, show 'checked' image next to product name
+                    ProductImagePath = OrderCreationViewModel.Order.Items[i].ProductDetail.ProductReviewed ? @"/Resources/CheckMarkCircle.png" : null,
                     FirstName = OrderCreationViewModel.Order.Items[i].FirstName,
                     LastName = OrderCreationViewModel.Order.Items[i].LastName,
                     Eye = OrderCreationViewModel.Order.Items[i].Eye,
@@ -371,8 +373,6 @@ namespace WVA_Compulink_Integration.Views.Orders
                 }
                 else
                 {
-                    index = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.CurrentItem);
-                    idx = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.SelectedItem);
                     Trace.WriteLine("Couldn't get index in SetMenuItems()!");
                     return;
                 }
@@ -965,13 +965,13 @@ namespace WVA_Compulink_Integration.Views.Orders
                 List<Item> listItems = new List<Item>();
                 IList rows = OrdersDataGrid.Items;
              
-                // Update order object with the form data               
+                // Update order object with the form data                  
                 order.OrderName         =   OrderNameTextBox.Text;
                 order.CustomerID        =   AccountIDTextBox.Text;
                 order.OrderedBy         =   OrderedByTextBox.Text;
                 //order.OfficeName        =   OfficeNameTextBox.Text;
                 order.PoNumber          =   PoNumberTextBox.Text;
-                order.ShippingMethod    =   ShippingTypeComboBox.Text;
+                order.ShippingMethod    =   GetShippingTypeID(ShippingTypeComboBox.Text);
 
                 try   { order.ShipToPatient = OrderCreationViewModel.Prescriptions[0].IsShipToPatient ? "Y" : "N"; }
                 catch { order.ShipToPatient = ""; }
@@ -994,7 +994,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     Prescription prescription = (Prescription)rows[i];
 
                     order.Items.Add(new Item()
-                    {       
+                    {                            
                         ID              =   Guid.NewGuid().ToString().Replace("-", ""),
                         FirstName       =   prescription.FirstName,
                         LastName        =   prescription.LastName,
@@ -1004,18 +1004,19 @@ namespace WVA_Compulink_Integration.Views.Orders
                         ItemRetailPrice =   prescription.Price,
                         ProductDetail   =   new OrderDetail()
                         {
-                            Name       =    prescription.Product,
-                            SKU        =    prescription.SKU,
-                            ProductKey =    prescription.ProductCode,
-                            UPC        =    prescription.UPC,
-                            BaseCurve  =    prescription.BaseCurve,
-                            Diameter   =    prescription.Diameter,
-                            Sphere     =    prescription.Sphere,
-                            Cylinder   =    prescription.Cylinder,
-                            Axis       =    prescription.Axis,
-                            Add        =    prescription.Add,
-                            Color      =    prescription.Color,
-                            Multifocal =    prescription.Multifocal,
+                            Name             =    prescription.Product,
+                            ProductReviewed  =    prescription.ProductImagePath == null || prescription.ProductImagePath == "" ? false : true,
+                            SKU              =    prescription.SKU,
+                            ProductKey       =    prescription.ProductCode,
+                            UPC              =    prescription.UPC,
+                            BaseCurve        =    prescription.BaseCurve,
+                            Diameter         =    prescription.Diameter,
+                            Sphere           =    prescription.Sphere,
+                            Cylinder         =    prescription.Cylinder,
+                            Axis             =    prescription.Axis,
+                            Add              =    prescription.Add,
+                            Color            =    prescription.Color,
+                            Multifocal       =    prescription.Multifocal,
                         }
                     });
                 }
@@ -1243,6 +1244,8 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void VerifyOrderButton_Click(object sender, RoutedEventArgs e)
         {
+            FindProductMatches();
+            SetMenuItems();
             Verify();                    
         }
 

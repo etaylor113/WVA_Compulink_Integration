@@ -10,6 +10,13 @@ namespace WVA_Compulink_Integration.MatchFinder
     {
         public MatchProduct(string name, double matchScore)
         {
+            // Check for nulls 
+            if (name == null || name?.Trim() == "")
+                throw new Exception("'name' cannot be null or blank.'");
+
+            if (matchScore < 0)
+                throw new Exception("'matchScore cannot be negative.'");
+
             Name = name;
             MatchScore = matchScore;
         }

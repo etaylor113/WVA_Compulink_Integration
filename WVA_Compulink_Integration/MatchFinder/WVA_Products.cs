@@ -36,6 +36,9 @@ namespace WVA_Compulink_Integration.MatchFinder
 
                 try
                 {
+                    if (data == null || data == "")
+                        throw new NullReferenceException("'data' in WVA_Products.GetProducts() cannot be null or empty");
+
                     ProductIn product = JsonConvert.DeserializeObject<ProductIn>(data);
 
                     if (product.Status == "SUCCESS")

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Models.Product;
 
 namespace WVA_Compulink_Integration.MatchFinder
@@ -12,14 +13,29 @@ namespace WVA_Compulink_Integration.MatchFinder
     {
         public static List<MatchProduct> FindMatch(string matchString, List<Product> listProducts, double minimumScore)
         {
-            List<MatchProduct> listMatchProducts = new List<MatchProduct>();
+            try
+            {
+                // Check for nulls
+                if (matchString == null || matchString.Trim() == "")
+                    throw new NullReferenceException("'matchString' cannot be null or blank.");
 
-            MatchProduct matchProduct = CrossRefMatch(matchString, listProducts);
+                if (listProducts == null || listProducts?.Count < 1)
+                    throw new NullReferenceException("'listProducts' cannot be null or empty");
 
-            if (matchProduct != null)
-                return new List<MatchProduct>() { matchProduct };
-            else
-                return RunMatchFinder(matchString, listProducts, minimumScore);
+                // Try to find product in cross-ref table 
+                MatchProduct matchProduct = CrossRefMatch(matchString, listProducts);
+
+                // If a product wasn't found in the cross-ref, then run the match finder and return possible matches
+                if (matchProduct != null)
+                    return new List<MatchProduct>() { matchProduct };
+                else
+                    return RunMatchFinder(matchString, listProducts, minimumScore);
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+                return null;
+            }           
         }
 
         // ==============================================================================================================================
@@ -32,7 +48,13 @@ namespace WVA_Compulink_Integration.MatchFinder
         // If found, return match, this will return null
         private static MatchProduct CrossRefMatch(string matchString, List<Product> listProducts)
         {
+            // Check for nulls 
+            if (matchString == null || matchString.Trim() == "")
+                return null;
+
             var productDict = ProductCrossRefDict.GetCrossRefDict();
+            if (productDict == null)
+                return null;
 
             foreach (KeyValuePair<string, string> product in productDict)
             {
@@ -46,6 +68,13 @@ namespace WVA_Compulink_Integration.MatchFinder
         // Will return a list of possible matches. The lowest index will have the highest match rating
         private static List<MatchProduct> RunMatchFinder(string compareString, List<Product> listProducts, double minimumScore)
         {
+            // Check for nulls
+            if (compareString == null || compareString.Trim() == "")
+                return new List<MatchProduct>();
+
+            if (listProducts == null || listProducts?.Count < 1)
+                return new List<MatchProduct>();
+
             List<MatchProduct> ListMatchProducts = new List<MatchProduct>();
 
             foreach (Product product in listProducts)
@@ -78,9 +107,7 @@ namespace WVA_Compulink_Integration.MatchFinder
             }
 
             // This just puts the matched items in a neat order so that the highest match is at the lowest index, i.e. the 100% match is at index[0] and the 98% match is at index[1]
-            List<MatchProduct> SortedListProducts = ListMatchProducts.OrderBy(o => o.MatchScore).Reverse().ToList();
-
-            return SortedListProducts;
+            return ListMatchProducts.OrderBy(o => o.MatchScore).Reverse().ToList();
         }
 
         // ==============================================================================================================================
@@ -91,6 +118,9 @@ namespace WVA_Compulink_Integration.MatchFinder
 
         static string GetProductKey(string productName, List<Product> listProducts)
         {
+            if (listProducts == null || listProducts?.Count > 1 || productName == null)
+                return null;
+
             foreach (Product prod in listProducts)
             {
                 if (productName == prod.Description)
@@ -102,6 +132,10 @@ namespace WVA_Compulink_Integration.MatchFinder
 
         static string RemoveGarbage(string originalString)
         {
+            // Null check
+            if (originalString == null)
+                return originalString;
+
             originalString = originalString.ToLower();
             originalString = originalString.Trim();
 
@@ -140,6 +174,10 @@ namespace WVA_Compulink_Integration.MatchFinder
 
         static string AdjustQuantity(string originalString)
         {
+            // Null check
+            if (originalString == null)
+                return originalString;
+
             originalString = originalString.Replace("ninety", "90")
                                            .Replace("thirty", "30")
                                            .Replace("twentyfour", "24")
@@ -151,6 +189,10 @@ namespace WVA_Compulink_Integration.MatchFinder
 
         static string AdjustSKUType(string originalString)
         {
+            // Null check
+            if (originalString == null)
+                return originalString;
+
             originalString += " ";
             originalString = originalString.Replace("astig ", " astigmatism ")
                                            .Replace("asti ", " astigmatism ")
@@ -170,6 +212,10 @@ namespace WVA_Compulink_Integration.MatchFinder
 
         static string AdjustProductName(string originalString)
         {
+            // Null check
+            if (originalString == null)
+                return originalString;
+
             originalString = originalString.Replace("av ", "acuvue ")
                                            .Replace("av2 ", "acuvue 2")
                                            .Replace("hydra ", "hydraglyde ")
@@ -189,6 +235,10 @@ namespace WVA_Compulink_Integration.MatchFinder
 
         static string BoostDullProducts(string originalString)
         {
+            // Null check
+            if (originalString == null)
+                return originalString;
+
             if (originalString.Contains("vitality") && !originalString.Contains("avaira"))
                 originalString = originalString.Insert(0, "avaira ");
             if (originalString.Contains("define") && !originalString.Contains("lacreon"))
@@ -201,6 +251,10 @@ namespace WVA_Compulink_Integration.MatchFinder
 
         static double DoQuantitiesMatch(string a, string b)
         {
+            // Null check
+            if (a == null || b == null)
+                return 12.5;
+
             bool quantitiesMatch = false;
 
             if (a.Contains("90") && b.Contains("90"))
@@ -224,6 +278,10 @@ namespace WVA_Compulink_Integration.MatchFinder
 
         static double DoSKUTypesMatch(string a, string b)
         {
+            // Null check
+            if (a == null || b == null)
+                return 12.5;
+
             string a_skuType = "";
             string b_skuType = "";
 
@@ -324,8 +382,12 @@ namespace WVA_Compulink_Integration.MatchFinder
             return (40 * ((a_percentMatch + b_PercentMatch) / 2));
         }
 
-        public static string ReplaceLastOccurrence(string source, string find, string replace)
+        static string ReplaceLastOccurrence(string source, string find, string replace)
         {
+            // Check for null input
+            if (source == null || find == null || replace == null)
+                return source;
+
             int place = source.LastIndexOf(find);
 
             if (place == -1)

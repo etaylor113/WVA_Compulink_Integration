@@ -58,7 +58,6 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\Newtonsoft.Json.dll
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\Newtonsoft.Json.pdb
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\Newtonsoft.Json.xml
-C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration.csprojAssemblyReference.cache
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Interop.IWshRuntimeLibrary.dll
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration.csproj.ResolveComReference.cache
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\ResourceDict\Styles.baml
@@ -115,3 +114,4 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\System.Data.SQLite.xml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\System.Data.SQLite.dll.config
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration.csprojAssemblyReference.cache

@@ -118,10 +118,6 @@
             <views:SettingsView DataContext="{Binding ElementName=settingsViewTemplate}"/>
         </DataTemplate>
 
-        <DataTemplate x:Name="helpViewTemplate" DataType="{x:Type viewmodels:HelpViewModel}">
-            <views:HelpView DataContext="{Binding ElementName=helpViewTemplate}"/>
-        </DataTemplate>
-
     </Window.Resources>
 
     <Grid Margin="0,0,0,0">
@@ -180,15 +176,6 @@
                         Content="Settings" 
                         Style="{StaticResource TabButton}"
                         Click="TabSettings_Click" />
-            </StackPanel>
-
-            <!-- Help Tab -->
-            <StackPanel Grid.Row="4" >
-                <Button x:Name="TabHelp"
-                        Content="Help"  
-                        Style="{StaticResource TabButton}" 
-                        Visibility="Hidden"
-                        Click="TabHelp_Click" />
             </StackPanel>
 
             <Label Name="AppVersionLabel"

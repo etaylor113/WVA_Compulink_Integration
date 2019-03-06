@@ -15,181 +15,263 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
 
         public static void SetUpDatabase()
         {
-            // Create the path to the product database file if it doesn't exists already
-            if (!Directory.Exists($"{Paths.ProductDatabaseDir}"))
-                Directory.CreateDirectory($"{Paths.ProductDatabaseDir}");
-
-            // Create product database file if it's not created already and set up table
-            if (!File.Exists($"{Paths.ProductDatabaseFile}"))
+            try
             {
-                SQLiteConnection.CreateFile($"{Paths.ProductDatabaseFile}");
-                CreateProductTable();
-            }               
+                // Create the path to the product database file if it doesn't exists already
+                if (!Directory.Exists($"{Paths.ProductDatabaseDir}"))
+                    Directory.CreateDirectory($"{Paths.ProductDatabaseDir}");
+
+                // Create product database file if it's not created already and set up table
+                if (!File.Exists($"{Paths.ProductDatabaseFile}"))
+                {
+                    SQLiteConnection.CreateFile($"{Paths.ProductDatabaseFile}");
+                    CreateProductTable();
+                }
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+            }
         }
 
         private static void CreateProductTable()
         {
-            SQLiteConnection dbConnection = GetSQLiteConnection();
-            dbConnection.Open();
+            try
+            {
+                SQLiteConnection dbConnection = GetSQLiteConnection();
+                dbConnection.Open();
 
-            string sql = "CREATE TABLE products (" +
-                                "id                     INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                "compulink_product      TEXT, " +
-                                "wva_product            TEXT, " +
-                                "num_picks              INT); ";
+                string sql = "CREATE TABLE products (" +
+                                    "id                     INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                    "compulink_product      TEXT, " +
+                                    "wva_product            TEXT, " +
+                                    "num_picks              INT); ";
 
-            SQLiteCommand command = new SQLiteCommand(sql, dbConnection);
-            command.ExecuteNonQuery();
+                SQLiteCommand command = new SQLiteCommand(sql, dbConnection);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+            }
         }
 
         public static string ReturnWvaProductFor(string compulinkProduct)
         {
-            // Update order status to 'submitted'
-            SQLiteConnection dbConnection = GetSQLiteConnection();
-            dbConnection.Open();
-
-            string query = $"SELECT wva_product FROM products WHERE compulink_product = '{compulinkProduct}'";
-
-            SQLiteCommand command = new SQLiteCommand(query, dbConnection);
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            string wvaProduct = null;
-
-            while (reader.Read())
+            try
             {
-                wvaProduct = (string)reader["wva_product"];
-            }
+                // Update order status to 'submitted'
+                SQLiteConnection dbConnection = GetSQLiteConnection();
+                dbConnection.Open();
 
-            return wvaProduct;            
+                string query = $"SELECT wva_product FROM products WHERE compulink_product = '{compulinkProduct}'";
+
+                SQLiteCommand command = new SQLiteCommand(query, dbConnection);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                string wvaProduct = null;
+
+                while (reader.Read())
+                {
+                    wvaProduct = (string)reader["wva_product"];
+                }
+
+                return wvaProduct;
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+                return null;
+            }
         }
 
         public static bool CompulinkProductExists(string compulinkProduct)
         {
-            // Update order status to 'submitted'
-            SQLiteConnection dbConnection = GetSQLiteConnection();
-            dbConnection.Open();
-
-            string query = $"SELECT compulink_product FROM products WHERE compulink_product = '{compulinkProduct}'";
-
-            SQLiteCommand command = new SQLiteCommand(query, dbConnection);
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            string product = null;
-
-            while (reader.Read())
+            try
             {
-                product = (string)reader["compulink_product"];
-            }
+                // Update order status to 'submitted'
+                SQLiteConnection dbConnection = GetSQLiteConnection();
+                dbConnection.Open();
 
-            if (product == null)
+                string query = $"SELECT compulink_product FROM products WHERE compulink_product = '{compulinkProduct}'";
+
+                SQLiteCommand command = new SQLiteCommand(query, dbConnection);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                string product = null;
+
+                while (reader.Read())
+                {
+                    product = (string)reader["compulink_product"];
+                }
+
+                if (product == null)
+                    return false;
+                else
+                    return true;
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
                 return false;
-            else
-                return true;
+            }
         }
 
         public static bool ProductMatchExists(string compulinkProduct, string wvaProduct)
-        {           
-            SQLiteConnection dbConnection = GetSQLiteConnection();
-            dbConnection.Open();
+        {
+            try
+            {
+                SQLiteConnection dbConnection = GetSQLiteConnection();
+                dbConnection.Open();
 
-            string sql = $"SELECT compulink_product FROM products WHERE compulink_product = '{compulinkProduct}' AND wva_product = '{wvaProduct}'";
+                string sql = $"SELECT compulink_product FROM products WHERE compulink_product = '{compulinkProduct}' AND wva_product = '{wvaProduct}'";
 
-            SQLiteDataReader reader = new SQLiteCommand(sql, dbConnection).ExecuteReader();
+                SQLiteDataReader reader = new SQLiteCommand(sql, dbConnection).ExecuteReader();
 
-            string readCompProd = null;
+                string readCompProd = null;
 
-            while (reader.Read())
-                readCompProd = (string)reader["compulink_product"];
+                while (reader.Read())
+                    readCompProd = (string)reader["compulink_product"];
 
-            return readCompProd != null ? true : false;          
+                return readCompProd != null ? true : false;
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+                return false;
+            }
         }
 
         public static int GetNumPicks(string compulinkProduct)
         {
-            SQLiteConnection dbConnection = GetSQLiteConnection();
-            dbConnection.Open();
-
-            string query;
-
-            if (compulinkProduct != null)
+            try
             {
-                query = $"SELECT num_picks FROM products WHERE compulink_product = '{compulinkProduct}'";
+                SQLiteConnection dbConnection = GetSQLiteConnection();
+                dbConnection.Open();
+
+                string query;
+
+                if (compulinkProduct != null)
+                {
+                    query = $"SELECT num_picks FROM products WHERE compulink_product = '{compulinkProduct}'";
+                }
+                else
+                {
+                    throw new Exception("Invalid parameter input!");
+                }
+
+                SQLiteCommand command = new SQLiteCommand(query, dbConnection);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                int numPicks = 0;
+
+                while (reader.Read())
+                {
+                    numPicks = (int)reader["num_picks"];
+                }
+
+                return numPicks;
             }
-            else
+            catch (Exception ex)
             {
-                throw new Exception("Invalid parameter input!");
+                AppError.PrintToLog(ex);
+                return 0;
             }
-
-            SQLiteCommand command = new SQLiteCommand(query, dbConnection);
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            int numPicks = 0;
-
-            while (reader.Read())
-            {
-                numPicks = (int)reader["num_picks"];
-            }
-
-            return numPicks;
         }
 
         public static void IncrementNumPicks(string compulinkProduct)
         {
-            SQLiteConnection dbConnection = GetSQLiteConnection();
-            dbConnection.Open();
+            try
+            {
+                SQLiteConnection dbConnection = GetSQLiteConnection();
+                dbConnection.Open();
 
-            string updateOrder = $"UPDATE products SET num_picks = '{GetNumPicks(compulinkProduct: compulinkProduct) + 1}' WHERE compulink_product = '{compulinkProduct}'";
+                string updateOrder = $"UPDATE products SET num_picks = '{GetNumPicks(compulinkProduct: compulinkProduct) + 1}' WHERE compulink_product = '{compulinkProduct}'";
 
-            SQLiteCommand command_1 = new SQLiteCommand(updateOrder, dbConnection);
-            command_1.ExecuteNonQuery();
+                SQLiteCommand command_1 = new SQLiteCommand(updateOrder, dbConnection);
+                command_1.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+            }
         }
 
         public static void DecrementNumPicks(string compulinkProduct)
         {
-            SQLiteConnection dbConnection = GetSQLiteConnection();
-            dbConnection.Open();
+            try
+            {
+                SQLiteConnection dbConnection = GetSQLiteConnection();
+                dbConnection.Open();
 
-            string updateOrder = $"UPDATE products SET num_picks = '{GetNumPicks(compulinkProduct: compulinkProduct) - 1}' WHERE compulink_product = '{compulinkProduct}'";
+                string updateOrder = $"UPDATE products SET num_picks = '{GetNumPicks(compulinkProduct: compulinkProduct) - 1}' WHERE compulink_product = '{compulinkProduct}'";
 
-            SQLiteCommand command_1 = new SQLiteCommand(updateOrder, dbConnection);
-            command_1.ExecuteNonQuery();          
+                SQLiteCommand command_1 = new SQLiteCommand(updateOrder, dbConnection);
+                command_1.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+            }
         }
 
         public static void UpdateCompulinkProductMatch(string compulinkProduct, string wvaProduct)
         {
-            SQLiteConnection dbConnection = GetSQLiteConnection();
-            dbConnection.Open();
+            try
+            {
+                SQLiteConnection dbConnection = GetSQLiteConnection();
+                dbConnection.Open();
 
-            string query = $"UPDATE products " +
-                            $"SET wva_product = '{wvaProduct}' " +
-                            $"WHERE compulink_product = '{compulinkProduct}'";
+                string query = $"UPDATE products " +
+                                $"SET wva_product = '{wvaProduct}' " +
+                                $"WHERE compulink_product = '{compulinkProduct}'";
 
-            SQLiteCommand command_1 = new SQLiteCommand(query, dbConnection);
-            command_1.ExecuteNonQuery();
+                SQLiteCommand command_1 = new SQLiteCommand(query, dbConnection);
+                command_1.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+            }
         }
 
         public static void CreateCompulinkProduct(string compulinkProduct, string wvaProduct)
         {
-            SQLiteConnection dbConnection = GetSQLiteConnection();
-            dbConnection.Open();
+            try
+            {
+                SQLiteConnection dbConnection = GetSQLiteConnection();
+                dbConnection.Open();
 
-            string query = "INSERT OR IGNORE into products (" +
-                                    "compulink_product, " +
-                                    "wva_product, " +
-                                    "num_picks) " +
-                                    "values (" +
-                                        $"'{compulinkProduct}', " +
-                                        $"'{wvaProduct}', " +
-                                        $"'{1}'" +
-                                        ")";
+                string query = "INSERT OR IGNORE into products (" +
+                                        "compulink_product, " +
+                                        "wva_product, " +
+                                        "num_picks) " +
+                                        "values (" +
+                                            $"'{compulinkProduct}', " +
+                                            $"'{wvaProduct}', " +
+                                            $"'{1}'" +
+                                            ")";
 
-            SQLiteCommand command_1 = new SQLiteCommand(query, dbConnection);
-            command_1.ExecuteNonQuery();
+                SQLiteCommand command_1 = new SQLiteCommand(query, dbConnection);
+                command_1.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+            }
         }
 
         private static SQLiteConnection GetSQLiteConnection()
         {
-            return new SQLiteConnection($"Data Source={Paths.ProductDatabaseFile};Version=3;");
+            try
+            {
+                return new SQLiteConnection($"Data Source={Paths.ProductDatabaseFile};Version=3;");
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+                return null;
+            }
         }
 
     }

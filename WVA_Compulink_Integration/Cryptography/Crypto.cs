@@ -31,11 +31,10 @@ namespace WVA_Compulink_Integration.Cryptography
                 for (int i = 0; i < bytes.Length; i++)
                     originalHash.Append(bytes[i].ToString("x2"));
 
-                // Define a string that is a chunk of the 'originalHash' based on the length of the input string
-                // NOTE: Password text field's max length is 20, so the inputString's length + 40 will never exceed the hash's max length
-                string hashChunk = originalHash.ToString().Substring(inputString.Length, inputString.Length + 40);
+                // Define a string that is a chunk of the 'originalHash' based on the length of the input string         
+                string hashChunk = originalHash.ToString().Substring(inputString.Length, originalHash.Length - inputString.Length);
 
-                // Create the final hash
+                // Create the final hash using the salt and hash chunk
                 bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(salt + hashChunk));
 
                 // Build the hash string

@@ -169,11 +169,6 @@ namespace WVA_Compulink_Integration.Views
             MainContentControl.DataContext = new SettingsView();
         }
 
-        private void TabHelp_Click(object sender, RoutedEventArgs e)
-        {
-            MainContentControl.DataContext = new HelpViewModel();
-        }
-
         private void Window_Closed(object sender, EventArgs e)
         {
             WVAOrdersViewModel.SaveOrders();

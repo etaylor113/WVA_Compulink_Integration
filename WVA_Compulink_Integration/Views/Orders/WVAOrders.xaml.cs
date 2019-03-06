@@ -48,6 +48,23 @@ namespace WVA_Compulink_Integration.Views.Orders
             RefreshOrders();
         }
 
+        private string GetShippingString(string shipID)
+        {
+            switch (shipID)
+            {
+                case "1":
+                    return "Standard";
+                case "D":
+                    return "UPS Ground";
+                case "J":
+                    return "UPS 2nd Day Air";
+                case "P":
+                    return "UPS Next Day Air";
+                default:
+                    return shipID;
+            }
+        }
+
         private void SearchOrders(string searchString)
         {
             List<Order> tempList = new List<Order>();
@@ -97,10 +114,27 @@ namespace WVA_Compulink_Integration.Views.Orders
                 string endpoint = $"http://{dsn}/api/order/get-orders/" + $"{UserData._User.Account}";
                 string strOrders = API.Get(endpoint, out string httpStatus);
 
-                if (strOrders == null)
+                if (strOrders == null || strOrders == "")
                     throw new NullReferenceException();
 
-                return JsonConvert.DeserializeObject<List<Order>>(strOrders);
+                List<Order> orders = JsonConvert.DeserializeObject<List<Order>>(strOrders);               
+
+                foreach (Order order in orders)
+                {
+                    int quantity = 0;
+
+                    foreach (var detail in order.Items)
+                    {
+                        try { quantity += Convert.ToInt32(detail.Quantity); }
+                        catch { continue; }                       
+                    }
+
+                    order.Quantity = quantity;
+                    order.ShippingMethod = GetShippingString(order.ShippingMethod);
+                }
+                   
+
+                return orders;
             }
             catch 
             {
@@ -113,16 +147,9 @@ namespace WVA_Compulink_Integration.Views.Orders
             try
             {
                 ListOrders = GetWVAOrders();
-              
-                // Set quantity in dataGrid 
-                foreach (Order order in ListOrders)
-                {
-                    int quantity = 0;
-                    foreach (Item item in order.Items)
-                        quantity += Convert.ToInt32(item.Quantity);                       
 
-                    order.Quantity = quantity;                   
-                }
+                if (ListOrders == null)
+                    return null;
 
                 return ListOrders;
             }
@@ -140,18 +167,27 @@ namespace WVA_Compulink_Integration.Views.Orders
             loadingWindow.Show();
             Mouse.OverrideCursor = Cursors.Wait;
 
-            List<Order> orders = await Task.Run(() => SetUpOrdersDataGrid());
-
-            WvaOrdersDataGrid.Items.Clear();
-
-            foreach (Order order in ListOrders)
+            try
             {
-                WvaOrdersDataGrid.Items.Add(order);
-            }
+                List<Order> orders = await Task.Run(() => SetUpOrdersDataGrid());
 
-            // Close loading window and change cursor back to default arrow cursor
-            loadingWindow.Close();
-            Mouse.OverrideCursor = Cursors.Arrow;
+                WvaOrdersDataGrid.Items.Clear();
+
+                foreach (Order order in ListOrders)
+                {
+                    WvaOrdersDataGrid.Items.Add(order);
+                }
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+            }            
+            finally
+            {
+                // Close loading window and change cursor back to default arrow cursor
+                loadingWindow.Close();
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }                          
         }
 
         private List<Order> GetSelectedOrders()
