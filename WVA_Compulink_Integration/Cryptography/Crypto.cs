@@ -11,10 +11,17 @@ using System.Threading.Tasks;
 
 namespace WVA_Compulink_Integration.Cryptography
 {
-    class Crypto
+    public class Crypto
     {
         public static string ConvertToHash(string inputString)
-        {                    
+        {
+            // Check for null or blank data
+            if (inputString == null || inputString.Trim() == "")
+                return null;
+
+            if (inputString.Length < 6)
+                throw new Exception("'inputString' must be at least 6 characters");
+
             using (SHA256 sha256Hash = SHA256.Create())
             {
                 // Split the input string into a character array

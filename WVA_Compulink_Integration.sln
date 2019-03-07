@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WVA_Compulink_Integration",
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{A173DFC8-9749-41B9-B88C-0F0A02A36795}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompulinkIntegration.Tests", "CompulinkIntegration.Tests\CompulinkIntegration.Tests.csproj", "{53817F81-F5E5-4074-858E-B7059E596BEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{5241BCD1-3A1E-4640-8972-6570888717A0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A173DFC8-9749-41B9-B88C-0F0A02A36795}.Debug|Any CPU.ActiveCfg = Debug
 		{A173DFC8-9749-41B9-B88C-0F0A02A36795}.Release|Any CPU.ActiveCfg = Release
+		{53817F81-F5E5-4074-858E-B7059E596BEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53817F81-F5E5-4074-858E-B7059E596BEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53817F81-F5E5-4074-858E-B7059E596BEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53817F81-F5E5-4074-858E-B7059E596BEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WVA_Compulink_Integration.Error
 {
-    class ErrorOutput
+    public class ErrorOutput
     {
         public string User;
         public string Error;

@@ -10,7 +10,7 @@ using WVA_Compulink_Integration.Error;
 
 namespace WVA_Compulink_Integration._API
 {
-    class API
+    public class API
     {
         // POST
         static public string Post(string endpoint, object jsonObject)

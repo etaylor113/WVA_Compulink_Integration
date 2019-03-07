@@ -1,7 +1,6 @@
 ﻿
 FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Misc\App.xaml;;
 FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Error\ErrorWindow.xaml;;
-FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\HelpView.xaml;;
 FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Login\ChangePasswordWindow.xaml;;
 FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Login\ForgotPasswordWindow.xaml;;
 FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Login\IpConfigWindow.xaml;;
@@ -9,7 +8,6 @@ FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration
 FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\MainWindow.xaml;;
 FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\MessageWindow.xaml;;
 FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\OrdersView.xaml;;
-FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\AddToOrderView.xaml;;
 FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Orders\CompulinkOrders.xaml;;
 FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Orders\OrderCreationView.xaml;;
 FC:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\Views\Orders\WVAOrders.xaml;;

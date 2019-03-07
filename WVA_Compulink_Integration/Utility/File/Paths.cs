@@ -16,7 +16,8 @@ namespace WVA_Compulink_Integration.Utility.File
 
         public static string ProgramFiles
         {
-            get {
+            get
+            {
                 if (Environment.Is64BitOperatingSystem)
                     return Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
                 else

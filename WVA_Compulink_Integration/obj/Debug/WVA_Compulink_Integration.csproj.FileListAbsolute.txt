@@ -62,7 +62,6 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration.csproj.ResolveComReference.cache
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\ResourceDict\Styles.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Error\ErrorWindow.g.cs
-C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\HelpView.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Login\ChangePasswordWindow.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Login\ForgotPasswordWindow.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Login\IpConfigWindow.g.cs
@@ -70,7 +69,6 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\MainWindow.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\MessageWindow.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\OrdersView.g.cs
-C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\AddToOrderView.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\CompulinkOrders.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\OrderCreationView.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\WVAOrders.g.cs
@@ -83,7 +81,6 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration_MarkupCompile.lref
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Misc\App.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Error\ErrorWindow.baml
-C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\HelpView.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Login\ChangePasswordWindow.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Login\ForgotPasswordWindow.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Login\IpConfigWindow.baml
@@ -91,7 +88,6 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\MainWindow.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\MessageWindow.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\OrdersView.baml
-C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\AddToOrderView.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\CompulinkOrders.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\OrderCreationView.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\WVAOrders.baml
@@ -115,3 +111,7 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\System.Data.SQLite.xml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\System.Data.SQLite.dll.config
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\WVA_Compulink_Integration.csprojAssemblyReference.cache
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml

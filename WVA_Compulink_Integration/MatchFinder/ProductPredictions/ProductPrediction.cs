@@ -36,6 +36,13 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
 
         public static void LearnProduct(string compulinkProduct, string wvaProduct)
         {
+            // Check for nulls
+            if (compulinkProduct == null || compulinkProduct.Trim() == "")
+                throw new Exception("string 'compulinkProduct' cannot be null or blank.");
+
+            if (wvaProduct == null || wvaProduct.Trim() == "")
+                throw new Exception("List of WVA products cannot be null or empty.");
+
             // Make sure database is set up 
             Database.SetUpDatabase();
 
