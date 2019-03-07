@@ -24,6 +24,7 @@ using WVA_Compulink_Integration.Models.Product;
 using System.Threading;
 using System.Diagnostics;
 using System.Reflection;
+using WVA_Compulink_Integration.Models.Product.ProductOut;
 
 namespace WVA_Compulink_Integration.Views
 {
@@ -58,15 +59,27 @@ namespace WVA_Compulink_Integration.Views
                     MainContentControl.DataContext = new SettingsViewModel();
                 }                                                                 
             }
-            catch (Exception x)
+            catch (Exception ex)
             {
-               
+                AppError.PrintToLog(ex);
             }
         }
 
-        private async void LoadProducts()
-        {
-            DidLoad = List_WVA_Products.LoadProducts();
+        private async void LoadProductsAsync()
+        {          
+            string dsn = UserData._User?.DSN ?? throw new NullReferenceException("DSN not set in MainWindow.LoadProducts().");
+            string endpoint = $"http://{dsn}/api/product/";
+
+            RequestOut request = new RequestOut()
+            {
+                Request = new ProductOut()
+                {
+                    Api_key = UserData._User?.ApiKey    ?? throw new NullReferenceException("ApiKey not set in MainWindow.LoadProducts()."),
+                    AccountID = UserData._User?.Account ?? throw new NullReferenceException("Account ID not set in MainWindow.LoadProducts().")
+                }
+            };
+
+            WvaProducts.LoadProductList(request, endpoint);
         }
 
         /// <summary>
@@ -84,23 +97,23 @@ namespace WVA_Compulink_Integration.Views
                 loadingWindow.Show();
                 Mouse.OverrideCursor = Cursors.Wait;
 
-                // Load product list into memory for match algorithm. If products to not load, Notify user.                
-                await Task.Run(() => LoadProducts());
-
+                try
+                {
+                    // Load product list into memory for match algorithm. If products to not load, Notify user.                
+                    await Task.Run(() => LoadProductsAsync());
+                }
+                catch (Exception)
+                {
+                    // If products list did not load correctly, this error window will pop up and we leave the method, not opening the OrdersViewModel
+                    new MessageWindow("WVA products not loaded! Please see error log in 'AppData\\Roaming\\WVA Compulink Integration\\ErrorLog' for more details.").Show();
+                    return;
+                }        
+                                         
                 // Close loading window and change cursor back to default arrow cursor
                 loadingWindow.Close();
                 Mouse.OverrideCursor = Cursors.Arrow;
-
-                // Open a message window and notify user that products didn't load correctly
-                if (!DidLoad)
-                {
-                    new MessageWindow("WVA products not loaded! Please see error log in 'AppData\\Roaming\\WVA Compulink Integration\\ErrorLog' for more details.").Show();
-                    return;
-                }
-                else
-                {
-                    MainContentControl.DataContext = new OrdersViewModel();
-                }
+                            
+                MainContentControl.DataContext = new OrdersViewModel();
             }
             catch (Exception x)
             {

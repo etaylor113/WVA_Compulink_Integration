@@ -87,44 +87,6 @@ namespace WVA_Compulink_Integration._API
             }
         }
 
-        // PUT
-        static public string Put(string endpoint, object jsonObject)
-        {
-            try
-            {
-                string targetResponse = null;
-                string json = JsonConvert.SerializeObject(jsonObject);
-
-                UTF8Encoding encoding = new UTF8Encoding();
-                byte[] byteArray = encoding.GetBytes(json);
-
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(endpoint);
-                request.ContentLength = byteArray.Length;
-                request.ContentType = @"application/json";
-                request.Method = "PUT";
-
-                using (Stream dataStream = request.GetRequestStream())
-                {
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                }
-
-                WebResponse webResponse = request.GetResponse();
-                using (Stream responseStream = webResponse.GetResponseStream())
-                {
-                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                    targetResponse = reader.ReadToEnd();
-                    reader.Close();
-                }
-
-                return targetResponse;
-            }
-            catch (Exception x)
-            {
-                AppError.PrintToLog(x);
-                return null;
-            }
-        }
-
         // GET
         static public string Get(string endpoint, out string httpStatus)
         {

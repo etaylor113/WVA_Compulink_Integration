@@ -105,7 +105,7 @@
     <Compile Include="Cryptography\Crypto.cs" />
     <Compile Include="MatchFinder\ProductPredictions\Database.cs" />
     <Compile Include="MatchFinder\ProductPredictions\ProductPrediction.cs" />
-    <Compile Include="MatchFinder\WVA_Products.cs" />
+    <Compile Include="Memory\WVA_Products.cs" />
     <Compile Include="Memory\Orders.cs" />
     <Compile Include="Memory\UserData.cs" />
     <Compile Include="Models\Order\ItemDetail.cs" />
@@ -133,7 +133,6 @@
     <Compile Include="Models\ProductParameters\Children\Sphere.cs" />
     <Compile Include="Models\ProductParameters\Children\UPC.cs" />
     <Compile Include="Models\ProductParameters\Parent\Parameter.cs" />
-    <Compile Include="Memory\List_WVA_Products.cs" />
     <Compile Include="Models\Request\Out_Request.cs" />
     <Compile Include="Models\Response\OrderErrors.cs" />
     <Compile Include="Models\Response\OrderResponse.cs" />

@@ -52,12 +52,18 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void SetUpUI()
         {
-            MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
-            SetUpOrdersDataGrid();
-            CheckViewMode();
-            FindProductMatches();
-            Verify();
-            Verify();
+            try
+            {
+                MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
+                SetUpOrdersDataGrid();
+                CheckViewMode();
+                FindProductMatches();
+                Verify();
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+            }
         }
 
         private void CheckViewMode()
@@ -95,7 +101,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             int index = 0;
             foreach (Product product in compulinkProducts)
             {
-                List<Product> wvaProducts = List_WVA_Products.ListProducts;
+                List<Product> wvaProducts = WvaProducts.ListProducts;
 
                 if (wvaProducts == null || wvaProducts.Count == 0)
                     throw new Exception("List<WVA_Products> is null or empty!");
@@ -1234,19 +1240,33 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void MinScoreAdjustSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
-            if (WVA_OrdersContextMenu.Items.Count > 0)
-            {               
-                FindProductMatches();
-                SetMenuItems();
+            try
+            {
+                MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
+                if (WVA_OrdersContextMenu.Items.Count > 0)
+                {               
+                    FindProductMatches();
+                    SetMenuItems();
+                }
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
             }
         }
 
         private void VerifyOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            FindProductMatches();
-            SetMenuItems();
-            Verify();                    
+            try
+            {
+                FindProductMatches();
+                SetMenuItems();
+                Verify();
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+            }           
         }
 
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)

@@ -180,12 +180,12 @@
 
             <Label Name="AppVersionLabel"
                    Content=""
-                   Grid.Row="99"
+                   Grid.Row="8"
                    HorizontalAlignment="Left"
                    FontFamily="Sitka Text"
                    FontSize="13"
                    Margin="0,0,0,0"
-                   Height="22"
+                   Height="24"
                    VerticalAlignment="Bottom"/>
         </Grid>
 

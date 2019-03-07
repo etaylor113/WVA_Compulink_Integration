@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WVA_Compulink_Integration._API;
+using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models.Response;
 using WVA_Compulink_Integration.Models.User;
@@ -36,32 +37,30 @@ namespace WVA_Compulink_Integration.Views.Login
             InitializeComponent();          
         }
 
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        private bool IsComplexPassword(string password)
         {
-            Close();
-        }
+            // Password must be at least 8 characters
+            if (password == null || password.Length < 8)
+                return false;
 
-        private void SubmitCodeButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (PasswordTextBox.Password == PasswordConfTextBox.Password)
+            bool hasCapitalLetter = false;
+            bool hasNumber = false;
+
+            foreach (char letter in password)
             {
-                Response response = ChangePassword();
+                // Check password for capital letters
+                if (char.IsUpper(letter) && char.IsLetter(letter))
+                    hasCapitalLetter = true;
 
-                if (response.Status == "SUCCESS")
-                {
-                    Close();
-                }
-                else
-                {
-                    MessageLabel.Visibility = Visibility.Visible;
-                    MessageLabel.Content = "An error has occurred. Password not updated";
-                }
+                // Check password for numbers
+                if (char.IsNumber(letter))
+                    hasNumber = true;
             }
+
+            if (hasCapitalLetter && hasNumber)
+                return true;
             else
-            {
-                MessageLabel.Visibility = Visibility.Visible;
-                MessageLabel.Content = "Passwords must match!";
-            }
+                return false;
         }
 
         private Response ChangePassword()
@@ -75,7 +74,57 @@ namespace WVA_Compulink_Integration.Views.Login
             };
 
             string strResponse = API.Post(endpoint, changePassUser);
-            return JsonConvert.DeserializeObject<Response>(strResponse);           
+
+            if (strResponse == null || strResponse.ToString().Trim() == "")
+                throw new NullReferenceException("response from endpoint was null or empty");
+            else
+                return JsonConvert.DeserializeObject<Response>(strResponse);
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void SubmitCodeButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Make sure passwords match
+                if (PasswordTextBox.Password != PasswordConfTextBox.Password)
+                {
+                    MessageLabel.Visibility = Visibility.Visible;
+                    MessageLabel.Text = "Passwords must match!";
+                    return;
+                }
+
+                // Make sure password is complex
+                if (!IsComplexPassword(PasswordTextBox.Password))
+                {
+                    MessageLabel.Visibility = Visibility.Visible;
+                    MessageLabel.Text = "Password must be a minimum of 8 characters, have one capital letter, and contain at least one number.";
+                    Height = 350;
+                    return;
+                }
+
+                // Make request to change password
+                Response response = ChangePassword();
+
+                if (response?.Status == "SUCCESS")
+                {                     
+                    new MessageWindow("\t\tPassword updated!").Show();
+                    Close();
+                }
+                else
+                    throw new Exception($"Bad response from endpoint. Status: {response?.Status} -- Message: {response?.Message}.");
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+                MessageLabel.Visibility = Visibility.Visible;
+                MessageLabel.Text = "An error has occurred. Password not updated. If this problem persists, please contact IT.";
+                Height = 350;
+            }
         }
 
     }

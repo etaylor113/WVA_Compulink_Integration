@@ -65,10 +65,59 @@ namespace WVA_Compulink_Integration.Views.Login
             MessageLabel.Content = "Error sending email!";
         }
 
+        private User GetUserEmail()
+        {
+            string getEmailEndpoint = $"http://{DSN}/api/User/GetEmail";
+            User user = new User()
+            {
+                UserName = UserNameTextBox.Text
+            };
+
+            string strEmail = API.Post(getEmailEndpoint, user);
+
+            if (strEmail == null || strEmail.ToString().Trim() == "")
+                throw new Exception("Null or blank response from endpoint.");
+
+            return JsonConvert.DeserializeObject<User>(strEmail);           
+        }
+
+        private Response SendEmail()
+        {
+            // Send the email               
+            string endpoint = $"http://{DSN}/api/user/reset-email";
+
+            EmailValidationSend emailValidation = new EmailValidationSend()
+            {
+                Email = UserEmail,
+                ApiKey = API_Key
+            };
+
+            string strResponse = API.Post(endpoint, emailValidation);
+
+            return JsonConvert.DeserializeObject<Response>(strResponse);
+        }
+
+        private Response ResetEmail()
+        {
+            string endpoint = $"http://{DSN}/api/user/reset-email-check";
+            EmailValidationCode emailValidation = new EmailValidationCode()
+            {
+                Email = UserEmail,
+                EmailCode = CodeTextBox.Text.Trim(),
+                ApiKey = API_Key
+            };
+
+            string strResponse = API.Post(endpoint, emailValidation);
+            return JsonConvert.DeserializeObject<Response>(strResponse);
+        }
+
         private void SendEmailButton_Click(object sender, RoutedEventArgs e)
         {
+            UserEmail = "";
+
             try
             {
+                // Make sure username is set
                 if (UserNameTextBox.Text.Trim() == "")
                 {
                     MessageLabel.Visibility = Visibility.Visible;
@@ -76,59 +125,35 @@ namespace WVA_Compulink_Integration.Views.Login
                     return;
                 }
 
-                UserEmail = "";
-                
-                string getEmailEndpoint = $"http://{DSN}/api/User/GetEmail";
-                User user = new User()
-                {
-                    UserName = UserNameTextBox.Text
-                };
+                User userResponse = GetUserEmail();
 
-                string strEmail = API.Post(getEmailEndpoint, user);
-                User userResponse = JsonConvert.DeserializeObject<User>(strEmail);
-
-                if (userResponse?.Status == "ERROR")
-                {
-                    ShowError();
-                }
-                else if (userResponse?.Email != null)
-                {
+                if (userResponse?.Email != null || userResponse?.Email.Trim() != "")                
                     UserEmail = userResponse.Email;
+                else
+                    throw new Exception($"Unable to get email for user: {UserNameTextBox.Text}.");
+
+                Response response = SendEmail();
+
+                if (response?.Status == "SUCCESS")
+                {
+                    MessageLabel.Visibility = Visibility.Visible;
+                    MessageLabel.Content = "Code sent to email!";
                 }
                 else
-                {
-                    ShowError();
-                }
-
-                // Send the email               
-                string endpoint = $"http://{DSN}/api/user/reset-email";
-
-                EmailValidationSend emailValidation = new EmailValidationSend()
-                {
-                    Email = UserEmail,
-                    ApiKey = API_Key
-                };
-
-                string strResponse = API.Post(endpoint, emailValidation);
-
-                Response response = JsonConvert.DeserializeObject<Response>(strResponse);
-
-                if (response.Status == "FAIL")
-                {
-                    ShowError();
-                }
+                    throw new Exception($"Bad response from email reset endpoint. Status: {response.Status} -- Message: {response.Message}");
             }
             catch (Exception x)
             {
+                ShowError();
                 AppError.PrintToLog(x);
             } 
-           
         }
 
         private void SubmitCodeButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                // Make sure username is set
                 if (UserNameTextBox.Text.Trim() == "")
                 {
                     MessageLabel.Visibility = Visibility.Visible;
@@ -136,17 +161,7 @@ namespace WVA_Compulink_Integration.Views.Login
                     return;
                 }
 
-
-                string endpoint = $"http://{DSN}/api/user/reset-email-check";
-                EmailValidationCode emailValidation = new EmailValidationCode()
-                {
-                    Email = UserEmail,
-                    EmailCode = CodeTextBox.Text.Trim(),
-                    ApiKey = API_Key
-                };
-
-                string strResponse = API.Post(endpoint, emailValidation);
-                Response response = JsonConvert.DeserializeObject<Response>(strResponse);
+                Response response = ResetEmail();
 
                 if (response.Status == "SUCCESS")
                 {

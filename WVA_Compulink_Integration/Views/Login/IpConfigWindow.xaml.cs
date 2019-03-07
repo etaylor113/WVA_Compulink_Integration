@@ -60,7 +60,8 @@ namespace WVA_Compulink_Integration.Views.Login
                     apiKeyFile.Close();
                     apiKeyText = File.ReadAllText(Paths.ApiKeyFile);
                 }
-                               
+                   
+                // Open login window if DSN and Api key has been set
                 if (ipNumText.Trim() != "" && apiKeyText.Trim() != "")
                 {
                     LoginWindow loginWindow = new LoginWindow();
@@ -72,6 +73,37 @@ namespace WVA_Compulink_Integration.Views.Login
             {
                 AppError.PrintToLog(x);
             }           
+        }
+
+        private void WriteToFiles()
+        {
+            try
+            {
+                // Write to ipConfig file
+                if (!File.Exists(Paths.DSNFile))
+                {
+                    Directory.CreateDirectory(Paths.DSNDir);
+                    var ipNumFile = File.Create(Paths.DSNFile);
+                    ipNumFile.Close();
+                }
+
+                File.WriteAllText(Paths.DSNFile, IpConfigTextBox.Text.Trim());
+
+                // Write to apiKey file
+                if (!File.Exists(Paths.ApiKeyFile))
+                {
+                    Directory.CreateDirectory(Paths.ApiKeyDir);
+                    var apiKeyFile = File.Create(Paths.ApiKeyFile);
+                    apiKeyFile.Close();
+                }
+
+                File.WriteAllText(Paths.ApiKeyFile, ApiKeyTextBox.Text.Trim());
+                CheckFields();
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+            }
         }
 
         private void IpConfigTextBox_KeyUp(object sender, KeyEventArgs e)
@@ -102,31 +134,6 @@ namespace WVA_Compulink_Integration.Views.Login
             {
                 AppError.PrintToLog(x);
             }
-        }
-
-        private void WriteToFiles()
-        {
-            // Write to ipConfig file
-            if (!File.Exists(Paths.DSNFile))
-            {
-                Directory.CreateDirectory(Paths.DSNDir);
-                var ipNumFile = File.Create(Paths.DSNFile);
-                ipNumFile.Close();
-            }
-
-            File.WriteAllText(Paths.DSNFile, IpConfigTextBox.Text.Trim());
-
-            // Write to apiKey file
-            if (!File.Exists(Paths.ApiKeyFile))
-            {
-                Directory.CreateDirectory(Paths.ApiKeyDir);
-                var apiKeyFile = File.Create(Paths.ApiKeyFile);
-                apiKeyFile.Close();
-            }
-
-            File.WriteAllText(Paths.ApiKeyFile, ApiKeyTextBox.Text.Trim());
-
-            CheckFields();
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

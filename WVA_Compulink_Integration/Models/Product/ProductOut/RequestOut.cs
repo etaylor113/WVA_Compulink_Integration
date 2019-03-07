@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WVA_Compulink_Integration.Models.Product.ProductOut
 {
-    class RequestOut
+    public class RequestOut
     {
         [JsonProperty("request")]
         public ProductOut Request { get; set; }
