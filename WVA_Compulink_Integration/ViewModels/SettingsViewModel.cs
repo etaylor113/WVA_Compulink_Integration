@@ -8,6 +8,9 @@ namespace WVA_Compulink_Integration.ViewModels
 {
     public class SettingsViewModel
     {
+        public SettingsViewModel()
+        {
 
+        }
     }
 }

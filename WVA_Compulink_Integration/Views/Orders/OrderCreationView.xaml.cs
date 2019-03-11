@@ -84,8 +84,14 @@ namespace WVA_Compulink_Integration.Views.Orders
         // ================================== Match Algorithm Methods ============================================================
         // =======================================================================================================================
 
-        private void FindProductMatches()
+        private void FindProductMatches(double matchScore = 50, bool overrideNumPicks = false)
         {
+            double MatchScore;
+            if (overrideNumPicks)
+                MatchScore = matchScore;
+            else
+                MatchScore = Convert.ToDouble(MinScoreAdjustSlider.Value);
+
             // Reset list of matched products 
             ListMatchedProducts.Clear();
 
@@ -107,7 +113,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     throw new Exception("List<WVA_Products> is null or empty!");
              
                 // Run match finder for product and return results based on numPicks (number of times same product has been chosen)
-                List<MatchProduct> matchProducts = ProductPrediction.GetPredictionMatches(product.Description + product.Vendor, Convert.ToDouble(MinScoreAdjustSlider.Value), wvaProducts);
+                List<MatchProduct> matchProducts = ProductPrediction.GetPredictionMatches(product.Description + product.Vendor, MatchScore, wvaProducts, overrideNumPicks);
 
                 // matchString format == (description + vendor) 
                 //List<MatchProduct> matchProducts = DescriptionMatcher.FindMatch(product.Description + product.Vendor, wvaProducts, Convert.ToDouble(MinScoreAdjustSlider.Value));
@@ -390,7 +396,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     {
                         MenuItem menuItem = new MenuItem() { Header = match.Name };
                         menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                        WVA_OrdersContextMenu.Items.Add(menuItem);
+                        WVA_OrdersContextMenu.Items.Add(menuItem);                      
                     }
                 }
                 // If column is a 'BaseCurve'
@@ -661,6 +667,10 @@ namespace WVA_Compulink_Integration.Views.Orders
                         SetNotAvailableMenuItem();
                     }
                 }
+
+                MenuItem menuItem2 = new MenuItem() { Header = "-- More Matches --" };
+                menuItem2.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
+                WVA_OrdersContextMenu.Items.Add(menuItem2);
             }
             catch (Exception x)
             {
@@ -1155,9 +1165,14 @@ namespace WVA_Compulink_Integration.Views.Orders
                     }
                 }
             
-                if (selectedItem == "More Results")
+                // Drop out of function and populate context menu with a lower match tolerance
+                if (selectedItem.Contains("More Matches"))
                 {
                     // Run match FindMatch again with higher tolerances
+                    FindProductMatches(50, true);
+                    SetMenuItems();
+                    WVA_OrdersContextMenu.IsOpen = true;
+                    return;
                 }
 
                 // Get selected prescription object in data grid

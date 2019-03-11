@@ -15,7 +15,7 @@ namespace WVA_Compulink_Integration.ViewModels
 
         public OrdersViewModel()
         {
-            // Pop a request out to get patient data from db 
+
         }
 
         public OrdersViewModel(string selectedView, List<Prescription> listPrescriptions)

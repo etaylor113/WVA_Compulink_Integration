@@ -33,105 +33,12 @@ namespace WVA_Compulink_Integration.Views.Orders
             SetUp();
         }
 
-        // Do any setup after loading the view
         private void SetUp()
         {
             //OrdersDataGrid.ItemsSource = Memory.Orders.CompulinkOrders;
-
             IsVisibleChanged += new DependencyPropertyChangedEventHandler(LoginControl_IsVisibleChanged);
             SetUpOrdersDataGrid();
             GetWvaOrders();            
-        }
-
-        private string RemoveUnsafeChars(string originalString)
-        {
-            return originalString.Replace("<", "")
-                                 .Replace(">", "")
-                                 .Replace("'", "")
-                                 .Replace("\"", "")
-                                 .Replace("|", "")
-                                 .Replace(";", "")
-                                 .Replace("\\", "")
-                                 .Replace("~", "")
-                                 .Replace("{", "")
-                                 .Replace("}", "")
-                                 .Replace("[", "")
-                                 .Replace("]", "")
-                                 .Replace("%", "")
-                                 .Replace("*", "")
-                                 .Replace("=", "")
-                                 .Replace("^", "")
-                                 .Replace("$", "")
-                                 .Replace("+", "")
-                                 .Replace("?", "")
-                                 .Replace("&", "");            
-        }
-
-        // Get wva orders for this user 
-        private void GetWvaOrders()
-        {
-            try
-            {
-                // Autofill new order display
-                WvaOrdersComboBox.Text = RemoveUnsafeChars($"[{UserData._User.UserName}]s order {DateTime.Now.ToString("MM/dd/yy--HH:mm:ss")}");
-                                        
-                // Get this account's open wva orders
-                string dsn = UserData._User.DSN;    
-                string endpoint = $"http://{dsn}/api/order/get-names/" + UserData._User?.Account;
-                string strNames = API.Get(endpoint, out string httpStatus);
-                Dictionary<string, string> dictOrderNames = JsonConvert.DeserializeObject<Dictionary<string, string>>(strNames);
-
-                // Break if bad response
-                if (httpStatus != "OK")
-                    throw new Exception("Bad response from server!");
-             
-                // Put account's open orders in the drop down
-                if (dictOrderNames.Count > 0)
-                {
-                    foreach (string orderName in dictOrderNames.Values)
-                        WvaOrdersComboBox.Items.Add(orderName);            
-                }
-            }
-            catch (Exception x)
-            {
-                AppError.PrintToLog(x);
-            }
-        }
-
-        // Filters out orders in table by whatever patient they search for in the searc box
-        private void SearchOrders(string searchString)
-        {
-            try
-            {
-                listPrescriptions.Clear();
-
-                List<Prescription> tempList = Memory.Orders.CompulinkOrders.Where(x => x.Patient.ToLower().Replace(",","").StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
-                       
-                foreach (Prescription prescription in tempList)
-                {
-                    listPrescriptions.Add(prescription);
-                }
-
-                OrdersDataGrid.Items.Refresh();
-            }
-            catch (Exception x)
-            {
-                AppError.PrintToLog(x);
-            }
-        }
-
-        // Asyncronously get Compulink Orders from server
-        private async Task<PrescriptionWrapper> GetCompulinkOrders()
-        {
-            string dsn = UserData._User.DSN;
-            string actNum = UserData._User.Account;  
-            string endpoint = $"http://{dsn}/api/openorder/{actNum}";
-            string strPrescriptions = API.Get(endpoint, out string httpStatus);
-
-            if (strPrescriptions == null || strPrescriptions.Trim() == "")
-                throw new NullReferenceException("Response from open orders is null or empty");
-
-            return JsonConvert.DeserializeObject<PrescriptionWrapper>(strPrescriptions);           
         }
 
         // Set up items in OrdersDataGrid 
@@ -143,7 +50,11 @@ namespace WVA_Compulink_Integration.Views.Orders
                 listPrescriptions.Clear();
 
                 var prescriptionWrapper = await GetCompulinkOrders();
-                var products = prescriptionWrapper.Request.Products;
+
+                if (prescriptionWrapper == null)
+                    throw new NullReferenceException("Response returned null from endpoint while getting Compulink orders.");
+                   
+                var products = prescriptionWrapper?.Request?.Products;
 
                 foreach (Prescription prescription in products)
                 {
@@ -169,6 +80,112 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 AppError.PrintToLog(x);
             }
+        }
+
+        // Get wva orders for this user 
+        private void GetWvaOrders()
+        {
+            try
+            {
+                // Autofill new order display
+                WvaOrdersComboBox.Text = RemoveUnsafeChars($"[{UserData._User.UserName}]s order {DateTime.Now.ToString("MM/dd/yy--HH:mm:ss")}");
+                                        
+                // Get this account's open wva orders
+                string dsn = UserData._User.DSN;    
+                string endpoint = $"http://{dsn}/api/order/get-names/" + UserData._User?.Account;
+                string strNames = API.Get(endpoint, out string httpStatus);
+
+                if (strNames == null || strNames.ToString().Trim() == "")
+                    throw new NullReferenceException("Response null ");
+
+                // Break if bad response
+                if (httpStatus != "OK")
+                    throw new Exception($"Http status: {httpStatus.ToString()} from server while getting order names!");
+
+                Dictionary<string, string> dictOrderNames = JsonConvert.DeserializeObject<Dictionary<string, string>>(strNames);
+             
+                // Put account's open orders in the drop down
+                if (dictOrderNames?.Count > 0)
+                {
+                    foreach (string orderName in dictOrderNames?.Values)
+                        WvaOrdersComboBox.Items.Add(orderName);            
+                }
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }
+        }
+
+        // Asyncronously get Compulink Orders from server
+        private async Task<PrescriptionWrapper> GetCompulinkOrders()
+        {
+            try
+            {
+                string dsn = UserData._User.DSN;
+                string actNum = UserData._User.Account;
+                string endpoint = $"http://{dsn}/api/openorder/{actNum}";
+                string strPrescriptions = API.Get(endpoint, out string httpStatus);
+
+                if (strPrescriptions == null || strPrescriptions.Trim() == "")
+                    throw new NullReferenceException("Response from open orders is null or empty.");
+
+                // Break if bad response
+                if (httpStatus != "OK")
+                    throw new Exception($"Http status: {httpStatus.ToString()} from server while getting order names!");
+
+                return JsonConvert.DeserializeObject<PrescriptionWrapper>(strPrescriptions);
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+                return null;
+            }
+        }
+
+        // Filters out orders in table by whatever patient they search for in the searc box
+        private void SearchOrders(string searchString)
+        {
+            try
+            {
+                listPrescriptions.Clear();
+
+                List<Prescription> tempList = Memory.Orders.CompulinkOrders.Where(x => x.Patient.ToLower().Replace(",","").StartsWith(searchString.ToLower().Replace(",", ""))).ToList();
+                       
+                foreach (Prescription prescription in tempList)
+                {
+                    listPrescriptions.Add(prescription);
+                }
+
+                OrdersDataGrid.Items.Refresh();
+            }
+            catch (Exception x)
+            {
+                AppError.PrintToLog(x);
+            }
+        }
+        private string RemoveUnsafeChars(string originalString)
+        {
+            return originalString.Replace("<", "")
+                                 .Replace(">", "")
+                                 .Replace("'", "")
+                                 .Replace("\"", "")
+                                 .Replace("|", "")
+                                 .Replace(";", "")
+                                 .Replace("\\", "")
+                                 .Replace("~", "")
+                                 .Replace("{", "")
+                                 .Replace("}", "")
+                                 .Replace("[", "")
+                                 .Replace("]", "")
+                                 .Replace("%", "")
+                                 .Replace("*", "")
+                                 .Replace("=", "")
+                                 .Replace("^", "")
+                                 .Replace("$", "")
+                                 .Replace("+", "")
+                                 .Replace("?", "")
+                                 .Replace("&", "");
         }
 
         // Allow SearchTextBox to get focus

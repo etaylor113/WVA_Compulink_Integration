@@ -44,6 +44,12 @@ namespace WVA_Compulink_Integration.Views
             
                 // Populate AvailableActComboBox with user's accounts
                 List<string> availableActs = GetAvailableAccounts();
+
+                // Check for nulls 
+                if (availableActs == null || availableActs.ToString().Trim() == "" || availableActs?.Count < 1)
+                    return;
+
+                // Add accounts to combo box
                 foreach (string account in availableActs)
                     AvailableActsComboBox.Items.Add(account);
 
@@ -54,9 +60,7 @@ namespace WVA_Compulink_Integration.Views
                 for (int i = 0; i < availableActs.Count; i++)
                 {
                     if (availableActs[i] == actNum)
-                    {
                         AvailableActsComboBox.SelectedIndex = i;
-                    }
                 }                       
             }
             catch (Exception x)
@@ -76,14 +80,21 @@ namespace WVA_Compulink_Integration.Views
         // Allow SearchTextBox to get focus
         void AvailableActsComboBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if ((bool)e.NewValue == true)
+            try
             {
-                Dispatcher.BeginInvoke(
-                DispatcherPriority.ContextIdle,
-                new Action(delegate ()
+                if ((bool)e.NewValue == true)
                 {
-                    AvailableActsComboBox.Focus();
-                }));
+                    Dispatcher.BeginInvoke(
+                    DispatcherPriority.ContextIdle,
+                    new Action(delegate ()
+                    {
+                        AvailableActsComboBox.Focus();
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
             }
         }
 

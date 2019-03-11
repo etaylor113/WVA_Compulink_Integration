@@ -18,6 +18,9 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
 
         public CompulinkOrdersViewModel(List<Prescription> prescriptions)
         {
+            if (prescriptions == null)
+                return;
+
             ListPrescriptions.AddRange(prescriptions);
         }
     }

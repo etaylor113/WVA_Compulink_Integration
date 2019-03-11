@@ -65,21 +65,30 @@ namespace WVA_Compulink_Integration.Views
             }
         }
 
-        private async void LoadProductsAsync()
-        {          
-            string dsn = UserData._User?.DSN ?? throw new NullReferenceException("DSN not set in MainWindow.LoadProducts().");
-            string endpoint = $"http://{dsn}/api/product/";
-
-            RequestOut request = new RequestOut()
+        private async Task<bool> LoadProductsAsync()
+        {
+            try
             {
-                Request = new ProductOut()
-                {
-                    Api_key = UserData._User?.ApiKey    ?? throw new NullReferenceException("ApiKey not set in MainWindow.LoadProducts()."),
-                    AccountID = UserData._User?.Account ?? throw new NullReferenceException("Account ID not set in MainWindow.LoadProducts().")
-                }
-            };
+                string dsn = UserData._User?.DSN ?? throw new NullReferenceException("DSN not set in MainWindow.LoadProducts().");
+                string endpoint = $"http://{dsn}/api/product/";
 
-            WvaProducts.LoadProductList(request, endpoint);
+                RequestOut request = new RequestOut()
+                {
+                    Request = new ProductOut()
+                    {
+                        Api_key = UserData._User?.ApiKey ?? throw new NullReferenceException("ApiKey not set in MainWindow.LoadProducts()."),
+                        AccountID = UserData._User?.Account ?? throw new NullReferenceException("Account ID not set in MainWindow.LoadProducts().")
+                    }
+                };
+
+                WvaProducts.LoadProductList(request, endpoint);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+                return false;
+            }
         }
 
         /// <summary>
@@ -97,27 +106,25 @@ namespace WVA_Compulink_Integration.Views
                 loadingWindow.Show();
                 Mouse.OverrideCursor = Cursors.Wait;
 
-                try
-                {
-                    // Load product list into memory for match algorithm. If products to not load, Notify user.                
-                    await Task.Run(() => LoadProductsAsync());
-                }
-                catch (Exception)
+                // Load product list into memory for match algorithm. If products to not load, Notify user.              
+                bool ProductsLoaded = await Task.Run(() => LoadProductsAsync());
+
+                if (!ProductsLoaded)
                 {
                     // If products list did not load correctly, this error window will pop up and we leave the method, not opening the OrdersViewModel
                     new MessageWindow("WVA products not loaded! Please see error log in 'AppData\\Roaming\\WVA Compulink Integration\\ErrorLog' for more details.").Show();
                     return;
-                }        
-                                         
-                // Close loading window and change cursor back to default arrow cursor
-                loadingWindow.Close();
-                Mouse.OverrideCursor = Cursors.Arrow;
+                }
                             
                 MainContentControl.DataContext = new OrdersViewModel();
             }
             catch (Exception x)
             {
                 AppError.PrintToLog(x);
+            }
+            finally
+            {
+                // Close loading window and change cursor back to default arrow cursor
                 loadingWindow.Close();
                 Mouse.OverrideCursor = Cursors.Arrow;
             }
@@ -166,15 +173,7 @@ namespace WVA_Compulink_Integration.Views
 
         private void TabOrders_Click(object sender, RoutedEventArgs e)
         {
-            if (AccountNumAvailable())
-            {
-                TryLoadOrderView();
-            }
-            else
-            {
-                MessageWindow messageWindow = new MessageWindow("You must set your account number in the settings tab before continuing.");
-                messageWindow.Show();
-            }
+            SetUpApp();
         }
 
         private void TabSettings_Click(object sender, RoutedEventArgs e)
@@ -184,7 +183,7 @@ namespace WVA_Compulink_Integration.Views
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            WVAOrdersViewModel.SaveOrders();
+
         }      
     }
 }

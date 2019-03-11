@@ -13,7 +13,7 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
     {
         public static double MatchScore { get; set; }
 
-        public static List<MatchProduct> GetPredictionMatches(string compulinkProduct, double matchScore, List<Product> wvaProducts)
+        public static List<MatchProduct> GetPredictionMatches(string compulinkProduct, double matchScore, List<Product> wvaProducts, bool overrideNumPicks = false)
         {
             // Check for nulls
             if (compulinkProduct == null || compulinkProduct.Trim() == "")
@@ -29,7 +29,7 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             List<MatchProduct> listMatches = new List<MatchProduct>();
 
             // Get wva products that are similarly matched with the compulink product
-            listMatches = GetMatches(compulinkProduct, wvaProducts);
+            listMatches = GetMatches(compulinkProduct, wvaProducts, overrideNumPicks);
 
             return listMatches;
         }
@@ -82,47 +82,47 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
         }
 
         // Get a list of wva product matches for a given compulink product
-        private static List<MatchProduct> GetMatches(string compulinkProduct, List<Product> wvaProducts)
+        private static List<MatchProduct> GetMatches(string compulinkProduct, List<Product> wvaProducts, bool overrideNumPicks)
         {
             var listMatches = new List<MatchProduct>();
 
-            int numPicks = Database.GetNumPicks(compulinkProduct: compulinkProduct);
+            // If overrideNumPicks is true, the method will not limit the list based on numPicks
+            int numPicks;
+            if (overrideNumPicks)
+                numPicks = 1;
+            else
+                numPicks = Database.GetNumPicks(compulinkProduct: compulinkProduct);
 
             // If 10 or more numPicks only show suggested product (confidence: extremely confident)
             if (numPicks >= 10)
             {
                 listMatches.Add(new MatchProduct(name: Database.ReturnWvaProductFor(compulinkProduct), matchScore: 100));
                 return listMatches;
-            }
-
+            }        
             // If 7-9 numPicks show suggested product and 4 matches (high confidence)
             else if (numPicks >= 7)
             {
                 listMatches = FilterList(6, compulinkProduct, wvaProducts, new MatchProduct(name: Database.ReturnWvaProductFor(compulinkProduct), matchScore: 100));
                 return listMatches;
             }
-
             // If 5-6 numPicks show suggested product and 4 matches (confident)
             else if (numPicks >= 5)
             {
                 listMatches = FilterList(11, compulinkProduct, wvaProducts, new MatchProduct(name: Database.ReturnWvaProductFor(compulinkProduct), matchScore: 100));
                 return listMatches;
             }
-
             // If 3-4 numPicks show suggested product and 14 matches (somewhat confident)
             else if (numPicks >= 3)
             {
                 listMatches = FilterList(16, compulinkProduct, wvaProducts, new MatchProduct(name: Database.ReturnWvaProductFor(compulinkProduct), matchScore: 100));
                 return listMatches;
             }
-
             // If 1-2 numPicks show suggested product and all matches (low confidence)
             else if (numPicks >= 1)
             {
                 listMatches = FilterList(999, compulinkProduct, wvaProducts, new MatchProduct(name: Database.ReturnWvaProductFor(compulinkProduct), matchScore: 100));
                 return listMatches;
             }
-
             // If 0 numPicks show all matches (no confidence)
             else
             {

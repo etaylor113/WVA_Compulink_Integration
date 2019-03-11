@@ -39,29 +39,36 @@ namespace WVA_Compulink_Integration.Views.Login
 
         private bool IsComplexPassword(string password)
         {
-            // Password must be at least 8 characters
-            if (password == null || password.Length < 8)
-                return false;
+            try { 
+                // Password must be at least 8 characters
+                if (password == null || password.Length < 8)
+                    return false;
 
-            bool hasCapitalLetter = false;
-            bool hasNumber = false;
+                bool hasCapitalLetter = false;
+                bool hasNumber = false;
 
-            foreach (char letter in password)
-            {
-                // Check password for capital letters
-                if (char.IsUpper(letter) && char.IsLetter(letter))
-                    hasCapitalLetter = true;
+                foreach (char letter in password)
+                {
+                    // Check password for capital letters
+                    if (char.IsUpper(letter) && char.IsLetter(letter))
+                        hasCapitalLetter = true;
 
-                // Check password for numbers
-                if (char.IsNumber(letter))
-                    hasNumber = true;
+                    // Check password for numbers
+                    if (char.IsNumber(letter))
+                        hasNumber = true;
+                }
+
+                if (hasCapitalLetter && hasNumber)
+                    return true;
+                else
+                    return false;
             }
-
-            if (hasCapitalLetter && hasNumber)
-                return true;
-            else
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
                 return false;
-        }
+            }
+}
 
         private Response ChangePassword()
         {
