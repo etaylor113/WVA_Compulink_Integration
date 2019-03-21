@@ -25,6 +25,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.Reflection;
 using WVA_Compulink_Integration.Models.Product.ProductOut;
+using WVA_Compulink_Integration.Updates;
 
 namespace WVA_Compulink_Integration.Views
 {
@@ -181,9 +182,9 @@ namespace WVA_Compulink_Integration.Views
             MainContentControl.DataContext = new SettingsView();
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
-        }      
+            //Updater.RunLaucherUpdate();
+        }
     }
 }

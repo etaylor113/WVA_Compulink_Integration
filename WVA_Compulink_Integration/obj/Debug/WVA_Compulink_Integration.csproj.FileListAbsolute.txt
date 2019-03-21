@@ -84,6 +84,7 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\OrdersView.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\CompulinkOrders.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\OrderCreationView.g.cs
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\ViewOrderDetails.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\WVAOrders.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Registration\RegistrationWindow.g.cs
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\LoadingWindow.g.cs
@@ -103,6 +104,7 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\OrdersView.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\CompulinkOrders.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\OrderCreationView.baml
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\ViewOrderDetails.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Orders\WVAOrders.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\Registration\RegistrationWindow.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Debug\Views\LoadingWindow.baml

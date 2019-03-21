@@ -27,6 +27,12 @@ namespace WVA_Compulink_Integration.Views
             DetermineView(prescriptions, orderName, selectedView);
         }
 
+        public OrdersView(Order order)
+        {
+            InitializeComponent();
+            OrdersContentControl.DataContext = new ViewOrderDetailsViewModel(order);
+        }
+
         public void DetermineView(List<Prescription> prescriptions = null, string orderName = "",  string selectedView = "")
         {
             switch (selectedView)

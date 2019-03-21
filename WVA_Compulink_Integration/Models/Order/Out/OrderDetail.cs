@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WVA_Compulink_Integration.Models.Order.Out
 {
-    class OrderDetail
+    public class OrderDetail
     {
         [JsonProperty("name")]
         public string Name { get; set; }

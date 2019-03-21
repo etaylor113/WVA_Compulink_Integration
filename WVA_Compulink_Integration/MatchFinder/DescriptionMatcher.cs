@@ -197,7 +197,9 @@ namespace WVA_Compulink_Integration.MatchFinder
                                            .Replace(" mf", " multifocal ")
                                            .Replace("multif ", " multifocal ")
                                            .Replace("multi ", " multifocal ")
-                                           .Replace("presby ", "presbyopia ")
+                                           .Replace("presby ", "multifocal ")
+                                           .Replace("pres ", "multifocal ")
+                                           .Replace("presbyopia", "multifocal ")
                                            .Replace("asph ", " aspheric ")
                                            .Replace("clr ", " color ");
 

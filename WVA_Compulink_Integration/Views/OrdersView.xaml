@@ -129,6 +129,10 @@
             <views:OrderCreationView DataContext="{Binding ElementName=orderCreationViewTemplate}"/>
         </DataTemplate>
 
+        <DataTemplate x:Name="ViewOrderDetailsViewTemplate" DataType="{x:Type viewmodels:ViewOrderDetailsViewModel}">
+            <views:ViewOrderDetails DataContext="{Binding ElementName=viewOrderDetailsViewTemplate}"/>
+        </DataTemplate>
+
     </UserControl.Resources>
 
     <!-- Main Grid -->

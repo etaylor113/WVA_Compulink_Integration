@@ -277,6 +277,26 @@ namespace WVA_Compulink_Integration.Views.Orders
             
             RefreshOrders();
         }
-      
+
+        private void WvaOrdersDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                Order selectedOrder = (Order)WvaOrdersDataGrid.SelectedItems[0];
+
+                if (selectedOrder.Status == "submitted")
+                {
+                    foreach (Window window in Application.Current.Windows)
+                    {
+                        if (window.GetType() == typeof(MainWindow))
+                            (window as MainWindow).MainContentControl.DataContext = new OrdersView(selectedOrder);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+            }
+        }
     }
 }

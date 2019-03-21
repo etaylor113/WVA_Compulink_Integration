@@ -81,7 +81,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         }
 
         // =======================================================================================================================
-        // ================================== Match Algorithm Methods ============================================================
+        // ================================== Match Algorithm ====================================================================
         // =======================================================================================================================
 
         private void FindProductMatches(double matchScore = 50, bool overrideNumPicks = false)
@@ -115,18 +115,14 @@ namespace WVA_Compulink_Integration.Views.Orders
                 // Run match finder for product and return results based on numPicks (number of times same product has been chosen)
                 List<MatchProduct> matchProducts = ProductPrediction.GetPredictionMatches(product.Description + product.Vendor, MatchScore, wvaProducts, overrideNumPicks);
 
-                // matchString format == (description + vendor) 
-                //List<MatchProduct> matchProducts = DescriptionMatcher.FindMatch(product.Description + product.Vendor, wvaProducts, Convert.ToDouble(MinScoreAdjustSlider.Value));
-
-                if (matchProducts.Count > 0)
+                if (matchProducts?.Count > 0)
                 {
                     ListMatchedProducts.Add(matchProducts);
                     OrderCreationViewModel.Prescriptions[index].ProductCode = matchProducts[0].ProductKey;
                 }
                 else
-                {
                     ListMatchedProducts.Add(new List<MatchProduct> { new MatchProduct("No Matches Found", 0) });
-                }
+
                 index++;
             }
         }
@@ -389,288 +385,201 @@ namespace WVA_Compulink_Integration.Views.Orders
                     return;
                 }
 
-                // If column is a 'Product'
-                if (SelectedColumn == 3)
-                {
-                    foreach (MatchProduct match in ListMatchedProducts[SelectedRow])
-                    {
-                        MenuItem menuItem = new MenuItem() { Header = match.Name };
-                        menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                        WVA_OrdersContextMenu.Items.Add(menuItem);                      
-                    }
-                }
-                // If column is a 'BaseCurve'
-                if (SelectedColumn == 5)
-                {
-                    try
-                    {
-                        int ValidItemsCount;
+                int ValidItemsCount;
 
-                        if (OrderCreationViewModel.Prescriptions[SelectedRow].BaseCurveValidItems != null)
-                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].BaseCurveValidItems.Count;
-                        else
-                        {
-                            SetNotAvailableMenuItem();
-                            return;
-                        }
-
-                        if (ValidItemsCount > 0)
-                        {
-                            for (int i = 0; i < ValidItemsCount; i++)
+                try
+                {
+                    // Load the context menu with relevant items at a specific column
+                    // 0-2 are skipped because they are not editable parameters
+                    switch (SelectedColumn)
+                    {
+                        case 3: // If column is a 'Product'
+                            foreach (MatchProduct match in ListMatchedProducts[SelectedRow])
                             {
-                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].BaseCurveValidItems[i] };
+                                MenuItem menuItem = new MenuItem() { Header = match.Name };
                                 menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                                WVA_OrdersContextMenu.Items.Add(menuItem);
+                                WVA_OrdersContextMenu.Items.Add(menuItem);                               
                             }
-                        }
-                        else
-                            throw new Exception("No Valid Items");
-                    }
-                    catch 
-                    {
-                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
-                        menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                        WVA_OrdersContextMenu.Items.Add(menuItem);
-                    }
-                }
-                // If column is a 'Diameter'
-                else if (SelectedColumn == 6)
-                {
-                    try
-                    {
-                        int ValidItemsCount;
 
-                        if (OrderCreationViewModel.Prescriptions[SelectedRow].DiameterValidItems != null)
-                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].DiameterValidItems.Count;
-                        else
-                        {
-                            SetNotAvailableMenuItem();
-                            return;
-                        }
-
-                        if (ValidItemsCount > 0)
-                        {
-                            for (int i = 0; i < ValidItemsCount; i++)
+                            // Add 'More Matches' item to the end of the list 
+                            MenuItem moreMatchesMenuItem = new MenuItem() { Header = "-- More Matches --" };
+                            moreMatchesMenuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
+                            WVA_OrdersContextMenu.Items.Add(moreMatchesMenuItem);
+                            break;
+                        case 5: // If column is a 'BaseCurve'
+                            if (OrderCreationViewModel.Prescriptions[SelectedRow].BaseCurveValidItems != null)
+                                ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].BaseCurveValidItems.Count;
+                            else
                             {
-                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].DiameterValidItems[i] };
-                                menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                                WVA_OrdersContextMenu.Items.Add(menuItem);
+                                SetNotAvailableMenuItem();
+                                return;
                             }
-                        }
-                        else
-                            throw new Exception("No Valid Items");
-                    }
-                    catch
-                    {
-                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
-                        menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                        WVA_OrdersContextMenu.Items.Add(menuItem);
-                    }
-                }
-                // If column is a 'Sphere'
-                else if (SelectedColumn == 7)
-                {
-                    try
-                    {
-                        int ValidItemsCount;
 
-                        if (OrderCreationViewModel.Prescriptions[SelectedRow].SphereValidItems != null)
-                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].SphereValidItems.Count;
-                        else
-                        {
-                            SetNotAvailableMenuItem();
-                            return;
-                        }
-
-                        if (ValidItemsCount > 0)
-                        {
-                            for (int i = 0; i < ValidItemsCount; i++)
+                            if (ValidItemsCount > 0)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].SphereValidItems[i] };
-                                menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                                WVA_OrdersContextMenu.Items.Add(menuItem);
+                                for (int i = 0; i < ValidItemsCount; i++)
+                                {
+                                    MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].BaseCurveValidItems[i] };
+                                    menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
+                                    WVA_OrdersContextMenu.Items.Add(menuItem);
+                                }
                             }
-                        }
-                        else
-                            throw new Exception("No Valid Items");
-                    }
-                    catch 
-                    {
-                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
-                        menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                        WVA_OrdersContextMenu.Items.Add(menuItem);
-                    }
-                }
-                // If column is a 'Cylinder'
-                else if (SelectedColumn == 8)
-                {
-                    try
-                    {
-                        int ValidItemsCount;
-
-                        if (OrderCreationViewModel.Prescriptions[SelectedRow].CylinderValidItems != null)
-                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].CylinderValidItems.Count;
-                        else
-                        {
-                            SetNotAvailableMenuItem();
-                            return;
-                        }
-
-                        if (ValidItemsCount > 0)
-                        {
-                            for (int i = 0; i < ValidItemsCount; i++)
+                            else
+                                throw new Exception("No Valid Items");
+                            break;
+                        case 6: // If column is a 'Diameter'
+                            if (OrderCreationViewModel.Prescriptions[SelectedRow].DiameterValidItems != null)
+                                ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].DiameterValidItems.Count;
+                            else
                             {
-                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].CylinderValidItems[i] };
-                                menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                                WVA_OrdersContextMenu.Items.Add(menuItem);
+                                SetNotAvailableMenuItem();
+                                return;
                             }
-                        }
-                        else
-                            throw new Exception("No Valid Items");
-                    }
-                    catch 
-                    {
-                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
-                        menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                        WVA_OrdersContextMenu.Items.Add(menuItem);
-                    }
-                }
-                // If column is a 'Axis'
-                else if (SelectedColumn == 9)
-                {
-                    try
-                    {
-                        int ValidItemsCount;
 
-                        if (OrderCreationViewModel.Prescriptions[SelectedRow].AxisValidItems != null)
-                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].AxisValidItems.Count;
-                        else
-                        {
-                            SetNotAvailableMenuItem();
-                            return;
-                        }
-
-                        if (ValidItemsCount > 0)
-                        {
-                            for (int i = 0; i < ValidItemsCount; i++)
+                            if (ValidItemsCount > 0)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].AxisValidItems[i] };
-                                menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                                WVA_OrdersContextMenu.Items.Add(menuItem);
+                                for (int i = 0; i < ValidItemsCount; i++)
+                                {
+                                    MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].DiameterValidItems[i] };
+                                    menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
+                                    WVA_OrdersContextMenu.Items.Add(menuItem);
+                                }
                             }
-                        }
-                        else
-                            throw new Exception("No Valid Items");
-                    }
-                    catch 
-                    {
-                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
-                        menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                        WVA_OrdersContextMenu.Items.Add(menuItem);
-                    }
-                }
-                // If column is a 'Add'
-                else if (SelectedColumn == 10)
-                {
-                    try
-                    {
-                        int ValidItemsCount;
-
-                        if (OrderCreationViewModel.Prescriptions[SelectedRow].AddValidItems != null)
-                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].AddValidItems.Count;
-                        else
-                        {
-                            SetNotAvailableMenuItem();
-                            return;
-                        }
-
-                        if (ValidItemsCount > 0)
-                        {
-                            for (int i = 0; i < ValidItemsCount; i++)
+                            else
+                                throw new Exception("No Valid Items");
+                            break;
+                        case 7: // If column is a 'Sphere'
+                            if (OrderCreationViewModel.Prescriptions[SelectedRow].SphereValidItems != null)
+                                ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].SphereValidItems.Count;
+                            else
                             {
-                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].AddValidItems[i] };
-                                menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                                WVA_OrdersContextMenu.Items.Add(menuItem);
+                                SetNotAvailableMenuItem();
+                                return;
                             }
-                        }
-                        else
-                            throw new Exception("No Valid Items");
-                    }
-                    catch
-                    {
-                        MenuItem menuItem = new MenuItem() { Header = "Not Available" };
-                        menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                        WVA_OrdersContextMenu.Items.Add(menuItem);
-                    }
-                }
-                // If column is a 'Color'
-                else if (SelectedColumn == 11)
-                {
-                    try
-                    {
-                        int ValidItemsCount;
 
-                        if (OrderCreationViewModel.Prescriptions[SelectedRow].ColorValidItems != null)
-                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].ColorValidItems.Count;
-                        else
-                        {
-                            SetNotAvailableMenuItem();
-                            return;
-                        }
-
-                        if (ValidItemsCount > 0)
-                        {
-                            for (int i = 0; i < ValidItemsCount; i++)
+                            if (ValidItemsCount > 0)
                             {
-                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].ColorValidItems[i] };
-                                menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                                WVA_OrdersContextMenu.Items.Add(menuItem);
+                                for (int i = 0; i < ValidItemsCount; i++)
+                                {
+                                    MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].SphereValidItems[i] };
+                                    menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
+                                    WVA_OrdersContextMenu.Items.Add(menuItem);
+                                }
                             }
-                        }
-                        else
-                            throw new Exception("No Valid Items");
-                    }
-                    catch 
-                    {
-                        SetNotAvailableMenuItem();
-                    }
-                }
-                // If column is a 'Multifocal'
-                else if (SelectedColumn == 12)
-                {
-                    try
-                    {
-                        int ValidItemsCount;
-
-                        if (OrderCreationViewModel.Prescriptions[SelectedRow].MultifocalValidItems != null)
-                            ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].MultifocalValidItems.Count;
-                        else
-                        {
-                            SetNotAvailableMenuItem();
-                            return;
-                        }
-
-                        if (ValidItemsCount > 0)
-                        {
-                            for (int i = 0; i < ValidItemsCount; i++)
+                            else
+                                throw new Exception("No Valid Items");
+                            break;
+                        case 8: // If column is a 'Cylinder'
+                            if (OrderCreationViewModel.Prescriptions[SelectedRow].CylinderValidItems != null)
+                                ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].CylinderValidItems.Count;
+                            else
                             {
-                                MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].MultifocalValidItems[i] };
-                                menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                                WVA_OrdersContextMenu.Items.Add(menuItem);
+                                SetNotAvailableMenuItem();
+                                return;
                             }
-                        }
-                        else
-                            throw new Exception("No Valid Items");
-                    }
-                    catch 
-                    {
-                        SetNotAvailableMenuItem();
+
+                            if (ValidItemsCount > 0)
+                            {
+                                for (int i = 0; i < ValidItemsCount; i++)
+                                {
+                                    MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].CylinderValidItems[i] };
+                                    menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
+                                    WVA_OrdersContextMenu.Items.Add(menuItem);
+                                }
+                            }
+                            else
+                                throw new Exception("No Valid Items");
+                            break;
+                        case 9: // If column is a 'Axis'
+                            if (OrderCreationViewModel.Prescriptions[SelectedRow].AxisValidItems != null)
+                                ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].AxisValidItems.Count;
+                            else
+                            {
+                                SetNotAvailableMenuItem();
+                                return;
+                            }
+
+                            if (ValidItemsCount > 0)
+                            {
+                                for (int i = 0; i < ValidItemsCount; i++)
+                                {
+                                    MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].AxisValidItems[i] };
+                                    menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
+                                    WVA_OrdersContextMenu.Items.Add(menuItem);
+                                }
+                            }
+                            else
+                                throw new Exception("No Valid Items");
+                            break;
+                        case 10: // If column is a 'Add'
+                            if (OrderCreationViewModel.Prescriptions[SelectedRow].AddValidItems != null)
+                                ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].AddValidItems.Count;
+                            else
+                            {
+                                SetNotAvailableMenuItem();
+                                return;
+                            }
+
+                            if (ValidItemsCount > 0)
+                            {
+                                for (int i = 0; i < ValidItemsCount; i++)
+                                {
+                                    MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].AddValidItems[i] };
+                                    menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
+                                    WVA_OrdersContextMenu.Items.Add(menuItem);
+                                }
+                            }
+                            else
+                                throw new Exception("No Valid Items");
+                            break;
+                        case 11: // If column is a 'Color'
+                            if (OrderCreationViewModel.Prescriptions[SelectedRow].ColorValidItems != null)
+                                ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].ColorValidItems.Count;
+                            else
+                            {
+                                SetNotAvailableMenuItem();
+                                return;
+                            }
+
+                            if (ValidItemsCount > 0)
+                            {
+                                for (int i = 0; i < ValidItemsCount; i++)
+                                {
+                                    MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].ColorValidItems[i] };
+                                    menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
+                                    WVA_OrdersContextMenu.Items.Add(menuItem);
+                                }
+                            }
+                            else
+                                throw new Exception("No Valid Items");
+                            break;
+                        case 12: // If column is a 'Multifocal'
+                            if (OrderCreationViewModel.Prescriptions[SelectedRow].MultifocalValidItems != null)
+                                ValidItemsCount = OrderCreationViewModel.Prescriptions[SelectedRow].MultifocalValidItems.Count;
+                            else
+                            {
+                                SetNotAvailableMenuItem();
+                                return;
+                            }
+
+                            if (ValidItemsCount > 0)
+                            {
+                                for (int i = 0; i < ValidItemsCount; i++)
+                                {
+                                    MenuItem menuItem = new MenuItem() { Header = OrderCreationViewModel.Prescriptions[SelectedRow].MultifocalValidItems[i] };
+                                    menuItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
+                                    WVA_OrdersContextMenu.Items.Add(menuItem);
+                                }
+                            }
+                            else
+                                throw new Exception("No Valid Items");
+                            break;
                     }
                 }
-
-                MenuItem menuItem2 = new MenuItem() { Header = "-- More Matches --" };
-                menuItem2.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                WVA_OrdersContextMenu.Items.Add(menuItem2);
+                catch
+                {
+                    SetNotAvailableMenuItem();
+                }               
             }
             catch (Exception x)
             {
@@ -1016,7 +925,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         LastName        =   prescription.LastName,
                         PatientID       =   prescription._CustomerID?.Value,
                         Eye             =   prescription.Eye,
-                        Quantity        =   prescription.Quantity,
+                        Quantity        =   prescription.Quantity == null || prescription.Quantity.Trim() == "" || prescription.Quantity == "0" ? "1" : prescription.Quantity,
                         ItemRetailPrice =   prescription.Price,
                         ProductDetail   =   new OrderDetail()
                         {
@@ -1064,8 +973,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 if (response.Status == "SUCCESS")
                 {
-                    MessageWindow messageWindow = new MessageWindow("\t\tOrder Saved!");
-                    messageWindow.Show();
+                    new MessageWindow("\t\tOrder Saved!").Show();
                 }
                 else
                     throw new Exception($"Save order failed. Error message: {response.Message}");                   
@@ -1084,8 +992,14 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 ClearView();
 
-                MessageWindow messageWindow = new MessageWindow("\t\tOrder deleted!");
-                messageWindow.Show();
+                new MessageWindow("\t\tOrder deleted!").Show();
+
+                // Change view to WVA Orders view
+                foreach (Window window in Application.Current.Windows)
+                {
+                    if (window.GetType() == typeof(MainWindow))
+                        (window as MainWindow).MainContentControl.DataContext = new OrdersView(null, null, "CompulinkOrders");
+                }
             }
             else
             {
@@ -1102,8 +1016,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 if (outOrderWrapper == null)
                 {
-                    MessageWindow messageWindow = new MessageWindow("Please be sure all items are valid before submitting.");
-                    messageWindow.Show();
+                    new MessageWindow("Please be sure all items are valid before submitting.").Show();
                     return;
                 }
                 
@@ -1123,20 +1036,23 @@ namespace WVA_Compulink_Integration.Views.Orders
                     else
                         message = "\t\tOrder created!";
 
-                    MessageWindow messageWindow = new MessageWindow(message);
-                    messageWindow.Show();
+                    new MessageWindow(message).Show();
+
+                    // Change view to WVA Orders view
+                    foreach (Window window in Application.Current.Windows)
+                    {
+                        if (window.GetType() == typeof(MainWindow))
+                            (window as MainWindow).MainContentControl.DataContext = new OrdersView(null, null, "WVAOrders");
+                    }
                 }
                 else
                 {
-                    MessageWindow messageWindow = new MessageWindow($"Order creation has failed with the following message: {response.Message}");
-                    messageWindow.Show();
+                    new MessageWindow($"Order creation has failed with the following message: {response.Message}").Show();
                 }                         
             }
             catch (Exception x)
             {
-                MessageWindow messageWindow = new MessageWindow("Order creation failed. Please see error log for details.");
-                messageWindow.Show();
-
+                new MessageWindow("Order creation failed. Please see error log for details.").Show();
                 AppError.PrintToLog(x);
             }
         }
@@ -1169,7 +1085,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 if (selectedItem.Contains("More Matches"))
                 {
                     // Run match FindMatch again with higher tolerances
-                    FindProductMatches(50, true);
+                    FindProductMatches(60, true);
                     SetMenuItems();
                     WVA_OrdersContextMenu.IsOpen = true;
                     return;
@@ -1303,9 +1219,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                MessageWindow messageWindow = new MessageWindow("An error has occurred Please see error log for details.");
-                messageWindow.Show();
-
+                new MessageWindow("An error has occurred Please see error log for details.").Show();
                 AppError.PrintToLog(x);
             }
         }

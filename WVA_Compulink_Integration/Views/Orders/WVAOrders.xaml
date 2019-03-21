@@ -244,7 +244,8 @@
                   CanUserAddRows="False"
                   CanUserReorderColumns="False"
                   CanUserSortColumns="False" 
-                  HeadersVisibility="Column">
+                  HeadersVisibility="Column" 
+                  MouseDoubleClick="WvaOrdersDataGrid_MouseDoubleClick">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=WvaStoreID}"     Width="85"   Header="WVA Store ID" />

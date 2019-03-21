@@ -145,9 +145,12 @@
     <Compile Include="Models\Validations\ValidationResponse.cs" />
     <Compile Include="Models\Validations\ValidationWrapper.cs" />
     <Compile Include="Models\Validations\Validator.cs" />
+    <Compile Include="Updates\UpdateOutput.cs" />
+    <Compile Include="Updates\Updater.cs" />
     <Compile Include="Utility\UI_Tools\DatagridTools.cs" />
     <Compile Include="ViewModels\Orders\CompulinkOrdersViewModel.cs" />
     <Compile Include="ViewModels\Orders\OrderCreationViewModel.cs" />
+    <Compile Include="ViewModels\Orders\ViewOrderDetailsViewModel.cs" />
     <Compile Include="ViewModels\Orders\WVAOrdersViewModel.cs" />
     <Compile Include="Views\Login\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
@@ -166,6 +169,9 @@
     </Compile>
     <Compile Include="Views\Orders\OrderCreationView.xaml.cs">
       <DependentUpon>OrderCreationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orders\ViewOrderDetails.xaml.cs">
+      <DependentUpon>ViewOrderDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Orders\WVAOrders.xaml.cs">
       <DependentUpon>WVAOrders.xaml</DependentUpon>
@@ -253,6 +259,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Orders\OrderCreationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Orders\ViewOrderDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

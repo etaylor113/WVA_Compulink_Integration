@@ -134,7 +134,30 @@ namespace WVA_Compulink_Integration.Views.Orders
                 if (httpStatus != "OK")
                     throw new Exception($"Http status: {httpStatus.ToString()} from server while getting order names!");
 
-                return JsonConvert.DeserializeObject<PrescriptionWrapper>(strPrescriptions);
+                PrescriptionWrapper prescriptionWrapper = JsonConvert.DeserializeObject<PrescriptionWrapper>(strPrescriptions);
+
+
+                // Remove any unsafe sql characters from compulink data
+                for (int i = 0; i < prescriptionWrapper.Request.Products.Count; i++)
+                {
+                    var p = prescriptionWrapper.Request.Products[i];
+
+                    p._CustomerID.Value  = RemoveUnsafeChars(p._CustomerID.Value);
+                    p.Patient            = RemoveUnsafeChars(p.Patient);
+                    p.Add                = RemoveUnsafeChars(p.Add);
+                    p.BaseCurve          = RemoveUnsafeChars(p.BaseCurve);
+                    p.Color              = RemoveUnsafeChars(p.Color);
+                    p.Cylinder           = RemoveUnsafeChars(p.Cylinder);
+                    p.Axis               = RemoveUnsafeChars(p.Axis);
+                    p.Diameter           = RemoveUnsafeChars(p.Diameter);
+                    p.Eye                = RemoveUnsafeChars(p.Eye);
+                    p.FirstName          = RemoveUnsafeChars(p.FirstName);
+                    p.LastName           = RemoveUnsafeChars(p.LastName);
+                    p.Multifocal         = RemoveUnsafeChars(p.Multifocal);
+                    p.Sphere             = RemoveUnsafeChars(p.Sphere);
+                }
+
+                return prescriptionWrapper;
             }
             catch (Exception ex)
             {

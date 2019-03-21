@@ -114,4 +114,6 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\bin\Release\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Orders\ViewOrderDetails.g.cs
+C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\Views\Orders\ViewOrderDetails.baml
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\WVA_Compulink_Integration\obj\Release\WVA_Compulink_Integration.csprojAssemblyReference.cache
