@@ -17,7 +17,7 @@ using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models.Response;
-using WVA_Compulink_Integration.Models.User;
+using WVA_Compulink_Integration.Models.Users;
 using WVA_Compulink_Integration.Utility.File;
 
 namespace WVA_Compulink_Integration.Views.Login

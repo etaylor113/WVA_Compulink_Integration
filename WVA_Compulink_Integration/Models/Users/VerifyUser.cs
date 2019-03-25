@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WVA_Compulink_Integration.Models.User
+namespace WVA_Compulink_Integration.Models.Users
 {
     class VerifyUser
     {

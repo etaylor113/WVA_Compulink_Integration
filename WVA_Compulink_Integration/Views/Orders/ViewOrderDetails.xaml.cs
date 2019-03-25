@@ -39,71 +39,33 @@ namespace WVA_Compulink_Integration.Views.Orders
             OrderedByLabel.Content  = o.OrderedBy;
             AccountIDLabel.Content  = o.CustomerID;
 
-            // Sub-header
-            // If value is not null or blank, add it to a stack panel column so the view scales smoothly
+            // Sub-header (if value is not null or blank, add it to a stack panel column so the view scales smoothly)
             if (o.Name_1 != null && o.Name_1.Trim() != "")
-                LeftInnerStackPanel.Children.Add(new Label()
-                {
-                    Content = $"Addressee: {o.Name_1}",
-                    FontFamily = new FontFamily("Sitka Text"),
-                    FontSize = 16
-                });
+                StackPanelAddLeftChild($"Addressee: {o.Name_1}");
 
             if (o.StreetAddr_1 != null && o.StreetAddr_1.Trim() != "")
-                LeftInnerStackPanel.Children.Add(new Label()
-                {
-                    Content = $"Address: {o.StreetAddr_1}",
-                    FontFamily = new FontFamily("Sitka Text"),
-                    FontSize = 16
-                });
+                StackPanelAddLeftChild($"Address: {o.StreetAddr_1}");
 
             if (o.ShippingMethod != null && o.ShippingMethod.Trim() != "")
-                LeftInnerStackPanel.Children.Add(new Label()
-                {
-                    Content = $"Ship Type: {o.ShippingMethod}",
-                    FontFamily = new FontFamily("Sitka Text"),
-                    FontSize = 16
-                });
+                StackPanelAddLeftChild($"Ship Type: {o.ShippingMethod}");
 
             if (o.Name_1 != null && o.Phone.Trim() != "")
-                LeftInnerStackPanel.Children.Add(new Label()
-                {
-                    Content = $"Phone: {o.Phone}",
-                    FontFamily = new FontFamily("Sitka Text"),
-                    FontSize = 16
-                });
+                StackPanelAddLeftChild($"Phone: {o.Phone}");
 
             if (o.City != null && o.City.Trim() != "")
-                RightInnerStackPanel.Children.Add(new Label()
-                {
-                    Content = $"City: {o.City}",
-                    FontFamily = new FontFamily("Sitka Text"),
-                    FontSize = 16
-                });
-
+                StackPanelAddRightChild($"City: {o.City}");
+               
             if (o.Name_1 != null && o.State.Trim() != "")
-                RightInnerStackPanel.Children.Add(new Label()
-                {
-                    Content = $"State: {o.State}",
-                    FontFamily = new FontFamily("Sitka Text"),
-                    FontSize = 16
-                });
-
+                StackPanelAddRightChild($"State: {o.State}");
+          
             if (o.Zip != null && o.Zip.Trim() != "")
-                RightInnerStackPanel.Children.Add(new Label()
-                {
-                    Content = $"Zip: {o.Zip}",
-                    FontFamily = new FontFamily("Sitka Text"),
-                    FontSize = 16
-                });
+                StackPanelAddRightChild($"Zip: {o.Zip}");
 
             if (o.StreetAddr_2 != null && o.StreetAddr_2.Trim() != "")
-                RightInnerStackPanel.Children.Add(new Label()
-                {
-                    Content = $"Suite/Apt: {o.StreetAddr_2}",
-                    FontFamily = new FontFamily("Sitka Text"),
-                    FontSize = 16
-                });
+                StackPanelAddRightChild($"Suite/Apt: {o.StreetAddr_2}");
+
+            // Grid Header
+            OrderIDLabel.Content = $"WVA Order ID: {o.WvaStoreID}";
 
             // Grid items
             foreach (Item item in ViewOrderDetailsViewModel.SelectedOrder.Items)
@@ -125,6 +87,26 @@ namespace WVA_Compulink_Integration.Views.Orders
                     Multifocal = item.ProductDetail.Multifocal
                 });
             }
+        }
+
+        private void StackPanelAddLeftChild(string content)
+        {
+            LeftInnerStackPanel.Children.Add(new Label()
+            {
+                Content = content,
+                FontFamily = new FontFamily("Sitka Text"),
+                FontSize = 16
+            });
+        }
+
+        private void StackPanelAddRightChild(string content)
+        {
+            RightInnerStackPanel.Children.Add(new Label()
+            {
+                Content = content,
+                FontFamily = new FontFamily("Sitka Text"),
+                FontSize = 16
+            });
         }
 
 

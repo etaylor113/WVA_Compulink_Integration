@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -110,19 +111,28 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
-                string dsn = UserData._User.DSN;
-                string endpoint = $"http://{dsn}/api/order/get-orders/" + $"{UserData._User.Account}";
+                string dsn = UserData.Data.DSN;
+                string endpoint = $"http://{dsn}/api/order/get-orders/" + $"{UserData.Data.Account}";
                 string strOrders = API.Get(endpoint, out string httpStatus);
 
                 if (strOrders == null || strOrders == "")
                     throw new NullReferenceException();
 
-                List<Order> orders = JsonConvert.DeserializeObject<List<Order>>(strOrders);               
+                var inputList = JsonConvert.DeserializeObject<List<Order>>(strOrders);
+                var returnList = new List<Order>();
 
-                foreach (Order order in orders)
+                foreach (Order order in inputList)
                 {
-                    int quantity = 0;
+                    DateTime cutoffDate = DateTime.Now.AddDays(-8);
+                    var cInfo= CultureInfo.CreateSpecificCulture("en-US");
+                    DateTime orderCreatedDate = DateTime.ParseExact(order.CreatedDate, "yyyy-MM-dd-HH:mm:ss", cInfo);
 
+                    // Don't return order if it is submitted and older than 8 days
+                    if (orderCreatedDate < cutoffDate && order.Status == "submitted")
+                        continue;
+
+                    // Find number of items in the order and set the quantity
+                    int quantity = 0;
                     foreach (var detail in order.Items)
                     {
                         try { quantity += Convert.ToInt32(detail.Quantity); }
@@ -131,12 +141,16 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                     order.Quantity = quantity;
                     order.ShippingMethod = GetShippingString(order.ShippingMethod);
-                }
-                   
 
-                return orders;
+                    returnList.Add(order);
+                }
+
+                // Reverse order of the list so that more recent orders show up first 
+                returnList.Reverse(0, returnList.Count);
+
+                return returnList;
             }
-            catch 
+            catch (Exception e) 
             {
                 return null;
             }                 

@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 using WVA_Compulink_Integration.Cryptography;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Memory;
-using WVA_Compulink_Integration.Models.User;
+using WVA_Compulink_Integration.Models.Users;
 using WVA_Compulink_Integration.Utility.File;
 using WVA_Compulink_Integration.Views.Login;
 
@@ -170,7 +170,7 @@ namespace WVA_Compulink_Integration.Views.Registration
                     throw new Exception($"Server responded with the following error: {userRegisterResponse.Message}");
                 else if (userRegisterResponse.Status == "OK")
                 {
-                    UserData._User = userRegisterResponse;
+                    UserData.Data = userRegisterResponse;
                     new MainWindow().Show();
                     Close();
                 }

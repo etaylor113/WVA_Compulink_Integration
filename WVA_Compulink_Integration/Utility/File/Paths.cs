@@ -49,7 +49,8 @@ namespace WVA_Compulink_Integration.Utility.File
         // APP DATA
         public static string ActNumDir              =   $@"{AppData}\WVA Compulink Integration\ActNum\";
         public static string ActNumFile             =   $@"{AppData}\WVA Compulink Integration\ActNum\ActNum.txt";
-
         public static string ErrorLog               =   $@"{AppData}\WVA Compulink Integration\ErrorLog\";
+        public static string UserSettingsDir        =   $@"{AppData}\WVA Compulink Integration\UserSettings\";
+        public static string UserSettingsFile       =   $@"{AppData}\WVA Compulink Integration\UserSettings\Settings.json";
     }
 }

@@ -20,6 +20,7 @@ using System.Windows.Threading;
 using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Memory;
+using WVA_Compulink_Integration.Models.Users;
 using WVA_Compulink_Integration.Utility.File;
 
 namespace WVA_Compulink_Integration.Views
@@ -39,29 +40,8 @@ namespace WVA_Compulink_Integration.Views
         {
             try
             {
-                // Subscribe to AccountTextBox event delegate
-                IsVisibleChanged += new DependencyPropertyChangedEventHandler(AvailableActsComboBox_IsVisibleChanged);
-            
-                // Populate AvailableActComboBox with user's accounts
-                List<string> availableActs = GetAvailableAccounts();
-
-                // Check for nulls 
-                if (availableActs == null || availableActs.ToString().Trim() == "" || availableActs?.Count < 1)
-                    return;
-
-                // Add accounts to combo box
-                foreach (string account in availableActs)
-                    AvailableActsComboBox.Items.Add(account);
-
-                // Pull account number from file if its there
-                string actNum = File.ReadAllText(Paths.ActNumFile).Trim();
-
-                // Select their account number if it's been set already in the drop down
-                for (int i = 0; i < availableActs.Count; i++)
-                {
-                    if (availableActs[i] == actNum)
-                        AvailableActsComboBox.SelectedIndex = i;
-                }                       
+                DeleteBlankCompulinkOrdersCheckBox.IsChecked = UserData.Data.Settings.DeleteBlankCompulinkOrders;
+                SetUpWvaAccountNumber();
             }
             catch (Exception x)
             {
@@ -70,11 +50,58 @@ namespace WVA_Compulink_Integration.Views
             }         
         }
 
+        private void SetUpWvaAccountNumber()
+        {
+            // Subscribe to AccountTextBox event delegate
+            IsVisibleChanged += new DependencyPropertyChangedEventHandler(AvailableActsComboBox_IsVisibleChanged);
+
+            // Populate AvailableActComboBox with user's accounts
+            List<string> availableActs = GetAvailableAccounts();
+
+            // Check for nulls 
+            if (availableActs == null || availableActs.ToString().Trim() == "" || availableActs?.Count < 1)
+                return;
+
+            // Add accounts to combo box
+            foreach (string account in availableActs)
+                AvailableActsComboBox.Items.Add(account);
+
+            // Pull account number from file if its there
+            string actNum = File.ReadAllText(Paths.ActNumFile).Trim();
+
+            // Select their account number if it's been set already in the drop down
+            for (int i = 0; i < availableActs.Count; i++)
+            {
+                if (availableActs[i] == actNum)
+                    AvailableActsComboBox.SelectedIndex = i;
+            }
+        }
+
         private List<string> GetAvailableAccounts()
         {
-            string endpoint = $"http://{UserData._User?.DSN}/api/user/get-acts";
+            string endpoint = $"http://{UserData.Data?.DSN}/api/user/get-acts";
             string response = API.Get(endpoint, out string httpStatus);
             return JsonConvert.DeserializeObject<List<string>>(response);
+        }
+
+        private void UpdateUserSettings()
+        {
+            try
+            {
+                string userSettings = JsonConvert.SerializeObject(UserData.Data?.Settings);
+
+                if (!Directory.Exists(Paths.UserSettingsDir))
+                    Directory.CreateDirectory(Paths.UserSettingsDir);
+
+                if (!File.Exists(Paths.UserSettingsFile))
+                    File.Create(Paths.UserSettingsFile).Close();
+
+                File.WriteAllText(Paths.UserSettingsFile, userSettings);
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+            }
         }
 
         // Allow SearchTextBox to get focus
@@ -118,5 +145,16 @@ namespace WVA_Compulink_Integration.Views
             }
         }
 
+        private void DeleteBlankCompulinkOrdersCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            UserData.Data.Settings.DeleteBlankCompulinkOrders = true;
+            UpdateUserSettings();
+        }
+
+        private void DeleteBlankCompulinkOrdersCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            UserData.Data.Settings.DeleteBlankCompulinkOrders = false;
+            UpdateUserSettings();
+        }
     }
 }

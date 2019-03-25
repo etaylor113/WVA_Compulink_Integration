@@ -70,15 +70,15 @@ namespace WVA_Compulink_Integration.Views
         {
             try
             {
-                string dsn = UserData._User?.DSN ?? throw new NullReferenceException("DSN not set in MainWindow.LoadProducts().");
+                string dsn = UserData.Data?.DSN ?? throw new NullReferenceException("DSN not set in MainWindow.LoadProducts().");
                 string endpoint = $"http://{dsn}/api/product/";
 
                 RequestOut request = new RequestOut()
                 {
                     Request = new ProductOut()
                     {
-                        Api_key = UserData._User?.ApiKey ?? throw new NullReferenceException("ApiKey not set in MainWindow.LoadProducts()."),
-                        AccountID = UserData._User?.Account ?? throw new NullReferenceException("Account ID not set in MainWindow.LoadProducts().")
+                        Api_key = UserData.Data?.ApiKey ?? throw new NullReferenceException("ApiKey not set in MainWindow.LoadProducts()."),
+                        AccountID = UserData.Data?.Account ?? throw new NullReferenceException("Account ID not set in MainWindow.LoadProducts().")
                     }
                 };
 
@@ -146,9 +146,9 @@ namespace WVA_Compulink_Integration.Views
                     file.Close();
                 }
 
-                UserData._User.Account = File.ReadAllText(Paths.ActNumFile).Trim();
-                UserData._User.ApiKey  = File.ReadAllText(Paths.ApiKeyFile).Trim();
-                UserData._User.DSN     = File.ReadAllText(Paths.DSNFile).Trim();
+                UserData.Data.Account = File.ReadAllText(Paths.ActNumFile).Trim();
+                UserData.Data.ApiKey  = File.ReadAllText(Paths.ApiKeyFile).Trim();
+                UserData.Data.DSN     = File.ReadAllText(Paths.DSNFile).Trim();
             }
             catch (Exception x)
             {
@@ -161,7 +161,7 @@ namespace WVA_Compulink_Integration.Views
             try
             {
                 SetUserData();
-                if (UserData._User?.Account != null && UserData._User.Account.Trim() != "")
+                if (UserData.Data?.Account != null && UserData.Data.Account.Trim() != "")
                     return true;
                 else
                     return false;

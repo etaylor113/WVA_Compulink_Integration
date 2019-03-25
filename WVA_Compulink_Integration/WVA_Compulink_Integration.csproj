@@ -137,6 +137,7 @@
     <Compile Include="Models\Response\OrderErrors.cs" />
     <Compile Include="Models\Response\OrderResponse.cs" />
     <Compile Include="Models\Response\ResponseData.cs" />
+    <Compile Include="Models\Users\UserSettings.cs" />
     <Compile Include="Models\Validations\Emails\EmailValidationCode.cs" />
     <Compile Include="Models\Validations\Emails\EmailValidationSend.cs" />
     <Compile Include="Models\Validations\ProductValidation.cs" />
@@ -191,8 +192,8 @@
     <Compile Include="Models\Product\ProductOut\ProductOut.cs" />
     <Compile Include="Models\Product\ProductOut\RequestOut.cs" />
     <Compile Include="Models\Response\Response.cs" />
-    <Compile Include="Models\User\User.cs" />
-    <Compile Include="Models\User\VerifyUser.cs" />
+    <Compile Include="Models\Users\User.cs" />
+    <Compile Include="Models\Users\VerifyUser.cs" />
     <Compile Include="Utility\File\Paths.cs" />
     <Compile Include="ViewModels\OrdersViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />

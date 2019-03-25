@@ -27,8 +27,27 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
         public OrderCreationViewModel(List<Prescription> listPrescriptions, string orderName)
         {
             Order = null;
-            Prescriptions = listPrescriptions;
             OrderName = orderName;
+
+            // Deletes any orders without a product name if user has this setting enabled
+            if (UserData.Data.Settings.DeleteBlankCompulinkOrders)
+            {
+                listPrescriptions.RemoveAll(p => p.Product == null);
+                listPrescriptions.RemoveAll(p => p.Product.Trim() == "");
+            }
+            else
+            {
+                for (int i = 0; i < listPrescriptions.Count; i++)
+                {
+                    if (listPrescriptions[i].Product == null || listPrescriptions[i].Product.Trim() == "")
+                    {
+                        // Find orders with null or blank products and try to match
+                        // them up to and order with the same patient name           
+                    }
+                }
+            }
+
+            Prescriptions = listPrescriptions;
         }
 
         public OrderCreationViewModel(Order order, string orderName)
@@ -46,7 +65,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
 
         public static Order GetOrder(string orderName)
         {
-            string dsn = UserData._User.DSN;          
+            string dsn = UserData.Data.DSN;          
             string endpoint = $"http://{dsn}/api/order/exists/";
             string strOrder = API.Post(endpoint, orderName);
             Order order = JsonConvert.DeserializeObject<Order>(strOrder);
@@ -60,7 +79,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
 
         public static OrderResponse CreateOrder(OutOrderWrapper outOrderWrapper)
         {
-            string dsn = UserData._User.DSN;
+            string dsn = UserData.Data.DSN;
             string endpoint = $"http://{dsn}/api/order/submit/";
             string strResponse = API.Post(endpoint, outOrderWrapper);
             OrderResponse response = JsonConvert.DeserializeObject<OrderResponse>(strResponse);
@@ -70,7 +89,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
 
         public static OrderResponse DeleteOrder(string orderName)
         {
-            string dsn = UserData._User.DSN;
+            string dsn = UserData.Data.DSN;
             string endpoint = $"http://{dsn}/api/order/delete/";
             string strResponse = API.Post(endpoint, orderName);
             OrderResponse response = JsonConvert.DeserializeObject<OrderResponse>(strResponse);
@@ -80,7 +99,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
 
         public static OrderResponse SaveOrder(OutOrderWrapper outOrderWrapper)
         {
-            string dsn = UserData._User.DSN;
+            string dsn = UserData.Data.DSN;
             string endpoint = $"http://{dsn}/api/order/save/";
             string strResponse = API.Post(endpoint, outOrderWrapper);
             OrderResponse response = JsonConvert.DeserializeObject<OrderResponse>(strResponse);

@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using WVA_Compulink_Integration.Models.User;
+using WVA_Compulink_Integration.Models.Users;
 using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Error;
 using Newtonsoft.Json;
@@ -47,7 +47,7 @@ namespace WVA_Compulink_Integration.Views.Login
                 User user = new User()
                 {
                     UserName = UsernameTextBox.Text,
-                    Password = Crypto.ConvertToHash(PasswordTextBox.Password)           
+                    Password = Crypto.ConvertToHash(PasswordTextBox.Password),
                 };
 
                 string dsn = File.ReadAllText(Paths.DSNFile).Trim();
@@ -60,6 +60,30 @@ namespace WVA_Compulink_Integration.Views.Login
             catch (Exception x)
             {
                 AppError.PrintToLog(x);
+                return null;
+            }
+        }
+
+        private UserSettings GetUserSettings()
+        {
+            try
+            {
+                string defaultSettings = JsonConvert.SerializeObject(new UserSettings());
+
+                if (!Directory.Exists(Paths.UserSettingsDir))
+                    Directory.CreateDirectory(Paths.UserSettingsDir);
+
+                if (!File.Exists(Paths.UserSettingsFile))
+                {
+                    File.Create(Paths.UserSettingsFile).Close();
+                    File.WriteAllText(Paths.UserSettingsFile, defaultSettings);
+                }
+
+                return JsonConvert.DeserializeObject<UserSettings>(File.ReadAllText($@"{Paths.UserSettingsFile}"));
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
                 return null;
             }
         }
@@ -96,7 +120,8 @@ namespace WVA_Compulink_Integration.Views.Login
                 else if (loginUserResponse.Status == "OK")
                 {
                     // Set user data in memory to response items                   
-                    UserData._User = loginUserResponse;
+                    UserData.Data = loginUserResponse;
+                    UserData.Data.Settings = GetUserSettings();
 
                     // Let user continue into application
                     new MainWindow().Show();

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WVA_Compulink_Integration.Utility.File;
 
-namespace WVA_Compulink_Integration.Models.User
+namespace WVA_Compulink_Integration.Models.Users
 {
     class User
     {
@@ -21,5 +21,7 @@ namespace WVA_Compulink_Integration.Models.User
         public string Status { get; set; }  
         public string Message { get; set; }
         public string[] AvailableActs { get; set; }
+        public UserSettings Settings { get; set; }
+
     }
 }

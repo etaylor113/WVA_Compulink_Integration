@@ -29,6 +29,7 @@ using System.Diagnostics;
 using WVA_Compulink_Integration.Models.Response;
 using WVA_Compulink_Integration.MatchFinder.ProductPredictions;
 using System.Threading;
+using System.ComponentModel;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
@@ -44,10 +45,41 @@ namespace WVA_Compulink_Integration.Views.Orders
         public List<List<MatchProduct>> ListMatchedProducts = new List<List<MatchProduct>>();
         public List<string> ListWVA_Products = new List<string>();
 
+
         public OrderCreationView()
         {
             InitializeComponent();
             SetUpUI();
+        }
+
+        private void AutosaveOrder()
+        {
+            new Thread(SaveOrderAsync).Start();
+        }
+
+        private void SaveOrderAsync()
+        {
+            while (true)
+            {
+                try
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        Mouse.OverrideCursor = Cursors.Wait;
+                        OutOrderWrapper order = GetCompleteOrder();
+                        OrderCreationViewModel.SaveOrder(order);
+                        Mouse.OverrideCursor = Cursors.Arrow;
+                    });
+                }
+                catch (Exception ex)
+                {
+
+                }
+                finally
+                {
+                    Thread.Sleep(60000);
+                }
+            }
         }
 
         private void SetUpUI()
@@ -253,7 +285,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
-                string dsn = UserData._User?.DSN;
+                string dsn = UserData.Data?.DSN;
                 string id = OrderCreationViewModel.Prescriptions[0]._CustomerID?.Value;
 
                 if (id == null)
@@ -289,8 +321,8 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             // Autofill some user information      
             OrderNameTextBox.Text = OrderCreationViewModel.OrderName ?? "";
-            AccountIDTextBox.Text = UserData._User?.Account ?? "";
-            OrderedByTextBox.Text = UserData._User?.UserName ?? "";
+            AccountIDTextBox.Text = UserData.Data?.Account ?? "";
+            OrderedByTextBox.Text = UserData.Data?.UserName ?? "";
 
             // Hide STP fields if order not STP
             if (!OrderCreationViewModel.Prescriptions[0].IsShipToPatient)
@@ -323,7 +355,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             
             // Right column
             OrderNameTextBox.Text = OrderCreationViewModel.Order.OrderName ?? "";
-            AccountIDTextBox.Text = UserData._User?.Account;
+            AccountIDTextBox.Text = UserData.Data?.Account;
             OrderedByTextBox.Text = OrderCreationViewModel.Order.OrderedBy ?? "";
             //OfficeNameTextBox.Text = OrderCreationViewModel.Order.OfficeName ?? "";
             PoNumberTextBox.Text = OrderCreationViewModel.Order.PoNumber ?? "";
@@ -777,7 +809,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     Request = new ProductValidation()
                     {
-                        Key = UserData._User.ApiKey,
+                        Key = UserData.Data.ApiKey,
                         ProductsToValidate = new List<ItemDetail>()
                     }
                 };
@@ -951,7 +983,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     OutOrder = new OutOrder()
                     {
-                        ApiKey = UserData._User.ApiKey,
+                        ApiKey = UserData.Data.ApiKey,
                         PatientOrder = order
                     }
                 };
@@ -1369,6 +1401,10 @@ namespace WVA_Compulink_Integration.Views.Orders
             DoBLabel.Foreground = new SolidColorBrush(Colors.Black);
         }
 
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            AutosaveOrder();
+        }
     }
 }
 
