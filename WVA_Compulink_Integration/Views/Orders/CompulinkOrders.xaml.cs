@@ -61,6 +61,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     var presc = prescription;
 
                     // Clean up Compulink data
+                    presc._CustomerID.Value = prescription?._CustomerID?.Value ?? null;
                     presc.BaseCurve = prescription.BaseCurve.Trim().Replace(" ", "");
                     presc.Diameter = prescription.Diameter.Trim().Replace(" ", "");
                     presc.Add = prescription.Add.Trim().Replace(" ", "");

@@ -52,6 +52,22 @@ namespace WVA_Compulink_Integration.Views.Orders
             SetUpUI();
         }
 
+        private void SetUpUI()
+        {
+            try
+            {
+                MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
+                SetUpOrdersDataGrid();
+                CheckViewMode();
+                FindProductMatches();
+                Verify();
+            }
+            catch (Exception ex)
+            {
+                AppError.PrintToLog(ex);
+            }
+        }
+
         private void AutosaveOrder()
         {
             new Thread(SaveOrderAsync).Start();
@@ -79,22 +95,6 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     Thread.Sleep(60000);
                 }
-            }
-        }
-
-        private void SetUpUI()
-        {
-            try
-            {
-                MatchPercentLabel.Content = $"Match Percent: {Convert.ToInt16(MinScoreAdjustSlider.Value)}%";
-                SetUpOrdersDataGrid();
-                CheckViewMode();
-                FindProductMatches();
-                Verify();
-            }
-            catch (Exception ex)
-            {
-                AppError.PrintToLog(ex);
             }
         }
 
@@ -921,7 +921,12 @@ namespace WVA_Compulink_Integration.Views.Orders
                     
                 List<Item> listItems = new List<Item>();
                 IList rows = OrdersDataGrid.Items;
-             
+
+                // Set orderID, created date if available
+                order.ID = order.ID ?? null;
+                order.CreatedDate = order.CreatedDate ?? null;
+                order.WvaStoreID = order.WvaStoreID ?? null;
+
                 // Update order object with the form data                  
                 order.OrderName         =   OrderNameTextBox.Text;
                 order.CustomerID        =   AccountIDTextBox.Text;
@@ -952,7 +957,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                     order.Items.Add(new Item()
                     {                            
-                        ID              =   Guid.NewGuid().ToString().Replace("-", ""),
+                        ID              =   Guid.NewGuid().ToString().Replace("-", ""),                       
                         FirstName       =   prescription.FirstName,
                         LastName        =   prescription.LastName,
                         PatientID       =   prescription._CustomerID?.Value,
@@ -1403,7 +1408,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            AutosaveOrder();
+            //AutosaveOrder();
         }
     }
 }

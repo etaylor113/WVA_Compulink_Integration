@@ -30,7 +30,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
             OrderName = orderName;
 
             // Deletes any orders without a product name if user has this setting enabled
-            if (UserData.Data.Settings.DeleteBlankCompulinkOrders)
+            if (UserData.Data?.Settings != null && UserData.Data.Settings.DeleteBlankCompulinkOrders)
             {
                 listPrescriptions.RemoveAll(p => p.Product == null);
                 listPrescriptions.RemoveAll(p => p.Product.Trim() == "");

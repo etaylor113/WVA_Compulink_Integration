@@ -116,7 +116,7 @@ namespace WVA_Compulink_Integration.Views.Registration
         private void Register()
         {
             try
-            {
+                {
                 // Pre API reponse check
                 string password = PasswordTextBox.Password.ToString();
                 string confirmPassword = ConfirmPasswordTextBox.Password.ToString();

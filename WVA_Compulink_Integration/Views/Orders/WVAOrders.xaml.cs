@@ -123,13 +123,16 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 foreach (Order order in inputList)
                 {
-                    DateTime cutoffDate = DateTime.Now.AddDays(-8);
-                    var cInfo= CultureInfo.CreateSpecificCulture("en-US");
-                    DateTime orderCreatedDate = DateTime.ParseExact(order.CreatedDate, "yyyy-MM-dd-HH:mm:ss", cInfo);
+                    if (order.CreatedDate != null && order.CreatedDate.Trim() != "")
+                    {
+                        DateTime cutoffDate = DateTime.Now.AddDays(-8);
+                        var cInfo = CultureInfo.CreateSpecificCulture("en-US");
+                        DateTime orderCreatedDate = DateTime.ParseExact(order.CreatedDate, "yyyy-MM-dd-HH:mm:ss", cInfo);
 
-                    // Don't return order if it is submitted and older than 8 days
-                    if (orderCreatedDate < cutoffDate && order.Status == "submitted")
-                        continue;
+                        // Don't return order if it is submitted and older than 8 days
+                        if (orderCreatedDate < cutoffDate && order.Status == "submitted")
+                            continue;
+                    }
 
                     // Find number of items in the order and set the quantity
                     int quantity = 0;
