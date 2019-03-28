@@ -93,7 +93,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 }
                 finally
                 {
-                    // Wait 2 minutes before continueing
+                    // Wait 2 minutes before auto-saving again
                     Thread.Sleep(120000);
                 }
             }

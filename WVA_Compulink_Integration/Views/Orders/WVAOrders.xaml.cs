@@ -32,10 +32,10 @@ namespace WVA_Compulink_Integration.Views.Orders
     /// </summary>
     public partial class WVAOrders : UserControl
     {
- 
+
         ToolTip toolTip = new ToolTip();
         List<Order> ListOrders { get; set; }
-  
+
         public WVAOrders()
         {
             InitializeComponent();
@@ -96,7 +96,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         tempList = ListOrders.Where(x => x.Status.ToLower().Contains(searchString.ToLower())).ToList();
                         break;
                 }
-                
+
                 WvaOrdersDataGrid.Items.Clear();
                 foreach (Order order in tempList)
                 {
@@ -139,7 +139,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     foreach (var detail in order.Items)
                     {
                         try { quantity += Convert.ToInt32(detail.Quantity); }
-                        catch { continue; }                       
+                        catch { continue; }
                     }
 
                     order.Quantity = quantity;
@@ -153,10 +153,10 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 return returnList;
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 return null;
-            }                 
+            }
         }
 
         private List<Order> SetUpOrdersDataGrid()
@@ -198,13 +198,13 @@ namespace WVA_Compulink_Integration.Views.Orders
             catch (Exception ex)
             {
                 AppError.PrintToLog(ex);
-            }            
+            }
             finally
             {
                 // Close loading window and change cursor back to default arrow cursor
                 loadingWindow.Close();
                 Mouse.OverrideCursor = Cursors.Arrow;
-            }                          
+            }
         }
 
         private List<Order> GetSelectedOrders()
@@ -220,9 +220,34 @@ namespace WVA_Compulink_Integration.Views.Orders
 
             for (int i = 0; i < rows.Count; i++)
                 listOrders.Add((Order)rows[i]);
-           
+
             return listOrders;
         }
+
+        private void OpenEditOrder()
+        {
+            List<Order> order = GetSelectedOrders();
+
+            // Leave method if they don't select an order or if order has already been submitted
+            if (order == null || order[0].Status.ToLower() == "submitted")
+                return;
+
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window.GetType() == typeof(MainWindow))
+                    (window as MainWindow).MainContentControl.DataContext = new OrdersView(new List<Prescription>(), order[0].OrderName, "OrderCreation");
+            }
+        }
+
+        private void OpenViewOrderDetails(Order selectedOrder)
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window.GetType() == typeof(MainWindow))
+                    (window as MainWindow).MainContentControl.DataContext = new OrdersView(selectedOrder);
+            }
+        }
+
 
         // Allow SearchTextBox to get focus
         void LoginControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -266,17 +291,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Edit Button
         private void EditOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            List<Order> order = GetSelectedOrders();
-
-            // Leave method if they don't select an order or if order has already been submitted
-            if (order == null || order[0].Status.ToLower() == "submitted")
-                return;
-
-            foreach (Window window in Application.Current.Windows)
-            {
-                if (window.GetType() == typeof(MainWindow))
-                    (window as MainWindow).MainContentControl.DataContext = new OrdersView(new List<Prescription>(), order[0].OrderName, "OrderCreation");
-            }
+            OpenEditOrder();
         }
 
         // Delete Button
@@ -303,11 +318,11 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 if (selectedOrder.Status == "submitted")
                 {
-                    foreach (Window window in Application.Current.Windows)
-                    {
-                        if (window.GetType() == typeof(MainWindow))
-                            (window as MainWindow).MainContentControl.DataContext = new OrdersView(selectedOrder);
-                    }
+                    OpenViewOrderDetails(selectedOrder);
+                }
+                else if (selectedOrder.Status == "open")
+                {
+                    OpenEditOrder();
                 }
             }
             catch (Exception ex)
