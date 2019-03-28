@@ -89,11 +89,12 @@ namespace WVA_Compulink_Integration.Views.Orders
                 }
                 catch (Exception ex)
                 {
-
+                    AppError.PrintToLog(ex);
                 }
                 finally
                 {
-                    Thread.Sleep(60000);
+                    // Wait 2 minutes before continueing
+                    Thread.Sleep(120000);
                 }
             }
         }
@@ -373,6 +374,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     // If product has been reviewed, show 'checked' image next to product name
                     ProductImagePath = OrderCreationViewModel.Order.Items[i].ProductDetail.ProductReviewed ? @"/Resources/CheckMarkCircle.png" : null,
                     FirstName = OrderCreationViewModel.Order.Items[i].FirstName,
+                    _CustomerID = new CustomerID() { Value = OrderCreationViewModel.Order.Items[i].PatientID }, 
                     LastName = OrderCreationViewModel.Order.Items[i].LastName,
                     Eye = OrderCreationViewModel.Order.Items[i].Eye,
                     Quantity = OrderCreationViewModel.Order.Items[i].Quantity,
@@ -955,9 +957,9 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     Prescription prescription = (Prescription)rows[i];
 
-                    order.Items.Add(new Item()
+                     order.Items.Add(new Item()
                     {                            
-                        ID              =   Guid.NewGuid().ToString().Replace("-", ""),                       
+                        ID              =   Guid.NewGuid().ToString().Replace("-", ""),    
                         FirstName       =   prescription.FirstName,
                         LastName        =   prescription.LastName,
                         PatientID       =   prescription._CustomerID?.Value,
@@ -1408,7 +1410,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            //AutosaveOrder();
+            AutosaveOrder();
         }
     }
 }

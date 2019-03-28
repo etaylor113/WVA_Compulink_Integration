@@ -89,7 +89,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             try
             {
                 // Autofill new order display
-                WvaOrdersComboBox.Text = RemoveUnsafeChars($"[{UserData.Data.UserName}]s order {DateTime.Now.ToString("MM/dd/yy--HH:mm:ss")}");
+                WvaOrdersComboBox.Text = RemoveUnsafeChars($"WVA Order ({UserData.Data.UserName})-{DateTime.Now.ToString("MM/dd/yy--hh:mm")}");
                                         
                 // Get this account's open wva orders
                 string dsn = UserData.Data.DSN;    
