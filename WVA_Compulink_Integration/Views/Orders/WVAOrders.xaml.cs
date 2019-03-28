@@ -4,24 +4,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models.Order.Out;
+using WVA_Compulink_Integration.Models.OrderStatus.FromApi;
+using WVA_Compulink_Integration.Models.OrderStatus.ToApi;
 using WVA_Compulink_Integration.Models.Prescription;
-using WVA_Compulink_Integration.Models.Response;
 using WVA_Compulink_Integration.ViewModels.Orders;
 using WVA_Compulink_Integration.Views.Search;
 
@@ -151,9 +146,39 @@ namespace WVA_Compulink_Integration.Views.Orders
                 // Reverse order of the list so that more recent orders show up first 
                 returnList.Reverse(0, returnList.Count);
 
+                // Make call to status endpoint and update order status so it is up to date
+                string statusEndpoint = "https://orders.wisvis.com/order_status";
+
+                foreach (Order order in returnList)
+                {
+                    if (order.WvaStoreID == null || order.WvaStoreID.Trim() == "")
+                        continue;
+
+                    RequestWrapper request = new RequestWrapper()
+                    {
+                        Request = new StatusRequest()
+                        {
+                            ApiKey = UserData.Data.ApiKey,
+                            CustomerId = UserData.Data.Account,
+                            WvaStoreNumber = order.WvaStoreID
+                        }
+                    };
+
+                    string strStatusResponse = API.Post(statusEndpoint, request);
+                    var statusResponse = JsonConvert.DeserializeObject<StatusResponse>(strStatusResponse);
+
+
+                    // Mark order as deleted
+                    if (statusResponse.DeletedFlag == "Y")
+                        order.Status = "deleted";
+
+                    if (statusResponse.ShippingStatus != null || statusResponse.ShippingStatus.Trim() != "")
+                        order.Status = statusResponse.ShippingStatus;
+                }
+
                 return returnList;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -248,7 +273,6 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
         }
 
-
         // Allow SearchTextBox to get focus
         void LoginControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -316,13 +340,13 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 Order selectedOrder = (Order)WvaOrdersDataGrid.SelectedItems[0];
 
-                if (selectedOrder.Status == "submitted")
-                {
-                    OpenViewOrderDetails(selectedOrder);
-                }
-                else if (selectedOrder.Status == "open")
+                if (selectedOrder.Status == "open")
                 {
                     OpenEditOrder();
+                }
+                else
+                {
+                    OpenViewOrderDetails(selectedOrder);
                 }
             }
             catch (Exception ex)

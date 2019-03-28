@@ -67,6 +67,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             // Grid Header
             OrderIDLabel.Content = $"WVA Order ID: {o.WvaStoreID}";
             OrderStatusLabel.Content = $"Status: {o.Status}";
+
             // Grid items
             foreach (Item item in ViewOrderDetailsViewModel.SelectedOrder.Items)
             {

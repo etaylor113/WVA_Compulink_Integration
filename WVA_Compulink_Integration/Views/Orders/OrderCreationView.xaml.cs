@@ -75,6 +75,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void SaveOrderAsync()
         {
+            int numEr = 0;
             while (true)
             {
                 try
@@ -89,7 +90,10 @@ namespace WVA_Compulink_Integration.Views.Orders
                 }
                 catch (Exception ex)
                 {
-                    AppError.PrintToLog(ex);
+                    numEr++;
+
+                    if (numEr >= 5)
+                        AppError.PrintToLog(ex);
                 }
                 finally
                 {
@@ -191,7 +195,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         
         private void SetUpOrdersDataGrid()
         {
-            OrdersDataGrid.ItemsSource = OrderCreationViewModel.Prescriptions;
+            OrdersDataGrid.ItemsSource = OrderCreationViewModel.Prescriptions;        
         }
 
         private string AssignCellColor(string prodValue, bool isValid, string errorMessage, bool canBeValidated)
@@ -1143,70 +1147,66 @@ namespace WVA_Compulink_Integration.Views.Orders
                 // Only want to change 'Products' column 
                 if (selectedItem != "No Matches Found" && selectedItem != "Not Available")
                 {
-                    // If there are any params that have only one valid item, then auto fill it in
-                    for (int i = 0; i < OrdersDataGrid.Items.Count; i++)
+                    if (OrderCreationViewModel.Prescriptions.Count > 0)
                     {
-                        if (OrderCreationViewModel.Prescriptions.Count > 0)
+                        FindProductMatches();
+                        SetMenuItems();
+                        Verify(); 
+
+                        if (OrderCreationViewModel.Prescriptions[row]?.BaseCurveValidItems?.Count == 1)
                         {
-                            FindProductMatches();
-                            SetMenuItems();
-                            Verify(); 
-
-                            if (OrderCreationViewModel.Prescriptions[i]?.BaseCurveValidItems?.Count == 1)
-                            {
-                                OrdersDataGrid.GetCell(i, 5).Content = OrderCreationViewModel.Prescriptions[i]?.BaseCurveValidItems[0];
-                                OrderCreationViewModel.Prescriptions[row].BaseCurve = OrderCreationViewModel.Prescriptions[i]?.BaseCurveValidItems[0];
-                                Verify();
-                            }
+                            OrdersDataGrid.GetCell(row, 5).Content = OrderCreationViewModel.Prescriptions[row]?.BaseCurveValidItems[0];
+                            OrderCreationViewModel.Prescriptions[row].BaseCurve = OrderCreationViewModel.Prescriptions[row]?.BaseCurveValidItems[0];
+                            Verify();
+                        }
                                
-                            if (OrderCreationViewModel.Prescriptions[i]?.DiameterValidItems?.Count == 1)
-                            {
-                                OrdersDataGrid.GetCell(i, 6).Content = OrderCreationViewModel.Prescriptions[i].DiameterValidItems[0];
-                                OrderCreationViewModel.Prescriptions[row].Diameter = OrderCreationViewModel.Prescriptions[i].DiameterValidItems[0];
-                                Verify();
-                            }
+                        if (OrderCreationViewModel.Prescriptions[row]?.DiameterValidItems?.Count == 1)
+                        {
+                            OrdersDataGrid.GetCell(row, 6).Content = OrderCreationViewModel.Prescriptions[row].DiameterValidItems[0];
+                            OrderCreationViewModel.Prescriptions[row].Diameter = OrderCreationViewModel.Prescriptions[row].DiameterValidItems[0];
+                            Verify();
+                        }
                                
-                            if (OrderCreationViewModel.Prescriptions[i]?.SphereValidItems?.Count == 1)
-                            {
-                                OrdersDataGrid.GetCell(i, 7).Content = OrderCreationViewModel.Prescriptions[i].SphereValidItems[0];
-                                OrderCreationViewModel.Prescriptions[row].Sphere = OrderCreationViewModel.Prescriptions[i].SphereValidItems[0];
-                                Verify();
-                            }
+                        if (OrderCreationViewModel.Prescriptions[row]?.SphereValidItems?.Count == 1)
+                        {
+                            OrdersDataGrid.GetCell(row, 7).Content = OrderCreationViewModel.Prescriptions[row].SphereValidItems[0];
+                            OrderCreationViewModel.Prescriptions[row].Sphere = OrderCreationViewModel.Prescriptions[row].SphereValidItems[0];
+                            Verify();
+                        }
                                
-                            if (OrderCreationViewModel.Prescriptions[i]?.CylinderValidItems?.Count == 1)
-                            {
-                                OrdersDataGrid.GetCell(i, 8).Content = OrderCreationViewModel.Prescriptions[i].CylinderValidItems[0];
-                                OrderCreationViewModel.Prescriptions[row].Cylinder = OrderCreationViewModel.Prescriptions[i].CylinderValidItems[0];
-                                Verify();
-                            }
+                        if (OrderCreationViewModel.Prescriptions[row]?.CylinderValidItems?.Count == 1)
+                        {
+                            OrdersDataGrid.GetCell(row, 8).Content = OrderCreationViewModel.Prescriptions[row].CylinderValidItems[0];
+                            OrderCreationViewModel.Prescriptions[row].Cylinder = OrderCreationViewModel.Prescriptions[row].CylinderValidItems[0];
+                            Verify();
+                        }
 
-                            if (OrderCreationViewModel.Prescriptions[i]?.AxisValidItems?.Count == 1)
-                            {
-                                OrdersDataGrid.GetCell(i, 9).Content = OrderCreationViewModel.Prescriptions[i].AxisValidItems[0];
-                                OrderCreationViewModel.Prescriptions[row].Axis = OrderCreationViewModel.Prescriptions[i].AxisValidItems[0];
-                                Verify();
-                            }
+                        if (OrderCreationViewModel.Prescriptions[row]?.AxisValidItems?.Count == 1)
+                        {
+                            OrdersDataGrid.GetCell(row, 9).Content = OrderCreationViewModel.Prescriptions[row].AxisValidItems[0];
+                            OrderCreationViewModel.Prescriptions[row].Axis = OrderCreationViewModel.Prescriptions[row].AxisValidItems[0];
+                            Verify();
+                        }
 
-                            if (OrderCreationViewModel.Prescriptions[i]?.AddValidItems?.Count == 1)
-                            {
-                                OrdersDataGrid.GetCell(i, 10).Content = OrderCreationViewModel.Prescriptions[i].AddValidItems[0];
-                                OrderCreationViewModel.Prescriptions[row].Add = OrderCreationViewModel.Prescriptions[i].AddValidItems[0];
-                                Verify();
-                            }
+                        if (OrderCreationViewModel.Prescriptions[row]?.AddValidItems?.Count == 1)
+                        {
+                            OrdersDataGrid.GetCell(row, 10).Content = OrderCreationViewModel.Prescriptions[row].AddValidItems[0];
+                            OrderCreationViewModel.Prescriptions[row].Add = OrderCreationViewModel.Prescriptions[row].AddValidItems[0];
+                            Verify();
+                        }
 
-                            if (OrderCreationViewModel.Prescriptions[i]?.ColorValidItems?.Count == 1)
-                            {
-                                OrdersDataGrid.GetCell(i, 11).Content = OrderCreationViewModel.Prescriptions[i].ColorValidItems[0];
-                                OrderCreationViewModel.Prescriptions[row].Color = OrderCreationViewModel.Prescriptions[i].ColorValidItems[0];
-                                Verify();
-                            }
+                        if (OrderCreationViewModel.Prescriptions[row]?.ColorValidItems?.Count == 1)
+                        {
+                            OrdersDataGrid.GetCell(row, 11).Content = OrderCreationViewModel.Prescriptions[row].ColorValidItems[0];
+                            OrderCreationViewModel.Prescriptions[row].Color = OrderCreationViewModel.Prescriptions[row].ColorValidItems[0];
+                            Verify();
+                        }
 
-                            if (OrderCreationViewModel.Prescriptions[i]?.MultifocalValidItems?.Count == 1)
-                            {
-                                OrdersDataGrid.GetCell(i, 12).Content = OrderCreationViewModel.Prescriptions[i].MultifocalValidItems[0];
-                                OrderCreationViewModel.Prescriptions[row].Multifocal = OrderCreationViewModel.Prescriptions[i].MultifocalValidItems[0];
-                                Verify();
-                            }
+                        if (OrderCreationViewModel.Prescriptions[row]?.MultifocalValidItems?.Count == 1)
+                        {
+                            OrdersDataGrid.GetCell(row, 12).Content = OrderCreationViewModel.Prescriptions[row].MultifocalValidItems[0];
+                            OrderCreationViewModel.Prescriptions[row].Multifocal = OrderCreationViewModel.Prescriptions[row].MultifocalValidItems[0];
+                            Verify();
                         }
                     }
 
@@ -1410,7 +1410,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            AutosaveOrder();
+            //AutosaveOrder();
         }
     }
 }

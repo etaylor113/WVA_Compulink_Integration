@@ -142,7 +142,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-
         <StackPanel Grid.Row="0" 
                     Grid.Column="1"
                     Orientation="Horizontal" 
