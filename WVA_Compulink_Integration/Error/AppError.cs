@@ -5,16 +5,55 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using WVA_Compulink_Integration._API;
+using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models;
+using WVA_Compulink_Integration.Models.Response;
 using WVA_Compulink_Integration.Utility.File;
 
 namespace WVA_Compulink_Integration.Error
 {
     class AppError
     {      
-        public static void PrintToLog(string exceptionMessage)
+        public static void ReportOrWrite(Exception e)
+        {
+            JsonError error = new JsonError()
+            {
+                ActNum = UserData.Data?.Account,
+                Error = e.ToString(),
+                Application = "CDI",
+                AppVersion = AssemblyName.GetAssemblyName(Paths.MainAppEXE).Version.ToString()
+            };
+
+            if (!ErrorReported(error))
+                ReportOrWrite(error.Error);
+        }
+
+        private static bool ErrorReported(JsonError error)
+        {
+            try
+            {
+                string dsn = UserData.Data?.DSN;
+
+                if (dsn == null || dsn.Trim() == "")
+                    return false;
+
+                string endpoint = $"http://{dsn}/api/error/";
+                string strResponse = API.Post(endpoint, error);
+                bool messageSent = JsonConvert.DeserializeObject<bool>(strResponse);
+
+                return messageSent;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private static void ReportOrWrite(string exceptionMessage)
         {
             try
             {
@@ -31,7 +70,7 @@ namespace WVA_Compulink_Integration.Error
                     file.Close();
                 }
 
-                using (System.IO.StreamWriter writer = new System.IO.StreamWriter((Paths.ErrorLog + $@"\Error_{time}.txt"), true))
+                using (StreamWriter writer = new StreamWriter((Paths.ErrorLog + $@"\Error_{time}.txt"), true))
                 {
                     writer.WriteLine("-----------------------------------------------------------------------------------");
                     writer.WriteLine("");
@@ -42,46 +81,7 @@ namespace WVA_Compulink_Integration.Error
                     writer.Close();
                 }
             }
-            catch (Exception x)
-            {
-                Trace.WriteLine(x.Message);
-            };
-        }
-
-        public static void PrintToLog(Exception exception)
-        {
-            try
-            {
-                string time = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
-
-                if (!Directory.Exists(Paths.ErrorLog))
-                {
-                    Directory.CreateDirectory(Paths.ErrorLog);
-                }
-                 
-                if (!File.Exists(Paths.ErrorLog + $@"\Error_{time}.txt"))
-                {
-                    var file = File.Create(Paths.ErrorLog + $@"\Error_{time}.txt");
-                    file.Close();
-                }
-              
-                using (System.IO.StreamWriter writer = new System.IO.StreamWriter((Paths.ErrorLog + $@"\Error_{time}.txt"), true))
-                {
-                    writer.WriteLine("-----------------------------------------------------------------------------------");
-                    writer.WriteLine("");
-                    writer.WriteLine($"{exception.ToString()}");
-                    //writer.WriteLine($"(ERROR.TIME_ENCOUNTERED: {time})");
-                    //writer.WriteLine($"(ERROR.MESSAGE: {exception.Message})");
-                    //writer.WriteLine($"(ERROR.INNER_EXCEPTION: {exception.InnerException})");
-                    writer.WriteLine("");
-                    writer.WriteLine("-----------------------------------------------------------------------------------");
-                    writer.Close();
-                }
-            }
-            catch (Exception x)
-            {
-                Trace.WriteLine(x.Message);
-            };
+            catch { }
         }
     }
 }

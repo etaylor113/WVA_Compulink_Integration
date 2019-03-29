@@ -8,13 +8,17 @@ namespace WVA_Compulink_Integration.Error
 {
     public class ErrorOutput
     {
-        public string User;
-        public string Error;
+        private string ActNum { get; set; }
+        private string Error { get; set; }
+        private string Application { get; set; }
+        private string AppVersion { get; set; }
 
-        public ErrorOutput(string _User, string _Error)
+        public ErrorOutput(string actNum, string error, string application, string appVersion)
         {
-            User = _User;
-            Error = _Error;
+            ActNum = actNum;
+            Error = error;
+            Application = application;
+            AppVersion = appVersion;
         }
     }
 }

@@ -103,6 +103,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Cryptography\Crypto.cs" />
+    <Compile Include="Error\JsonError.cs" />
     <Compile Include="MatchFinder\ProductPredictions\Database.cs" />
     <Compile Include="MatchFinder\ProductPredictions\ProductPrediction.cs" />
     <Compile Include="Memory\WVA_Products.cs" />

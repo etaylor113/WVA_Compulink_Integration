@@ -45,7 +45,7 @@ namespace WVA_Compulink_Integration._API
             }
             catch (Exception x)
             {
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
                 return null;
             }
         }
@@ -82,7 +82,7 @@ namespace WVA_Compulink_Integration._API
             }
             catch (Exception x)
             {
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
                 return null;
             }
         }
@@ -109,7 +109,7 @@ namespace WVA_Compulink_Integration._API
             }
             catch (Exception x)
             {
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
                 httpStatus = null;
                 return null;
             }

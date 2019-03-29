@@ -43,20 +43,13 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
         {
             // Check for nulls
             if (compulinkProduct == null || compulinkProduct.Trim() == "")
-                throw new Exception("string 'compulinkProduct' cannot be null or blank.");
+                return;
 
             if (wvaProduct == null || wvaProduct.Trim() == "")
                 throw new Exception("List of WVA products cannot be null or empty.");
 
             // Make sure database is set up 
             Database.SetUpDatabase();
-
-            // Check for nulls
-            if (compulinkProduct == null || compulinkProduct?.Trim() == "")
-                throw new Exception("'compulinkProduct' cannot be null or blank.");
-
-            if (wvaProduct == null || wvaProduct?.Trim() == "")
-                throw new Exception("'wvaProduct' cannot be null or blank");
 
             // Increase number of times this product has been picked or create a new object if it has not been used already
             if (Database.ProductMatchExists(compulinkProduct: compulinkProduct, wvaProduct: wvaProduct))
@@ -69,19 +62,12 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
                 int numPicks = Database.GetNumPicks(compulinkProduct);
 
                 if (numPicks > 1)
-                {
-                    Trace.WriteLine($"\nDecrementing product: \n\t(Compulink: {compulinkProduct}) \n\t(WVA: {wvaProduct})");
                     Database.DecrementNumPicks(compulinkProduct);
-                }
                 else
-                {
-                    Trace.WriteLine($"\nUpdating compulink product '{compulinkProduct}' suggestion to '{wvaProduct}'");
                     Database.UpdateCompulinkProductMatch(compulinkProduct, wvaProduct);
-                }
             }
             else
             {
-                Trace.WriteLine($"\nAdding compulink product: \n\t(Compulink: {compulinkProduct}) \n\t(WVA: {wvaProduct})");
                 Database.CreateCompulinkProduct(compulinkProduct, wvaProduct);
             }
         }

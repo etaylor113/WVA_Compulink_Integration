@@ -61,10 +61,12 @@ namespace WVA_Compulink_Integration.Views.Orders
                 CheckViewMode();
                 FindProductMatches();
                 Verify();
+
+                throw new Exception("TEST Exception");
             }
             catch (Exception ex)
             {
-                AppError.PrintToLog(ex);
+                AppError.ReportOrWrite(ex);
             }
         }
 
@@ -93,7 +95,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     numEr++;
 
                     if (numEr >= 5)
-                        AppError.PrintToLog(ex);
+                        AppError.ReportOrWrite(ex);
                 }
                 finally
                 {
@@ -318,7 +320,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
             }           
         }
 
@@ -621,7 +623,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
             }
         }  
         
@@ -902,7 +904,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
                 return null;
             }
         }
@@ -1003,7 +1005,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
                 return null;
             }           
         }
@@ -1023,7 +1025,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
             }           
         }
 
@@ -1096,7 +1098,73 @@ namespace WVA_Compulink_Integration.Views.Orders
             catch (Exception x)
             {
                 new MessageWindow("Order creation failed. Please see error log for details.").Show();
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
+            }
+        }
+
+        private void AutoFillParameterCells(int row)
+        {
+            if (OrderCreationViewModel.Prescriptions.Count > 0)
+            {
+                FindProductMatches();
+                SetMenuItems();
+                Verify();
+
+                if (OrderCreationViewModel.Prescriptions[row]?.BaseCurveValidItems?.Count == 1 && (OrderCreationViewModel.Prescriptions[row].BaseCurve == null || OrderCreationViewModel.Prescriptions[row].BaseCurve.Trim() == ""))
+                {
+                    OrdersDataGrid.GetCell(row, 5).Content = OrderCreationViewModel.Prescriptions[row]?.BaseCurveValidItems[0];
+                    OrderCreationViewModel.Prescriptions[row].BaseCurve = OrderCreationViewModel.Prescriptions[row]?.BaseCurveValidItems[0];
+                    Verify();
+                }
+
+                if (OrderCreationViewModel.Prescriptions[row]?.DiameterValidItems?.Count == 1)
+                {
+                    OrdersDataGrid.GetCell(row, 6).Content = OrderCreationViewModel.Prescriptions[row].DiameterValidItems[0];
+                    OrderCreationViewModel.Prescriptions[row].Diameter = OrderCreationViewModel.Prescriptions[row].DiameterValidItems[0];
+                    Verify();
+                }
+
+                if (OrderCreationViewModel.Prescriptions[row]?.SphereValidItems?.Count == 1)
+                {
+                    OrdersDataGrid.GetCell(row, 7).Content = OrderCreationViewModel.Prescriptions[row].SphereValidItems[0];
+                    OrderCreationViewModel.Prescriptions[row].Sphere = OrderCreationViewModel.Prescriptions[row].SphereValidItems[0];
+                    Verify();
+                }
+
+                if (OrderCreationViewModel.Prescriptions[row]?.CylinderValidItems?.Count == 1)
+                {
+                    OrdersDataGrid.GetCell(row, 8).Content = OrderCreationViewModel.Prescriptions[row].CylinderValidItems[0];
+                    OrderCreationViewModel.Prescriptions[row].Cylinder = OrderCreationViewModel.Prescriptions[row].CylinderValidItems[0];
+                    Verify();
+                }
+
+                if (OrderCreationViewModel.Prescriptions[row]?.AxisValidItems?.Count == 1)
+                {
+                    OrdersDataGrid.GetCell(row, 9).Content = OrderCreationViewModel.Prescriptions[row].AxisValidItems[0];
+                    OrderCreationViewModel.Prescriptions[row].Axis = OrderCreationViewModel.Prescriptions[row].AxisValidItems[0];
+                    Verify();
+                }
+
+                if (OrderCreationViewModel.Prescriptions[row]?.AddValidItems?.Count == 1)
+                {
+                    OrdersDataGrid.GetCell(row, 10).Content = OrderCreationViewModel.Prescriptions[row].AddValidItems[0];
+                    OrderCreationViewModel.Prescriptions[row].Add = OrderCreationViewModel.Prescriptions[row].AddValidItems[0];
+                    Verify();
+                }
+
+                if (OrderCreationViewModel.Prescriptions[row]?.ColorValidItems?.Count == 1)
+                {
+                    OrdersDataGrid.GetCell(row, 11).Content = OrderCreationViewModel.Prescriptions[row].ColorValidItems[0];
+                    OrderCreationViewModel.Prescriptions[row].Color = OrderCreationViewModel.Prescriptions[row].ColorValidItems[0];
+                    Verify();
+                }
+
+                if (OrderCreationViewModel.Prescriptions[row]?.MultifocalValidItems?.Count == 1)
+                {
+                    OrdersDataGrid.GetCell(row, 12).Content = OrderCreationViewModel.Prescriptions[row].MultifocalValidItems[0];
+                    OrderCreationViewModel.Prescriptions[row].Multifocal = OrderCreationViewModel.Prescriptions[row].MultifocalValidItems[0];
+                    Verify();
+                }
             }
         }
 
@@ -1109,22 +1177,8 @@ namespace WVA_Compulink_Integration.Views.Orders
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
-
-                int selectedIndex = 0;
                 MenuItem menuItem = sender as MenuItem;
                 string selectedItem = menuItem.Header.ToString();
-
-                // Get the selected menu item
-                for (int i = 0; i < WVA_OrdersContextMenu.Items.Count; i++)
-                {
-                    MenuItem item = (MenuItem)WVA_OrdersContextMenu.Items[i];
-
-                    if (item.Header.ToString() == selectedItem)
-                    {
-                        selectedIndex = i;
-                        break;
-                    }
-                }
 
                 // Drop out of function and populate context menu with a lower match tolerance
                 if (selectedItem.Contains("More Matches"))
@@ -1136,114 +1190,48 @@ namespace WVA_Compulink_Integration.Views.Orders
                     return;
                 }
 
-                // Get selected prescription object in data grid
-                IList rows = OrdersDataGrid.SelectedItems;
-                Prescription prescription = (Prescription)rows[0];
-
                 // Get selected row and column
                 int row = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.CurrentItem);
                 int column = OrdersDataGrid.CurrentColumn.DisplayIndex;
 
                 // Only want to change 'Products' column 
                 if (selectedItem != "No Matches Found" && selectedItem != "Not Available")
-                {
-                    if (OrderCreationViewModel.Prescriptions.Count > 0)
-                    {
-                        FindProductMatches();
-                        SetMenuItems();
-                        Verify(); 
-
-                        if (OrderCreationViewModel.Prescriptions[row]?.BaseCurveValidItems?.Count == 1)
-                        {
-                            OrdersDataGrid.GetCell(row, 5).Content = OrderCreationViewModel.Prescriptions[row]?.BaseCurveValidItems[0];
-                            OrderCreationViewModel.Prescriptions[row].BaseCurve = OrderCreationViewModel.Prescriptions[row]?.BaseCurveValidItems[0];
-                            Verify();
-                        }
-                               
-                        if (OrderCreationViewModel.Prescriptions[row]?.DiameterValidItems?.Count == 1)
-                        {
-                            OrdersDataGrid.GetCell(row, 6).Content = OrderCreationViewModel.Prescriptions[row].DiameterValidItems[0];
-                            OrderCreationViewModel.Prescriptions[row].Diameter = OrderCreationViewModel.Prescriptions[row].DiameterValidItems[0];
-                            Verify();
-                        }
-                               
-                        if (OrderCreationViewModel.Prescriptions[row]?.SphereValidItems?.Count == 1)
-                        {
-                            OrdersDataGrid.GetCell(row, 7).Content = OrderCreationViewModel.Prescriptions[row].SphereValidItems[0];
-                            OrderCreationViewModel.Prescriptions[row].Sphere = OrderCreationViewModel.Prescriptions[row].SphereValidItems[0];
-                            Verify();
-                        }
-                               
-                        if (OrderCreationViewModel.Prescriptions[row]?.CylinderValidItems?.Count == 1)
-                        {
-                            OrdersDataGrid.GetCell(row, 8).Content = OrderCreationViewModel.Prescriptions[row].CylinderValidItems[0];
-                            OrderCreationViewModel.Prescriptions[row].Cylinder = OrderCreationViewModel.Prescriptions[row].CylinderValidItems[0];
-                            Verify();
-                        }
-
-                        if (OrderCreationViewModel.Prescriptions[row]?.AxisValidItems?.Count == 1)
-                        {
-                            OrdersDataGrid.GetCell(row, 9).Content = OrderCreationViewModel.Prescriptions[row].AxisValidItems[0];
-                            OrderCreationViewModel.Prescriptions[row].Axis = OrderCreationViewModel.Prescriptions[row].AxisValidItems[0];
-                            Verify();
-                        }
-
-                        if (OrderCreationViewModel.Prescriptions[row]?.AddValidItems?.Count == 1)
-                        {
-                            OrdersDataGrid.GetCell(row, 10).Content = OrderCreationViewModel.Prescriptions[row].AddValidItems[0];
-                            OrderCreationViewModel.Prescriptions[row].Add = OrderCreationViewModel.Prescriptions[row].AddValidItems[0];
-                            Verify();
-                        }
-
-                        if (OrderCreationViewModel.Prescriptions[row]?.ColorValidItems?.Count == 1)
-                        {
-                            OrdersDataGrid.GetCell(row, 11).Content = OrderCreationViewModel.Prescriptions[row].ColorValidItems[0];
-                            OrderCreationViewModel.Prescriptions[row].Color = OrderCreationViewModel.Prescriptions[row].ColorValidItems[0];
-                            Verify();
-                        }
-
-                        if (OrderCreationViewModel.Prescriptions[row]?.MultifocalValidItems?.Count == 1)
-                        {
-                            OrdersDataGrid.GetCell(row, 12).Content = OrderCreationViewModel.Prescriptions[row].MultifocalValidItems[0];
-                            OrderCreationViewModel.Prescriptions[row].Multifocal = OrderCreationViewModel.Prescriptions[row].MultifocalValidItems[0];
-                            Verify();
-                        }
-                    }
-
-                    string compulinkProduct = (OrdersDataGrid.CurrentItem as Prescription).Product;
+                    AutoFillParameterCells(row);
                     
-                    OrdersDataGrid.GetCell(row, column).Content = selectedItem;
+                OrdersDataGrid.GetCell(row, column).Content = selectedItem;
 
-                    if (column <= 4)
-                    {
-                        OrderCreationViewModel.Prescriptions[row].Product = selectedItem;
-                        OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"/Resources/CheckMarkCircle.png";
-                        ProductPrediction.LearnProduct(compulinkProduct, selectedItem);
-                    }
-                    if (column == 5)
-                        OrderCreationViewModel.Prescriptions[row].BaseCurve = selectedItem;
-                    if (column == 6)
-                        OrderCreationViewModel.Prescriptions[row].Diameter = selectedItem;
-                    if (column == 7)
-                        OrderCreationViewModel.Prescriptions[row].Sphere = selectedItem;
-                    if (column == 8)
-                        OrderCreationViewModel.Prescriptions[row].Cylinder = selectedItem;
-                    if (column == 9)
-                        OrderCreationViewModel.Prescriptions[row].Axis = selectedItem;
-                    if (column == 10)
-                        OrderCreationViewModel.Prescriptions[row].Add = selectedItem;
-                    if (column == 11)
-                        OrderCreationViewModel.Prescriptions[row].Color = selectedItem;
-                    if (column == 12)
-                        OrderCreationViewModel.Prescriptions[row].Multifocal = selectedItem;
+                if (column <= 4)
+                {
+                    string compulinkProduct = (OrdersDataGrid.CurrentItem as Prescription).Product;
+                    OrderCreationViewModel.Prescriptions[row].Product = selectedItem;
+                    OrderCreationViewModel.Prescriptions[row].ProductImagePath = @"/Resources/CheckMarkCircle.png";
+                    ProductPrediction.LearnProduct(compulinkProduct, selectedItem);
                 }
-               
+                if (column == 5)
+                    OrderCreationViewModel.Prescriptions[row].BaseCurve = selectedItem;
+                if (column == 6)
+                    OrderCreationViewModel.Prescriptions[row].Diameter = selectedItem;
+                if (column == 7)
+                    OrderCreationViewModel.Prescriptions[row].Sphere = selectedItem;
+                if (column == 8)
+                    OrderCreationViewModel.Prescriptions[row].Cylinder = selectedItem;
+                if (column == 9)
+                    OrderCreationViewModel.Prescriptions[row].Axis = selectedItem;
+                if (column == 10)
+                    OrderCreationViewModel.Prescriptions[row].Add = selectedItem;
+                if (column == 11)
+                    OrderCreationViewModel.Prescriptions[row].Color = selectedItem;
+                if (column == 12)
+                    OrderCreationViewModel.Prescriptions[row].Multifocal = selectedItem;
+
+                AutoFillParameterCells(row);
                 Verify();
+
                 Mouse.OverrideCursor = Cursors.Arrow;
             }
             catch (Exception x)
             {
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
                 Mouse.OverrideCursor = Cursors.Arrow;
             }
         }
@@ -1262,7 +1250,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
             }
         }
 
@@ -1275,7 +1263,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.PrintToLog(ex);
+                AppError.ReportOrWrite(ex);
             }          
         }
 
@@ -1292,7 +1280,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.PrintToLog(ex);
+                AppError.ReportOrWrite(ex);
             }
         }
 
@@ -1306,7 +1294,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.PrintToLog(ex);
+                AppError.ReportOrWrite(ex);
             }           
         }
 
@@ -1330,7 +1318,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             catch (Exception x)
             {
                 new MessageWindow("An error has occurred Please see error log for details.").Show();
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
             }
         }
 
@@ -1348,7 +1336,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
             }           
         }
 

@@ -31,7 +31,7 @@ namespace WVA_Compulink_Integration.MatchFinder
             }
             catch (Exception ex)
             {
-                AppError.PrintToLog(ex);
+                AppError.ReportOrWrite(ex);
                 return null;
             }           
         }

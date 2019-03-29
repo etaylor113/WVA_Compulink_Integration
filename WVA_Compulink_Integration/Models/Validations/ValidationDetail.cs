@@ -118,7 +118,7 @@ namespace WVA_Compulink_Integration.Models.Validations
             }
             catch (Exception x)
             {
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
             };
         }
 
@@ -208,7 +208,7 @@ namespace WVA_Compulink_Integration.Models.Validations
             }
             catch (Exception x)
             {
-                AppError.PrintToLog(x);
+                AppError.ReportOrWrite(x);
             };
         }
 
