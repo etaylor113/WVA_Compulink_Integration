@@ -39,7 +39,8 @@ namespace WVA_Compulink_Integration.Views.Login
 
         private bool IsComplexPassword(string password)
         {
-            try { 
+            try
+            { 
                 // Password must be at least 8 characters
                 if (password == null || password.Length < 8)
                     return false;

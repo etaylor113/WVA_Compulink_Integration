@@ -16,12 +16,30 @@ namespace WVA_Compulink_Integration.Models.OrderStatus.FromApi
         public string ID { get; set; }
 
         [JsonProperty("qty_backordered")]
-        public int QuantityBackordered { get; set; }
+        public string QuantityBackordered { get; set; }
 
         [JsonProperty("qty_cancelled")]
-        public int QuantityCancelled { get; set; }
+        public string QuantityCancelled { get; set; }
 
         [JsonProperty("qty_shipped")]
-        public int QuantityShipped { get; set; }
+        public string QuantityShipped { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("item_status")]
+        public string ItemStatus { get; set; }
+
+        [JsonProperty("tracking_number")]
+        public string TrackingNumber { get; set; }
+
+        [JsonProperty("tracking_url")]
+        public string TrackingUrl { get; set; }
+
+        [JsonProperty("shipping_date")]
+        public string ShippingDate { get; set; }
+
+        [JsonProperty("shipping_carrier")]
+        public string ShippingCarrier { get; set; }
     }
 }

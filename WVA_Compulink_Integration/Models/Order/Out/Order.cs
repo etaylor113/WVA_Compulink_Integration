@@ -51,12 +51,6 @@ namespace WVA_Compulink_Integration.Models.Order.Out
         [JsonProperty("zip")]
         public string Zip { get; set; }
 
-        //[JsonProperty("ship_to_account")]
-        //public string ShipToAccount { get; set; }
-
-        //[JsonProperty("office_name")]
-        //public string OfficeName { get; set; }
-
         [JsonProperty("ordered_by")]
         public string OrderedBy { get; set; }
 
@@ -69,26 +63,20 @@ namespace WVA_Compulink_Integration.Models.Order.Out
         [JsonProperty("ship_to_patient")]
         public string ShipToPatient { get; set; }
 
-        //[JsonProperty("freight")]
-        //public string Freight { get; set; }
-
-        //[JsonProperty("tax")]
-        //public string Tax { get; set; }
-
-        //[JsonProperty("discount")]
-        //public string Discount { get; set; }
-
-        //[JsonProperty("invoice_total")]
-        //public string InvoiceTotal { get; set; }
-
         [JsonProperty("phone")]
         public string Phone { get; set; }
 
         [JsonProperty("email")]
         public string Email { get; set; }
 
-        [JsonProperty("status")]
-        public string Status { get; set; }
+        [JsonProperty("deleted_flag")]
+        public string DeletedFlag { get; set; }
+
+        [JsonProperty("message")]
+        public string Message { get; set; }
+
+        [JsonProperty("processed_flag")]
+        public string ProcessedFlag { get; set; }
 
         [JsonProperty("items")]
         public List<Item> Items { get; set; }

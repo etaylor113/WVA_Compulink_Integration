@@ -54,7 +54,6 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             // Increase number of times this product has been picked or create a new object if it has not been used already
             if (Database.ProductMatchExists(compulinkProduct: compulinkProduct, wvaProduct: wvaProduct))
             {
-                Trace.WriteLine($"\nIncrementing product: \n\t(Compulink: {compulinkProduct}) \n\t(WVA: {wvaProduct})");
                 Database.IncrementNumPicks(compulinkProduct);
             }
             else if (Database.CompulinkProductExists(compulinkProduct) && Database.ReturnWvaProductFor(compulinkProduct) != wvaProduct)

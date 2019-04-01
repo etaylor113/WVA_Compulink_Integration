@@ -18,18 +18,10 @@ namespace WVA_Compulink_Integration.Models.OrderStatus.FromApi
         [JsonProperty("deleted_flag")]
         public string DeletedFlag { get; set; }
 
-        [JsonProperty("shipping_status")]
-        public string ShippingStatus { get; set; }
-
-        [JsonProperty("tracking_number")]
-        public string TrackingNumber { get; set; }
-
-        [JsonProperty("tracking_url")]
-        public string TrackingUrl { get; set; }
+        [JsonProperty("processed_flag")]
+        public string ProcessedFlag { get; set; }
 
         [JsonProperty("items")]
         public List<Item> Items { get; set; }
-
-
     }
 }

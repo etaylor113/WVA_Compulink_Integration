@@ -88,7 +88,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         tempList = ListOrders.Where(x => x.OrderedBy.ToLower().Contains(searchString.ToLower())).ToList();
                         break;
                     case 6:
-                        tempList = ListOrders.Where(x => x.Status.ToLower().Contains(searchString.ToLower())).ToList();
+                        tempList = ListOrders.Where(x => x.DeletedFlag.ToLower().Contains(searchString.ToLower())).ToList();
                         break;
                 }
 
@@ -125,7 +125,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         DateTime orderCreatedDate = DateTime.ParseExact(order.CreatedDate, "yyyy-MM-dd-HH:mm:ss", cInfo);
 
                         // Don't return order if it is submitted and older than 8 days
-                        if (orderCreatedDate < cutoffDate && order.Status == "submitted")
+                        if (orderCreatedDate < cutoffDate && order.DeletedFlag == "submitted")
                             continue;
                     }
 
@@ -147,11 +147,11 @@ namespace WVA_Compulink_Integration.Views.Orders
                 returnList.Reverse(0, returnList.Count);
 
                 // Make call to status endpoint and update order status so it is up to date
-                string statusEndpoint = "https://orders.wisvis.com/order_status";
+                string statusEndpoint = "https://orders-qa.wisvis.com/order_status";
 
                 foreach (Order order in returnList)
                 {
-                    if (order.WvaStoreID == null || order.WvaStoreID.Trim() == "")
+                    if (order.WvaStoreID == null || order.WvaStoreID.Trim() == "" || order.DeletedFlag == "open")
                         continue;
 
                     RequestWrapper request = new RequestWrapper()
@@ -164,22 +164,46 @@ namespace WVA_Compulink_Integration.Views.Orders
                         }
                     };
 
-                    string strStatusResponse = API.Post(statusEndpoint, request);
-                    var statusResponse = JsonConvert.DeserializeObject<StatusResponse>(strStatusResponse);
+                    try
+                    {
+                        string strStatusResponse = API.Post(statusEndpoint, request);
 
+                        if (strStatusResponse == null || strStatusResponse.Trim() == "")
+                            continue;
 
-                    // Mark order as deleted
-                    if (statusResponse.DeletedFlag == "Y")
-                        order.Status = "deleted";
+                        var statusResponse = JsonConvert.DeserializeObject<StatusResponse>(strStatusResponse);
 
-                    if (statusResponse.ShippingStatus != null || statusResponse.ShippingStatus.Trim() != "")
-                        order.Status = statusResponse.ShippingStatus;
+                        order.DeletedFlag = statusResponse.DeletedFlag;
+                        order.Message = statusResponse.Message;
+                        order.ProcessedFlag = statusResponse.ProcessedFlag;
+
+                        if (statusResponse.Items == null || statusResponse.Items?.Count < 1)
+                            continue;
+
+                        for (int i = 0; i < statusResponse.Items.Count; i++)
+                        {
+                            order.Items[i].DeletedFlag = statusResponse.DeletedFlag;
+                            order.Items[i].QuantityBackordered = statusResponse.Items[i].QuantityBackordered;
+                            order.Items[i].QuantityCancelled = statusResponse.Items[i].QuantityCancelled;
+                            order.Items[i].QuantityShipped = statusResponse.Items[i].QuantityShipped;
+                            order.Items[i].Status = statusResponse.Items[i].Status;
+                            order.Items[i].ItemStatus = statusResponse.Items[i].ItemStatus;
+                            order.Items[i].ShippingDate = statusResponse.Items[i].ShippingDate;
+                            order.Items[i].ShippingCarrier = statusResponse.Items[i].ShippingCarrier;
+                            order.Items[i].TrackingUrl = statusResponse.Items[i].TrackingUrl;
+                            order.Items[i].TrackingNumber = statusResponse.Items[i].TrackingNumber;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        AppError.ReportOrWrite(ex);
+                        continue;
+                    }
                 }
-
                 return returnList;
             }
-            catch (Exception ex)
-            {
+            catch 
+            {              
                 return null;
             }
         }
@@ -254,7 +278,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             List<Order> order = GetSelectedOrders();
 
             // Leave method if they don't select an order or if order has already been submitted
-            if (order == null || order[0].Status.ToLower() == "submitted")
+            if (order == null || order[0].DeletedFlag.ToLower() == "submitted")
                 return;
 
             foreach (Window window in Application.Current.Windows)
@@ -340,7 +364,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 Order selectedOrder = (Order)WvaOrdersDataGrid.SelectedItems[0];
 
-                if (selectedOrder.Status == "open")
+                if (selectedOrder.DeletedFlag == "open")
                 {
                     OpenEditOrder();
                 }
