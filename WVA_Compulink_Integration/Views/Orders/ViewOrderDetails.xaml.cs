@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Models.Order.Out;
 using WVA_Compulink_Integration.Models.Prescription;
 using WVA_Compulink_Integration.ViewModels.Orders;
@@ -34,58 +35,65 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void SetUp()
         {
-            var o = ViewOrderDetailsViewModel.SelectedOrder;
-
-            // Header
-            OrderNameLabel.Content = o.OrderName;
-            OrderedByLabel.Content = o.OrderedBy;
-            AccountIDLabel.Content = o.CustomerID;
-            OrderIDLabel.Content = $"WVA Order ID: {o.WvaStoreID}";
-
-            // Sub-header (if value is not null or blank, add it to a stack panel column so the view scales smoothly)
-            if (o.Name_1 != null && o.Name_1.Trim() != "")
-                StackPanelAddLeftChild($"Addressee: {o.Name_1}");
-
-            if (o.StreetAddr_1 != null && o.StreetAddr_1.Trim() != "")
-                StackPanelAddLeftChild($"Address: {o.StreetAddr_1}");
-
-            if (o.ShippingMethod != null && o.ShippingMethod.Trim() != "")
-                StackPanelAddLeftChild($"Ship Type: {o.ShippingMethod}");
-
-            if (o.Phone != null && o.Phone.Trim() != "")
-                StackPanelAddLeftChild($"Phone: {o.Phone}");
-
-            if (o.City != null && o.City.Trim() != "")
-                StackPanelAddRightChild($"City: {o.City}");
-
-            if (o.State != null && o.State.Trim() != "")
-                StackPanelAddRightChild($"State: {o.State}");
-
-            if (o.Zip != null && o.Zip.Trim() != "")
-                StackPanelAddRightChild($"Zip: {o.Zip}");
-
-            if (o.StreetAddr_2 != null && o.StreetAddr_2.Trim() != "")
-                StackPanelAddRightChild($"Suite/Apt: {o.StreetAddr_2}");
-
-            // Grid items
-            foreach (Item item in ViewOrderDetailsViewModel.SelectedOrder.Items)
+            try
             {
-                ReviewOrderDataGrid.Items.Add(new Prescription()
+                var o = ViewOrderDetailsViewModel.SelectedOrder;
+
+                // Header
+                OrderNameLabel.Content = o.OrderName;
+                OrderedByLabel.Content = o.OrderedBy;
+                AccountIDLabel.Content = o.CustomerID;
+                OrderIDLabel.Content = $"WVA Order ID: {o.WvaStoreID}";
+
+                // Sub-header (if value is not null or blank, add it to a stack panel column so the view scales smoothly)
+                if (o.Name_1 != null && o.Name_1.Trim() != "")
+                    StackPanelAddLeftChild($"Addressee: {o.Name_1}");
+
+                if (o.StreetAddr_1 != null && o.StreetAddr_1.Trim() != "")
+                    StackPanelAddLeftChild($"Address: {o.StreetAddr_1}");
+
+                if (o.ShippingMethod != null && o.ShippingMethod.Trim() != "")
+                    StackPanelAddLeftChild($"Ship Type: {o.ShippingMethod}");
+
+                if (o.Phone != null && o.Phone.Trim() != "")
+                    StackPanelAddLeftChild($"Phone: {o.Phone}");
+
+                if (o.City != null && o.City.Trim() != "")
+                    StackPanelAddRightChild($"City: {o.City}");
+
+                if (o.State != null && o.State.Trim() != "")
+                    StackPanelAddRightChild($"State: {o.State}");
+
+                if (o.Zip != null && o.Zip.Trim() != "")
+                    StackPanelAddRightChild($"Zip: {o.Zip}");
+
+                if (o.StreetAddr_2 != null && o.StreetAddr_2.Trim() != "")
+                    StackPanelAddRightChild($"Suite/Apt: {o.StreetAddr_2}");
+
+                // Grid items
+                foreach (Item item in ViewOrderDetailsViewModel.SelectedOrder.Items)
                 {
-                    FirstName = item.FirstName,
-                    LastName = item.LastName,
-                    Eye = item.Eye,
-                    Product = item.ProductDetail.Name,
-                    Quantity = item.Quantity,
-                    BaseCurve = item.ProductDetail.BaseCurve,
-                    Diameter = item.ProductDetail.Diameter,
-                    Sphere = item.ProductDetail.Sphere,
-                    Cylinder = item.ProductDetail.Cylinder,
-                    Axis = item.ProductDetail.Axis,
-                    Add = item.ProductDetail.Add,
-                    Color = item.ProductDetail.Color,
-                    Multifocal = item.ProductDetail.Multifocal
-                });
+                    ReviewOrderDataGrid.Items.Add(new Prescription()
+                    {
+                        FirstName = item.FirstName,
+                        LastName = item.LastName,
+                        Eye = item.Eye,
+                        Product = item.ProductDetail.Name,
+                        Quantity = item.Quantity,
+                        BaseCurve = item.ProductDetail.BaseCurve,
+                        Diameter = item.ProductDetail.Diameter,
+                        Sphere = item.ProductDetail.Sphere,
+                        Cylinder = item.ProductDetail.Cylinder,
+                        Axis = item.ProductDetail.Axis,
+                        Add = item.ProductDetail.Add,
+                        Color = item.ProductDetail.Color,
+                        Multifocal = item.ProductDetail.Multifocal
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                AppError.ReportOrWrite(ex);
             }
         }
 
@@ -111,89 +119,93 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void SetUpGridContextMenuItems()
         {
-            // Reset context menu 
-            WVA_OrdersContextMenu.Items.Clear();
-
-            if (SelectedRow < 0)
-                return;
-           
-            if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].DeletedFlag != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].DeletedFlag.ToLower() == "y")
+            try
             {
-                MenuItem item = new MenuItem() { Header = "-- DELETED ORDER --" };
+                // Reset context menu 
+                WVA_OrdersContextMenu.Items.Clear();
+
+                if (SelectedRow < 0)
+                    return;
+
+                // <START> FOR TESTING ONLY!!!
+                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].DeletedFlag = "y";
+                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityBackordered = 1;
+                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityCancelled = 1;
+                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityShipped = 4;
+                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].Status = "Shipped";
+                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ItemStatus = "AS466SDF654";
+                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingDate = "04/03/19";
+                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingCarrier = "UPS";
+                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingUrl = "https://Google.com";
+                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingNumber = "654687463546";
+                // <END>
+
+                if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].DeletedFlag != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].DeletedFlag.ToLower() == "y")
+                    AddItemToGridContextMenu("-- DELETED ORDER! --");
+
+                if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityBackordered > 0)
+                    AddItemToGridContextMenu($"Quantity backordered: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityBackordered}");
+
+                if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityCancelled > 0)
+                    AddItemToGridContextMenu($"Quantity cancelled: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityCancelled}");
+
+                if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityShipped > 0)
+                    AddItemToGridContextMenu($"Quantity shipped: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityShipped}");
+
+                if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].Status != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].Status.Trim() != "")
+                    AddItemToGridContextMenu($"Status: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].Status}");
+
+                if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ItemStatus != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ItemStatus.Trim() != "")
+                    AddItemToGridContextMenu($"Item Status: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ItemStatus}");
+
+                if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingDate != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingDate.Trim() != "")
+                    AddItemToGridContextMenu($"Shipping Date: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingDate}");
+
+                if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingCarrier != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingCarrier.Trim() != "")
+                    AddItemToGridContextMenu($"Shipping Carrier: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingCarrier}");
+
+                if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingUrl != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingUrl.Trim() != "")
+                    AddItemToGridContextMenu($"{ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingUrl}");
+
+                if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingNumber != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingNumber.Trim() != "")
+                    AddItemToGridContextMenu($"Tracking Number: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingNumber}");
+            }
+            catch (Exception ex)
+            {
+                AppError.ReportOrWrite(ex);
+            }
+        }
+
+        private void AddItemToGridContextMenu(string headerContent)
+        {
+            try
+            {
+                MenuItem item = new MenuItem() { Header = headerContent };
                 item.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
                 WVA_OrdersContextMenu.Items.Add(item);
             }
-
-            if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityBackordered > 0)
+            catch (Exception ex)
             {
-                MenuItem item = new MenuItem() { Header = $"Quantity backordered: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityBackordered}" };
-                item.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                WVA_OrdersContextMenu.Items.Add(item);
+                AppError.ReportOrWrite(ex);
             }
-
-            if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityCancelled > 0)
-            {
-                MenuItem item = new MenuItem() { Header = $"Quantity cancelled: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityCancelled}" };
-                item.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                WVA_OrdersContextMenu.Items.Add(item);
-            }
-
-            if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityShipped > 0)
-            {
-                MenuItem numShippedItem = new MenuItem() { Header = $"Quantity shipped: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityShipped}" };
-                numShippedItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                WVA_OrdersContextMenu.Items.Add(numShippedItem);
-            }
-
-            if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].Status != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].Status.Trim() != "")
-            {
-                MenuItem statusItem = new MenuItem() { Header = $"Status: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].Status}" };
-                statusItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                WVA_OrdersContextMenu.Items.Add(statusItem);
-            }
-
-            if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ItemStatus != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ItemStatus.Trim() != "")
-            {
-                MenuItem itemStatusItem = new MenuItem() { Header = $"Item Status: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ItemStatus}" };
-                itemStatusItem.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                WVA_OrdersContextMenu.Items.Add(itemStatusItem);
-            }
-
-            if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingDate != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingDate.Trim() != "")
-            {
-                MenuItem item = new MenuItem() { Header = $"Shipping Date: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingDate}" };
-                item.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                WVA_OrdersContextMenu.Items.Add(item);
-            }
-
-            if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingCarrier != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingCarrier.Trim() != "")
-            {
-                MenuItem item = new MenuItem() { Header = $"Shipping Carrier: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingCarrier}" };
-                item.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                WVA_OrdersContextMenu.Items.Add(item);
-            }
-
-            if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingUrl != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingUrl.Trim() != "")
-            {
-                MenuItem item = new MenuItem() { Header = $"{ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingUrl}" };
-                item.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                WVA_OrdersContextMenu.Items.Add(item);
-            }
-
-            if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingNumber != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingNumber.Trim() != "")
-            {
-                MenuItem item = new MenuItem() { Header = $"Tracking Number: {ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingNumber}" };
-                item.Click += new RoutedEventHandler(WVA_OrdersContextMenu_Click);
-                WVA_OrdersContextMenu.Items.Add(item);
-            }
-
         }
 
         private void WVA_OrdersContextMenu_Click(object sender, RoutedEventArgs e)
         {
-           
+            try
+            {
+                MenuItem menuItem = sender as MenuItem;
+                string selectedItem = menuItem.Header.ToString();
 
-
+                if (selectedItem.Contains("https"))
+                {
+                    Process.Start(selectedItem);
+                }
+            }
+            catch (Exception ex)
+            {
+                AppError.ReportOrWrite(ex);
+            }
         }
 
         private void ReviewOrderDataGrid_CurrentCellChanged(object sender, EventArgs e)

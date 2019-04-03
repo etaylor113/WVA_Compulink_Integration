@@ -27,6 +27,7 @@ namespace WVA_Compulink_Integration._API
                 request.ContentLength = byteArray.Length;
                 request.ContentType = @"application/json";
                 request.Method = "POST";
+                request.Timeout = 10000;
 
                 using (Stream dataStream = request.GetRequestStream())
                 {

@@ -13,7 +13,7 @@ namespace WVA_Compulink_Integration.Models.OrderStatus.FromApi
         [JsonProperty("id")]
         public string ID { get; set; }
 
-        [JsonProperty("messasge")]
+        [JsonProperty("message")]
         public string Message { get; set; }
 
         [JsonProperty("deleted_flag")]

@@ -37,10 +37,10 @@ namespace WVA_Compulink_Integration.Views.Orders
             SetUp();
         }
 
-        // Do any setup after loading the view
+        // Do any setup after loading the view elements
         private void SetUp()
         {
-            IsVisibleChanged += new DependencyPropertyChangedEventHandler(LoginControl_IsVisibleChanged);
+            IsVisibleChanged += new DependencyPropertyChangedEventHandler(LoginControl_IsVisibleChanged);  // Subscribe to LoginControl_IsVisibleChanged Event (This just sets the cursor on the search box)
             RefreshOrders();
         }
 
@@ -121,6 +121,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
         }
 
+        // Removes all orders from list that are older than 8 days
         private List<Order> RemoveOldOrders(List<Order> orders)
         {
             var returnList = new List<Order>();
@@ -158,11 +159,10 @@ namespace WVA_Compulink_Integration.Views.Orders
             return returnList;
         }
 
+
+        // Update order status for each order in list
         private List<Order> UpdateOrderStatus(List<Order> orders)
         {
-            // Make call to status endpoint and update order status so it is up to date
-            string statusEndpoint = "https://orders-qa.wisvis.com/order_status";
-
             foreach (Order order in orders)
             {
                 if (order.WvaStoreID == null || order.WvaStoreID.Trim() == "" || order.DeletedFlag == "open")
@@ -178,6 +178,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     }
                 };
 
+                string statusEndpoint = "https://orders-qa.wisvis.com/order_status";
                 string strStatusResponse = API.Post(statusEndpoint, request);
 
                 if (strStatusResponse == null || strStatusResponse.Trim() == "")
