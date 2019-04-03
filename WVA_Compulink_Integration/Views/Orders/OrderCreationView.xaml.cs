@@ -411,7 +411,6 @@ namespace WVA_Compulink_Integration.Views.Orders
                
                 // Sets 'ClickedIndex' to the index of selected cell
                 int index = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.CurrentItem);
-                int idx = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.SelectedItem);
                 if (index > -1)
                 {
                     SelectedRow = OrdersDataGrid.Items.IndexOf(OrdersDataGrid.CurrentItem);                

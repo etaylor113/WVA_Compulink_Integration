@@ -34,13 +34,13 @@ namespace WVA_Compulink_Integration.Models.Order.Out
         public string DeletedFlag { get; set; }
 
         [JsonProperty("qty_backordered")]
-        public string QuantityBackordered { get; set; }
+        public int QuantityBackordered { get; set; }
 
         [JsonProperty("qty_cancelled")]
-        public string QuantityCancelled { get; set; }
+        public int QuantityCancelled { get; set; }
 
         [JsonProperty("qty_shipped")]
-        public string QuantityShipped { get; set; }
+        public int QuantityShipped { get; set; }
 
         [JsonProperty("status")]
         public string Status{ get; set; }

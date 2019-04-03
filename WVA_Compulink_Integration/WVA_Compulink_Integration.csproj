@@ -109,7 +109,6 @@
     <Compile Include="Memory\WVA_Products.cs" />
     <Compile Include="Memory\Orders.cs" />
     <Compile Include="Memory\UserData.cs" />
-    <Compile Include="Models\OrderStatus\FromApi\Item.cs" />
     <Compile Include="Models\OrderStatus\FromApi\StatusResponse.cs" />
     <Compile Include="Models\OrderStatus\ToApi\StatusRequest.cs" />
     <Compile Include="Models\OrderStatus\ToApi\RequestWrapper.cs" />

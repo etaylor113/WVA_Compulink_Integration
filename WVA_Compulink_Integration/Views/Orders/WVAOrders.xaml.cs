@@ -113,94 +113,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 if (strOrders == null || strOrders == "")
                     throw new NullReferenceException();
 
-                var inputList = JsonConvert.DeserializeObject<List<Order>>(strOrders);
-                var returnList = new List<Order>();
-
-                foreach (Order order in inputList)
-                {
-                    if (order.CreatedDate != null && order.CreatedDate.Trim() != "")
-                    {
-                        DateTime cutoffDate = DateTime.Now.AddDays(-8);
-                        var cInfo = CultureInfo.CreateSpecificCulture("en-US");
-                        DateTime orderCreatedDate = DateTime.ParseExact(order.CreatedDate, "yyyy-MM-dd-HH:mm:ss", cInfo);
-
-                        // Don't return order if it is submitted and older than 8 days
-                        if (orderCreatedDate < cutoffDate && order.DeletedFlag == "submitted")
-                            continue;
-                    }
-
-                    // Find number of items in the order and set the quantity
-                    int quantity = 0;
-                    foreach (var detail in order.Items)
-                    {
-                        try { quantity += Convert.ToInt32(detail.Quantity); }
-                        catch { continue; }
-                    }
-
-                    order.Quantity = quantity;
-                    order.ShippingMethod = GetShippingString(order.ShippingMethod);
-
-                    returnList.Add(order);
-                }
-
-                // Reverse order of the list so that more recent orders show up first 
-                returnList.Reverse(0, returnList.Count);
-
-                // Make call to status endpoint and update order status so it is up to date
-                string statusEndpoint = "https://orders-qa.wisvis.com/order_status";
-
-                foreach (Order order in returnList)
-                {
-                    if (order.WvaStoreID == null || order.WvaStoreID.Trim() == "" || order.DeletedFlag == "open")
-                        continue;
-
-                    RequestWrapper request = new RequestWrapper()
-                    {
-                        Request = new StatusRequest()
-                        {
-                            ApiKey = UserData.Data.ApiKey,
-                            CustomerId = UserData.Data.Account,
-                            WvaStoreNumber = order.WvaStoreID
-                        }
-                    };
-
-                    try
-                    {
-                        string strStatusResponse = API.Post(statusEndpoint, request);
-
-                        if (strStatusResponse == null || strStatusResponse.Trim() == "")
-                            continue;
-
-                        var statusResponse = JsonConvert.DeserializeObject<StatusResponse>(strStatusResponse);
-
-                        order.DeletedFlag = statusResponse.DeletedFlag;
-                        order.Message = statusResponse.Message;
-                        order.ProcessedFlag = statusResponse.ProcessedFlag;
-
-                        if (statusResponse.Items == null || statusResponse.Items?.Count < 1)
-                            continue;
-
-                        for (int i = 0; i < statusResponse.Items.Count; i++)
-                        {
-                            order.Items[i].DeletedFlag = statusResponse.DeletedFlag;
-                            order.Items[i].QuantityBackordered = statusResponse.Items[i].QuantityBackordered;
-                            order.Items[i].QuantityCancelled = statusResponse.Items[i].QuantityCancelled;
-                            order.Items[i].QuantityShipped = statusResponse.Items[i].QuantityShipped;
-                            order.Items[i].Status = statusResponse.Items[i].Status;
-                            order.Items[i].ItemStatus = statusResponse.Items[i].ItemStatus;
-                            order.Items[i].ShippingDate = statusResponse.Items[i].ShippingDate;
-                            order.Items[i].ShippingCarrier = statusResponse.Items[i].ShippingCarrier;
-                            order.Items[i].TrackingUrl = statusResponse.Items[i].TrackingUrl;
-                            order.Items[i].TrackingNumber = statusResponse.Items[i].TrackingNumber;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        AppError.ReportOrWrite(ex);
-                        continue;
-                    }
-                }
-                return returnList;
+                return JsonConvert.DeserializeObject<List<Order>>(strOrders);
             }
             catch 
             {              
@@ -208,11 +121,104 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
         }
 
+        private List<Order> RemoveOldOrders(List<Order> orders)
+        {
+            var returnList = new List<Order>();
+
+            foreach (Order order in orders)
+            {
+                if (order.CreatedDate != null && order.CreatedDate.Trim() != "")
+                {
+                    DateTime cutoffDate = DateTime.Now.AddDays(-8);
+                    var cInfo = CultureInfo.CreateSpecificCulture("en-US");
+                    DateTime orderCreatedDate = DateTime.ParseExact(order.CreatedDate, "yyyy-MM-dd-HH:mm:ss", cInfo);
+
+                    // Don't return order if it is submitted and older than 8 days
+                    if (orderCreatedDate < cutoffDate && order.Status == "submitted")
+                        continue;
+                }
+
+                // Find number of items in the order and set the quantity
+                int quantity = 0;
+                foreach (var detail in order.Items)
+                {
+                    try { quantity += Convert.ToInt32(detail.Quantity); }
+                    catch { continue; }
+                }
+
+                order.Quantity = quantity;
+                order.ShippingMethod = GetShippingString(order.ShippingMethod);
+
+                returnList.Add(order);
+            }
+
+            // Reverse order of the list so that more recent orders show up first 
+            returnList.Reverse(0, returnList.Count);
+
+            return returnList;
+        }
+
+        private List<Order> UpdateOrderStatus(List<Order> orders)
+        {
+            // Make call to status endpoint and update order status so it is up to date
+            string statusEndpoint = "https://orders-qa.wisvis.com/order_status";
+
+            foreach (Order order in orders)
+            {
+                if (order.WvaStoreID == null || order.WvaStoreID.Trim() == "" || order.DeletedFlag == "open")
+                    continue;
+
+                RequestWrapper request = new RequestWrapper()
+                {
+                    Request = new StatusRequest()
+                    {
+                        ApiKey = UserData.Data.ApiKey,
+                        CustomerId = UserData.Data.Account,
+                        WvaStoreNumber = order.WvaStoreID
+                    }
+                };
+
+                string strStatusResponse = API.Post(statusEndpoint, request);
+
+                if (strStatusResponse == null || strStatusResponse.Trim() == "")
+                    continue;
+
+                var statusResponse = JsonConvert.DeserializeObject<StatusResponse>(strStatusResponse);
+
+                order.DeletedFlag = statusResponse.DeletedFlag;
+                order.Message = statusResponse.Message;
+                order.ProcessedFlag = statusResponse.ProcessedFlag;
+
+                if (statusResponse.Items == null || statusResponse.Items?.Count < 1)
+                    continue;
+
+                for (int i = 0; i < statusResponse.Items.Count; i++)
+                {
+                    order.Items[i].DeletedFlag = statusResponse.DeletedFlag;
+                    order.Items[i].QuantityBackordered = statusResponse.Items[i].QuantityBackordered;
+                    order.Items[i].QuantityCancelled = statusResponse.Items[i].QuantityCancelled;
+                    order.Items[i].QuantityShipped = statusResponse.Items[i].QuantityShipped;
+                    order.Items[i].Status = statusResponse.Items[i].Status;
+                    order.Items[i].ItemStatus = statusResponse.Items[i].ItemStatus;
+                    order.Items[i].ShippingDate = statusResponse.Items[i].ShippingDate;
+                    order.Items[i].ShippingCarrier = statusResponse.Items[i].ShippingCarrier;
+                    order.Items[i].TrackingUrl = statusResponse.Items[i].TrackingUrl;
+                    order.Items[i].TrackingNumber = statusResponse.Items[i].TrackingNumber;
+                }
+            }
+            return orders;
+        }
+
+        private List<Order> GetFilteredOrders()
+        {
+            return UpdateOrderStatus(RemoveOldOrders(GetWVAOrders()));
+        }
+
         private List<Order> SetUpOrdersDataGrid()
         {
             try
             {
-                ListOrders = GetWVAOrders();
+                ListOrders = GetFilteredOrders();
 
                 if (ListOrders == null)
                     return null;
@@ -273,6 +279,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             return listOrders;
         }
 
+        // Navigate to Views/Orders/OrderCreationView
         private void OpenEditOrder()
         {
             List<Order> order = GetSelectedOrders();

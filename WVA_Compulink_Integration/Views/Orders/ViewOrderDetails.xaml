@@ -160,6 +160,21 @@
                        Grid.Column="1" 
                        VerticalAlignment="Center"/>
 
+            <Label Name="OrderIDLabel"
+                   FontFamily="Sitka Text"
+                   FontSize="20" 
+                   Content="WvaStoreID"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   Margin="0,0,0,0"
+                   Height="30"/>
+
+            <Rectangle Fill="Black" 
+                       Height="25" 
+                       Width="1"
+                       Grid.Column="1" 
+                       VerticalAlignment="Center"/>
+
             <Label Name="OrderedByLabel"
                    FontFamily="Sitka Text"
                    FontSize="20"
@@ -210,40 +225,6 @@
                    Grid.Column="1" 
                    VerticalAlignment="Top"/>
 
-        <StackPanel Grid.Row="2"
-                    Grid.Column="1"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Height="40"
-                    Margin="0,10,0,0">
-            
-            <Label Name="OrderIDLabel"
-                   FontFamily="Sitka Text"
-                   FontSize="16" 
-                   Content=""
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Top"
-                   Margin="0,10,0,0"
-                   Height="30"/>
-
-            <Rectangle Fill="Black" 
-                       Height="20" 
-                       Width="1"
-                       Grid.Column="1" 
-                       VerticalAlignment="Center"
-                       Margin="0,8,0,0"/>
-
-            <Label Name="OrderStatusLabel"
-                   FontFamily="Sitka Text"
-                   FontSize="16" 
-                   Content=""
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Top"
-                   Margin="0,10,0,0"
-                   Height="30"/>
-        </StackPanel>
-
         <DataGrid Name="ReviewOrderDataGrid" 
                   HorizontalAlignment="Stretch" 
                   VerticalAlignment="Stretch"  
@@ -260,7 +241,8 @@
                   CanUserReorderColumns="False"
                   CanUserSortColumns="False" 
                   CanUserAddRows="False"
-                  IsReadOnly="True">
+                  IsReadOnly="True"
+                  CurrentCellChanged="ReviewOrderDataGrid_CurrentCellChanged">
 
             <DataGrid.OpacityMask>
                 <RadialGradientBrush>
@@ -282,6 +264,12 @@
             <DataGrid.HorizontalGridLinesBrush>
                 <SolidColorBrush Color="Black"/>
             </DataGrid.HorizontalGridLinesBrush>
+
+            <DataGrid.ContextMenu>
+                <ContextMenu Name="WVA_OrdersContextMenu"
+                                 MaxHeight="300">
+                </ContextMenu>
+            </DataGrid.ContextMenu>
 
             <DataGrid.Columns>
                 <DataGridTextColumn Width="*" Binding="{Binding Path=Patient}"    Header="Patient"      MinWidth="110" />

@@ -20,13 +20,14 @@ namespace WVA_Compulink_Integration.Views
             InitializeComponent();
             DetermineView();
         }
-
+       
         public OrdersView(List<Prescription> prescriptions, string orderName, string selectedView)
         {
             InitializeComponent();
             DetermineView(prescriptions, orderName, selectedView);
         }
 
+        // Navigate to Views\Orders\ViewOrderDetails with 'order' object
         public OrdersView(Order order)
         {
             InitializeComponent();
@@ -38,56 +39,61 @@ namespace WVA_Compulink_Integration.Views
             switch (selectedView)
             {
                 case "CompulinkOrders":
-                    // Navigate to Lab Orders View
                     SetUpLabOrdersView();
-                    OrdersContentControl.DataContext = new CompulinkOrdersViewModel();
+                    OrdersContentControl.DataContext = new CompulinkOrdersViewModel();  // Navigate to Views\Orders\CompulinkOrders
                     break;
                 case "WVAOrders":
-                    // Navigate to WVA Orders View         
-                    SetUpWVA_OrdersView();
-                    OrdersContentControl.DataContext = new WVAOrdersViewModel();
+                    SetUpWvaOrdersView();
+                    OrdersContentControl.DataContext = new WVAOrdersViewModel();  // Navigate to Views\Orders\WvaOrders       
                     break;
                 case "OrderCreation":
 
                     // Check if order exists, if it does, return it
                     Order order = OrderCreationViewModel.GetOrder(orderName);
-                  
-                    // Open order creation view with the order's saved data (edits the selected order)
+
+                    // If (true) this order exists in the database on their server
+                    // If (false) then this is a new order (i.e. doesn't exists in the database)
                     if (order != null)
                     {
                         if (prescriptions.Count < 1)
-                        {
                             OrdersContentControl.DataContext = new OrderCreationViewModel(order, prescriptions, orderName);
-                        }
-                        // Don't add a STP item to an order and dont add a compulink order to a STP wva order
+
+                        // Can't add a STP item to an order and dont add a compulink order to a STP wva order. 
                         else if (prescriptions?[0].IsShipToPatient == true)
                         {                          
                             // Make sure user can't add a STP to another order
                             MessageBox.Show("Cannot add a Ship to Patient item to an existing WVA order!", "Compulink Integration", MessageBoxButton.OK);
-                            OrdersContentControl.DataContext = new CompulinkOrdersViewModel();                                                       
+                            GoToCompulinkOrdersView();
                         }    
                         else if (order.ShipToPatient == "Y")
                         {
                             // Make sure user can't add a STP to another order
                             MessageBox.Show("Cannot add this item to a Ship to Patient order!", "Compulink Integration", MessageBoxButton.OK);
-                            OrdersContentControl.DataContext = new CompulinkOrdersViewModel();
+                            GoToCompulinkOrdersView();
                         }
                         else
                             OrdersContentControl.DataContext = new OrderCreationViewModel(order, prescriptions, orderName);
-                    }                       
+                    }
                     else
-                        // Open order creation view with a clean slate (creates a new order in the db)
-                        OrdersContentControl.DataContext = new OrderCreationViewModel(prescriptions, orderName);                    
+                    {
+                        // Open OrderCreationView with a new order (creates a new order in the db)
+                        OrdersContentControl.DataContext = new OrderCreationViewModel(prescriptions, orderName);
+                    }
                     break;
                 default:
-                    OrdersContentControl.DataContext = new CompulinkOrdersViewModel();
+                    GoToCompulinkOrdersView();
                     break;
             }         
         }
 
+        private void GoToCompulinkOrdersView()
+        {
+            OrdersContentControl.DataContext = new CompulinkOrdersViewModel(); 
+        }
+
         private void SetUpLabOrdersView()
         {
-            // Update header to show user they are in STP view
+            // Update header to show user they are in 'Compulink Orders' view
             TabLabel.Content = "Compulink Orders";
 
             Color blue = (Color)ColorConverter.ConvertFromString("#FF327EC3");
@@ -99,9 +105,9 @@ namespace WVA_Compulink_Integration.Views
             Rect_2.Fill = whiteBrush;
         }
 
-        private void SetUpWVA_OrdersView()
+        private void SetUpWvaOrdersView()
         {
-            // Update header to show user they are in STP view
+            // Update header to show user they are in 'WVA Orders' view
             TabLabel.Content = "WVA Orders";
 
             Color blue = (Color)ColorConverter.ConvertFromString("#FF327EC3");
@@ -121,7 +127,7 @@ namespace WVA_Compulink_Integration.Views
 
         private void WVA_OrdersButton_Click(object sender, RoutedEventArgs e)
         {
-            SetUpWVA_OrdersView();
+            SetUpWvaOrdersView();
             OrdersContentControl.DataContext = new WVAOrdersViewModel();
         }       
 

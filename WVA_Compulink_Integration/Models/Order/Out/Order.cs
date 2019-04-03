@@ -78,6 +78,9 @@ namespace WVA_Compulink_Integration.Models.Order.Out
         [JsonProperty("processed_flag")]
         public string ProcessedFlag { get; set; }
 
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
         [JsonProperty("items")]
         public List<Item> Items { get; set; }
     }
