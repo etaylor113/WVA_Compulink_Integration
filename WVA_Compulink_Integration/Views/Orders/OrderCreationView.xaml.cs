@@ -1029,9 +1029,10 @@ namespace WVA_Compulink_Integration.Views.Orders
             }           
         }
 
-        private void DeleteOrder()
+        private string DeleteOrder()
         {
-            Response response = OrderCreationViewModel.DeleteOrder(OrderNameTextBox.Text);
+            string orderName = OrderNameTextBox.Text;
+            Response response = OrderCreationViewModel.DeleteOrder(orderName);
 
             if (response.Status == "SUCCESS")
             {
@@ -1050,6 +1051,8 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 MessageBox.Show("An error has occurred. Order not deleted.", "", MessageBoxButton.OK);
             }
+
+            return orderName;
         }       
 
         private void CreateOrder()
@@ -1305,12 +1308,11 @@ namespace WVA_Compulink_Integration.Views.Orders
                     actionMessage = $"<Delete_Order_Start>";
                     ActionLogger.Log(location, actionMessage);
 
-                    DeleteOrder();
-                }
-                    
+                    string orderName = DeleteOrder();
 
-                actionMessage = $"<Delete_Order_End>, <Order.Name={OrderNameTextBox.Text}>";
-                ActionLogger.Log(location, actionMessage);
+                    actionMessage = $"<Delete_Order_End>, <Order.Name={orderName}>";
+                    ActionLogger.Log(location, actionMessage);
+                }
             }
             catch (Exception ex)
             {

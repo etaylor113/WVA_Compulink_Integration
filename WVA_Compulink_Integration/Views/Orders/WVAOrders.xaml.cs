@@ -361,7 +361,18 @@ namespace WVA_Compulink_Integration.Views.Orders
                 return;
 
             foreach (var order in listOrders)
-                OrderCreationViewModel.DeleteOrder(order.OrderName);      
+            {
+                string location = "WVA_Compulink_Integration.Orders.WVAOrders.DeleteOrderButton_Click()";
+                string actionMessage = $"<Delete_Order_Start>";
+                ActionLogger.Log(location, actionMessage);
+
+                OrderCreationViewModel.DeleteOrder(order.OrderName);
+
+                location = "WVA_Compulink_Integration.Orders.WVAOrders.DeleteOrderButton_Click()";
+                actionMessage = $"<Delete_Order_Start> <Order.Name={order.OrderName}>";
+                ActionLogger.Log(location, actionMessage);
+            }
+                  
             
             RefreshOrders();
         }
