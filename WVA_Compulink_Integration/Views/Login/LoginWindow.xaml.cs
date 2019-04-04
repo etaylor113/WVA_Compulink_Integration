@@ -20,7 +20,7 @@ using WVA_Compulink_Integration.Views.Registration;
 using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Cryptography;
 using System.IO;
-using WVA_Compulink_Integration.Utility.File;
+using WVA_Compulink_Integration.Utility.Files;
 
 namespace WVA_Compulink_Integration.Views.Login
 {

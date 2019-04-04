@@ -23,13 +23,14 @@ using WVA_Compulink_Integration.Models;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.IO;
-using WVA_Compulink_Integration.Utility.File;
+using WVA_Compulink_Integration.Utility.Files;
 using WVA_Compulink_Integration.Models.Patient;
 using System.Diagnostics;
 using WVA_Compulink_Integration.Models.Response;
 using WVA_Compulink_Integration.MatchFinder.ProductPredictions;
 using System.Threading;
 using System.ComponentModel;
+using WVA_Compulink_Integration.Utility.Actions;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
@@ -932,7 +933,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 // Update order object with the form data                  
                 order.OrderName         =   OrderNameTextBox.Text;
                 order.CustomerID        =   AccountIDTextBox.Text;
-                order.OrderedBy         =   OrderedByTextBox.Text;
+                order.OrderedBy         =   UserData.Data.UserName ?? OrderedByTextBox.Text;
                 //order.OfficeName        =   OfficeNameTextBox.Text;
                 order.PoNumber          =   PoNumberTextBox.Text;
                 order.ShippingMethod    =   GetShippingTypeID(ShippingTypeComboBox.Text);
@@ -1330,6 +1331,16 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             OutOrderWrapper outOrderWrapper = GetCompleteOrder();
             OrderCreationViewModel.SaveOrder(outOrderWrapper);
+
+            string location = e.Source.ToString() + "UserControl_Unloaded()";
+            string actionMessage = $"<Order.ID={outOrderWrapper.OutOrder.PatientOrder.ID}>, <Order.Name={outOrderWrapper.OutOrder.PatientOrder.OrderName}>";
+            ActionLogger.Log(location, actionMessage);
+        }
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            //AutosaveOrder();
+            string location = e.Source.ToString() + "UserControl_Loaded()";
+            ActionLogger.Log(location);
         }
 
         private void OrderNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -1381,11 +1392,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             DoBLabel.Foreground = new SolidColorBrush(Colors.Black);
         }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            //AutosaveOrder();
-        }
+       
     }
 }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WVA_Compulink_Integration.Utility.File
+namespace WVA_Compulink_Integration.Utility.Files
 {
     class Paths
     {
@@ -20,7 +20,8 @@ namespace WVA_Compulink_Integration.Utility.File
             set { ProgramFiles = value; }
         }
 
-        public static string AppData                =   Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);       
+        public static string AppData                =   Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        public static string LocalAppData           =   Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         public static string PublicDocs             =   Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments);
         public static string Desktop                =   Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         public static string MainAppEXE             =   $@"{ProgramFiles}\WVA Compulink Integration\WVA_Compulink_Integration.exe";
@@ -52,5 +53,8 @@ namespace WVA_Compulink_Integration.Utility.File
         public static string ErrorLog               =   $@"{AppData}\WVA Compulink Integration\ErrorLog\";
         public static string UserSettingsDir        =   $@"{AppData}\WVA Compulink Integration\UserSettings\";
         public static string UserSettingsFile       =   $@"{AppData}\WVA Compulink Integration\UserSettings\Settings.json";
+
+        // TEMP
+        public static string ActionLogDir = $@"{LocalAppData}\Temp\";
     }
 }

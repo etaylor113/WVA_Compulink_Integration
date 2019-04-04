@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WVA_Compulink_Integration.Utility.File;
+using WVA_Compulink_Integration.Utility.Files;
 
 namespace WVA_Compulink_Integration.Models.Users
 {

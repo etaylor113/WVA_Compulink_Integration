@@ -69,8 +69,8 @@ namespace WVA_Compulink_Integration.Models.Order.Out
         [JsonProperty("email")]
         public string Email { get; set; }
 
-        [JsonProperty("deleted_flag")]
-        public string DeletedFlag { get; set; }
+        [JsonProperty("status")]
+        public string Status { get; set; }
 
         [JsonProperty("message")]
         public string Message { get; set; }
@@ -78,8 +78,8 @@ namespace WVA_Compulink_Integration.Models.Order.Out
         [JsonProperty("processed_flag")]
         public string ProcessedFlag { get; set; }
 
-        [JsonProperty("status")]
-        public string Status { get; set; }
+        [JsonProperty("deleted_flag")]
+        public string DeletedFlag { get; set; }
 
         [JsonProperty("items")]
         public List<Item> Items { get; set; }

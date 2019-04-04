@@ -152,6 +152,7 @@
     <Compile Include="Models\Validations\Validator.cs" />
     <Compile Include="Updates\UpdateOutput.cs" />
     <Compile Include="Updates\Updater.cs" />
+    <Compile Include="Utility\Actions\ActionLogger.cs" />
     <Compile Include="Utility\UI_Tools\DatagridTools.cs" />
     <Compile Include="ViewModels\Orders\CompulinkOrdersViewModel.cs" />
     <Compile Include="ViewModels\Orders\OrderCreationViewModel.cs" />
@@ -198,7 +199,7 @@
     <Compile Include="Models\Response\Response.cs" />
     <Compile Include="Models\Users\User.cs" />
     <Compile Include="Models\Users\VerifyUser.cs" />
-    <Compile Include="Utility\File\Paths.cs" />
+    <Compile Include="Utility\Files\Paths.cs" />
     <Compile Include="ViewModels\OrdersViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\Error\ErrorWindow.xaml.cs">
@@ -311,15 +312,11 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="App.config" />
-    <None Include="Misc\packages.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Misc\App.config" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons8-Reset-64.png" />

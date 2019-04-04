@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Models.Order.Out;
 using WVA_Compulink_Integration.Models.Prescription;
+using WVA_Compulink_Integration.Utility.Actions;
 using WVA_Compulink_Integration.ViewModels.Orders;
 
 namespace WVA_Compulink_Integration.Views.Orders
@@ -212,6 +213,19 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             SelectedRow = ReviewOrderDataGrid.Items.IndexOf(ReviewOrderDataGrid.CurrentItem);
             SetUpGridContextMenuItems();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            string location = e.Source.ToString() + "UserControl_Loaded()";
+            ActionLogger.Log(location);
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            string location = e.Source.ToString() + "UserControl_Unloaded()";
+            string actionMessage = $"<Order.ID={ViewOrderDetailsViewModel.SelectedOrder.ID}>, <Order.Name={ViewOrderDetailsViewModel.SelectedOrder.OrderName}>, <Order.WvaOrderID={ViewOrderDetailsViewModel.SelectedOrder.WvaStoreID}>";
+            ActionLogger.Log(location, actionMessage);
         }
     }
 }

@@ -14,7 +14,8 @@
         WindowStartupLocation="CenterScreen" 
         ResizeMode="CanResize" 
         Icon="/WVA_Compulink_Integration;component/Resources/wva_square_logo.jpg"
-        Closing="Window_Closing">
+        Closing="Window_Closing"
+        Loaded="Window_Loaded">
 
     <Window.Resources>
 

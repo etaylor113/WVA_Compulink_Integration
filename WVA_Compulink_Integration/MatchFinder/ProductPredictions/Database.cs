@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Models.Product;
-using WVA_Compulink_Integration.Utility.File;
+using WVA_Compulink_Integration.Utility.Files;
 
 namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
 {

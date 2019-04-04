@@ -17,6 +17,7 @@ using WVA_Compulink_Integration.Models.Order.Out;
 using WVA_Compulink_Integration.Models.OrderStatus.FromApi;
 using WVA_Compulink_Integration.Models.OrderStatus.ToApi;
 using WVA_Compulink_Integration.Models.Prescription;
+using WVA_Compulink_Integration.Utility.Actions;
 using WVA_Compulink_Integration.ViewModels.Orders;
 using WVA_Compulink_Integration.Views.Search;
 
@@ -88,7 +89,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                         tempList = ListOrders.Where(x => x.OrderedBy.ToLower().Contains(searchString.ToLower())).ToList();
                         break;
                     case 6:
-                        tempList = ListOrders.Where(x => x.DeletedFlag.ToLower().Contains(searchString.ToLower())).ToList();
+                        tempList = ListOrders.Where(x => x.Status.ToLower().Contains(searchString.ToLower())).ToList();
                         break;
                 }
 
@@ -165,7 +166,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             foreach (Order order in orders)
             {
-                if (order.WvaStoreID == null || order.WvaStoreID.Trim() == "" || order.DeletedFlag == "open")
+                if (order.WvaStoreID == null || order.WvaStoreID.Trim() == "" || order.Status == "open")
                     continue;
 
                 RequestWrapper request = new RequestWrapper()
@@ -186,7 +187,6 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 var statusResponse = JsonConvert.DeserializeObject<StatusResponse>(strStatusResponse);
 
-                order.DeletedFlag = statusResponse.DeletedFlag;
                 order.Message = statusResponse.Message;
                 order.ProcessedFlag = statusResponse.ProcessedFlag;
 
@@ -286,7 +286,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             List<Order> order = GetSelectedOrders();
 
             // Leave method if they don't select an order or if order has already been submitted
-            if (order == null || order[0].DeletedFlag.ToLower() == "submitted")
+            if (order == null || order[0].Status.ToLower() == "submitted")
                 return;
 
             foreach (Window window in Application.Current.Windows)
@@ -372,19 +372,28 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 Order selectedOrder = (Order)WvaOrdersDataGrid.SelectedItems[0];
 
-                if (selectedOrder.DeletedFlag == "open")
-                {
+                if (selectedOrder.Status == "open")
                     OpenEditOrder();
-                }
-                else
-                {
+                
+                if (selectedOrder.Status == "submitted")
                     OpenViewOrderDetails(selectedOrder);
-                }
             }
             catch (Exception ex)
             {
                 AppError.ReportOrWrite(ex);
             }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            string location = e.Source.ToString() + "UserControl_Loaded()";
+            ActionLogger.Log(location);
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            string location = e.Source.ToString() + "UserControl_Unloaded()";
+            ActionLogger.Log(location);
         }
     }
 }

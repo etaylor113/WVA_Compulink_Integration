@@ -17,7 +17,7 @@ using WVA_Compulink_Integration.Cryptography;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models.Users;
-using WVA_Compulink_Integration.Utility.File;
+using WVA_Compulink_Integration.Utility.Files;
 using WVA_Compulink_Integration.Views.Login;
 
 namespace WVA_Compulink_Integration.Views.Registration

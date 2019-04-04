@@ -18,7 +18,7 @@ using WVA_Compulink_Integration.Views.Search;
 using WVA_Compulink_Integration.Views;
 using WVA_Compulink_Integration.Memory;
 using System.IO;
-using WVA_Compulink_Integration.Utility.File;
+using WVA_Compulink_Integration.Utility.Files;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Models.Product;
 using System.Threading;
@@ -26,6 +26,7 @@ using System.Diagnostics;
 using System.Reflection;
 using WVA_Compulink_Integration.Models.Product.ProductOut;
 using WVA_Compulink_Integration.Updates;
+using WVA_Compulink_Integration.Utility.Actions;
 
 namespace WVA_Compulink_Integration.Views
 {
@@ -34,8 +35,6 @@ namespace WVA_Compulink_Integration.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool DidLoad { get; set; }
-
         public MainWindow()
         {
             InitializeComponent();
@@ -183,8 +182,24 @@ namespace WVA_Compulink_Integration.Views
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            //Updater.RunLaucherUpdate();
+        {            
+            
+            string location =  "WVA_Compulink_Integration.Views.MainWindow.Window_Closing()";
+            string actionMessage = "<Pre_Launcher_Update>";
+            ActionLogger.Log(location, actionMessage);
+
+            Updater.RunLaucherUpdate();
+
+            actionMessage = "<Post_Launcher_Update> <App_Exit>\n";
+            ActionLogger.Log(location, actionMessage);
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            string location = e.Source.ToString() + "Window_Loaded()";
+            string actionMessage = "<App_Launch>";
+            ActionLogger.Log(location, actionMessage);
+        }
+
     }
 }

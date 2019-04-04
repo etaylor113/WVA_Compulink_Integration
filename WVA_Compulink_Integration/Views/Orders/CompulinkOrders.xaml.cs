@@ -15,10 +15,12 @@ using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models.Prescription;
+using WVA_Compulink_Integration.Utility.Actions;
 using WVA_Compulink_Integration.Views.Search;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
+    /// <summary>
     /// <summary>
     /// Interaction logic for CompulinkOrders.xaml
     /// </summary>
@@ -343,5 +345,16 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
         }
 
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            string location = e.Source.ToString() + "UserControl_Loaded()";
+            ActionLogger.Log(location);
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            string location = e.Source.ToString() + "UserControl_Unloaded()";
+            ActionLogger.Log(location);
+        }
     }
 }
