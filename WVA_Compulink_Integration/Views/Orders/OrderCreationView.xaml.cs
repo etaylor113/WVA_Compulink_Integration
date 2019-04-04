@@ -145,23 +145,29 @@ namespace WVA_Compulink_Integration.Views.Orders
             int index = 0;
             foreach (Product product in compulinkProducts)
             {
-                List<Product> wvaProducts = WvaProducts.ListProducts;
-
-                if (wvaProducts == null || wvaProducts.Count == 0)
-                    throw new Exception("List<WVA_Products> is null or empty!");
-             
-                // Run match finder for product and return results based on numPicks (number of times same product has been chosen)
-                List<MatchProduct> matchProducts = ProductPrediction.GetPredictionMatches(product.Description + product.Vendor, MatchScore, wvaProducts, overrideNumPicks);
-
-                if (matchProducts?.Count > 0)
+                try
                 {
-                    ListMatchedProducts.Add(matchProducts);
-                    OrderCreationViewModel.Prescriptions[index].ProductCode = matchProducts[0].ProductKey;
-                }
-                else
-                    ListMatchedProducts.Add(new List<MatchProduct> { new MatchProduct("No Matches Found", 0) });
+                    List<Product> wvaProducts = WvaProducts.ListProducts;
 
-                index++;
+                    if (wvaProducts == null || wvaProducts.Count == 0)
+                        throw new Exception("List<WVA_Products> is null or empty!");
+
+                    // Run match finder for product and return results based on numPicks (number of times same product has been chosen)
+                    List<MatchProduct> matchProducts = ProductPrediction.GetPredictionMatches(product.Description + product.Vendor, MatchScore, wvaProducts, overrideNumPicks);
+
+                    if (matchProducts?.Count > 0)
+                    {
+                        ListMatchedProducts.Add(matchProducts);
+                        OrderCreationViewModel.Prescriptions[index].ProductCode = matchProducts[0].ProductKey;
+                    }
+                    else
+                        ListMatchedProducts.Add(new List<MatchProduct> { new MatchProduct("No Matches Found", 0) });
+                }
+                catch { }
+                finally
+                {
+                    index++;
+                }
             }
         }
 
@@ -362,7 +368,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             // Right column
             OrderNameTextBox.Text = OrderCreationViewModel.Order.OrderName ?? "";
             AccountIDTextBox.Text = UserData.Data?.Account;
-            OrderedByTextBox.Text = OrderCreationViewModel.Order.OrderedBy ?? "";
+            OrderedByTextBox.Text = UserData.Data.UserName ?? "";
             //OfficeNameTextBox.Text = OrderCreationViewModel.Order.OfficeName ?? "";
             PoNumberTextBox.Text = OrderCreationViewModel.Order.PoNumber ?? "";
             ShippingTypeComboBox.Text = OrderCreationViewModel.Order.ShippingMethod ?? "";
@@ -933,8 +939,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 // Update order object with the form data                  
                 order.OrderName         =   OrderNameTextBox.Text;
                 order.CustomerID        =   AccountIDTextBox.Text;
-                order.OrderedBy         =   UserData.Data.UserName ?? OrderedByTextBox.Text;
-                //order.OfficeName        =   OfficeNameTextBox.Text;
+                order.OrderedBy         =   OrderedByTextBox.Text;
                 order.PoNumber          =   PoNumberTextBox.Text;
                 order.ShippingMethod    =   GetShippingTypeID(ShippingTypeComboBox.Text);
 
@@ -1287,20 +1292,45 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this order?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            string location = "";
+            string actionMessage = "";
 
-            if (result.ToString() == "Yes")
+            try
             {
-                DeleteOrder();
+                MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this order?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result.ToString() == "Yes")
+                {
+                    location = "WVA_Compulink_Integration.Orders.OrderCreationView.DeleteOrderButton_Click()";
+                    actionMessage = $"<Delete_Order_Start>";
+                    ActionLogger.Log(location, actionMessage);
+
+                    DeleteOrder();
+                }
+                    
+
+                actionMessage = $"<Delete_Order_End>, <Order.Name={OrderNameTextBox.Text}>";
+                ActionLogger.Log(location, actionMessage);
+            }
+            catch (Exception ex)
+            {
+                AppError.ReportOrWrite(ex);
             }
         }
 
         private void SubmitOrderButton_Click(object sender, RoutedEventArgs e)
         {
             try
-            {                            
+            {
+                string location = "WVA_Compulink_Integration.Orders.OrderCreationView.SubmitOrderButton_Click()";
+                string actionMessage = $"<Submit_Order_Start>";
+                ActionLogger.Log(location, actionMessage);
+
                 if (ItemsAreValid())
-                    CreateOrder();                      
+                    CreateOrder();
+
+                actionMessage = $"<Submit_Order_End> <Order.Name={OrderNameTextBox.Text}>";
+                ActionLogger.Log(location, actionMessage);
             }
             catch (Exception x)
             {
@@ -1314,12 +1344,19 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
+                string location = "WVA_Compulink_Integration.Orders.OrderCreationView.SaveOrderButton_Click()";
+                string actionMessage = $"<Save_Order_Start>";
+                ActionLogger.Log(location, actionMessage);
+
                 OutOrderWrapper outOrderWrapper = GetCompleteOrder();
 
                 if (outOrderWrapper != null)
                     SaveOrder(outOrderWrapper);
                 else
-                    throw new NullReferenceException();             
+                    throw new NullReferenceException();
+
+                actionMessage = $"<Save_Order_End> <Order.Name={OrderNameTextBox.Text}>";
+                ActionLogger.Log(location, actionMessage);
             }
             catch (Exception x)
             {
