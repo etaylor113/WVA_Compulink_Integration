@@ -343,6 +343,12 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 AppError.ReportOrWrite(x);
             }
+            finally
+            {
+                string location = "WVA_Compulink_Integration.Views.Orders.CompulinkOrders.AddToOrderButton_Click()";
+                string actionMessage = $"<OrderName=<{WvaOrdersComboBox.Text}>";
+                ActionLogger.Log(location, actionMessage);
+            }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)

@@ -48,6 +48,9 @@ namespace WVA_Compulink_Integration.Views
                 // Set app version at bottom of view
                 AppVersionLabel.Content = $"Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion}";
 
+                // Send data collection of user activity for statistics and diagnosing user problems
+                ReportActionLogData();
+
                 // Set the main data context to the Compulink orders view if their account number is set
                 if (AccountNumAvailable())
                 {
@@ -91,10 +94,11 @@ namespace WVA_Compulink_Integration.Views
             }
         }
 
-        /// <summary>
-        /// Side Tab Control Buttons For Changing Views
-        /// </summary>
-        /// 
+        private async void ReportActionLogData()
+        {
+            List<string> data = ActionLogger.GetData();
+            ActionLogger.ReportData(data);
+        }
 
         private async void TryLoadOrderView()
         {
@@ -183,23 +187,28 @@ namespace WVA_Compulink_Integration.Views
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {            
-            
             string location =  "WVA_Compulink_Integration.Views.MainWindow.Window_Closing()";
-            string actionMessage = "<Pre_Launcher_Update>";
+            string actionMessage = "<Start_Launcher_Update>";
             ActionLogger.Log(location, actionMessage);
 
             Updater.RunLaucherUpdate();
 
-            actionMessage = "<Post_Launcher_Update> <App_Exit>\n";
+            actionMessage = "<End_Launcher_Update>";
             ActionLogger.Log(location, actionMessage);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            string location = e.Source.ToString() + "Window_Loaded()";
+            string location = "WVA_Compulink_Integration.Views.MainWindow.Window_Loaded()";
             string actionMessage = "<App_Launch>";
             ActionLogger.Log(location, actionMessage);
         }
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            string location = "WVA_Compulink_Integration.Views.MainWindow.Window_Closed()";
+            string actionMessage = " <App_Exit>\n";
+            ActionLogger.Log(location, actionMessage);
+        }
     }
 }

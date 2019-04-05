@@ -1368,18 +1368,47 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            OutOrderWrapper outOrderWrapper = GetCompleteOrder();
-            OrderCreationViewModel.SaveOrder(outOrderWrapper);
+            try
+            {
+                OutOrderWrapper outOrderWrapper = GetCompleteOrder();
+                OrderCreationViewModel.SaveOrder(outOrderWrapper);
 
-            string location = e.Source.ToString() + "UserControl_Unloaded()";
-            string actionMessage = $"<Order.ID={outOrderWrapper.OutOrder.PatientOrder.ID}>, <Order.Name={outOrderWrapper.OutOrder.PatientOrder.OrderName}>";
-            ActionLogger.Log(location, actionMessage);
+                string location = e.Source.ToString() + "UserControl_Unloaded()";
+                string actionMessage = null;
+
+                if (OrderCreationViewModel.Order != null && OrderCreationViewModel.Order?.OrderName.Trim() != "")
+                    actionMessage = $"<Order.ID={OrderCreationViewModel.Order?.ID}>, <Order.Name={OrderCreationViewModel.Order?.OrderName}>";
+
+                if (actionMessage == null)
+                    ActionLogger.Log(location);
+                else
+                    ActionLogger.Log(location, actionMessage);
+            }
+            catch (Exception ex)
+            {
+                AppError.ReportOrWrite(ex);
+            }
         }
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            //AutosaveOrder();
-            string location = e.Source.ToString() + "UserControl_Loaded()";
-            ActionLogger.Log(location);
+            try
+            {
+                //AutosaveOrder();
+                string location = e.Source.ToString() + "UserControl_Loaded()";
+                string actionMessage = null;
+
+                if (OrderCreationViewModel.Order != null)
+                    actionMessage = $"<Order.ID={OrderCreationViewModel.Order?.ID}>, <Order.Name={OrderCreationViewModel.Order?.OrderName}>";
+
+                if (actionMessage == null)
+                    ActionLogger.Log(location);
+                else
+                    ActionLogger.Log(location, actionMessage);
+            }
+            catch (Exception ex)
+            {
+                AppError.ReportOrWrite(ex);
+            }
         }
 
         private void OrderNameTextBox_TextChanged(object sender, TextChangedEventArgs e)

@@ -61,7 +61,6 @@
     <Compile Include="ApiTests.cs" />
     <Compile Include="BasecurveTests.cs" />
     <Compile Include="CryptoTests.cs" />
-    <Compile Include="ErrorOutputTests.cs" />
     <Compile Include="ErrorWindowTests.cs" />
     <Compile Include="PatientTests.cs" />
     <Compile Include="PrescriptionTests.cs" />

@@ -55,6 +55,6 @@ namespace WVA_Compulink_Integration.Utility.Files
         public static string UserSettingsFile       =   $@"{AppData}\WVA Compulink Integration\UserSettings\Settings.json";
 
         // TEMP
-        public static string ActionLogDir = $@"{LocalAppData}\Temp\";
+        public static string ActionLogDir           =   $@"{PublicDocs}\WVA Compulink Integration\Temp\";
     }
 }

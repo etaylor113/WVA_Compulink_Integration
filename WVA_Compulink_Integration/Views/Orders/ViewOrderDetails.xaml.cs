@@ -218,7 +218,8 @@ namespace WVA_Compulink_Integration.Views.Orders
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             string location = e.Source.ToString() + "UserControl_Loaded()";
-            ActionLogger.Log(location);
+            string actionMessage = $"<Order.ID={ViewOrderDetailsViewModel.SelectedOrder.ID}>, <Order.Name={ViewOrderDetailsViewModel.SelectedOrder.OrderName}>, <Order.WvaOrderID={ViewOrderDetailsViewModel.SelectedOrder.WvaStoreID}>";
+            ActionLogger.Log(location, actionMessage);
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)

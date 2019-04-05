@@ -24,5 +24,3 @@ C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\CompulinkIntegration.Tests
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\CompulinkIntegration.Tests\obj\Debug\CompulinkIntegration.Tests.csproj.CopyComplete
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\CompulinkIntegration.Tests\obj\Debug\CompulinkIntegration.Tests.dll
 C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\CompulinkIntegration.Tests\obj\Debug\CompulinkIntegration.Tests.pdb
-C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\CompulinkIntegration.Tests\bin\Debug\CompulinkIntegration.Tests.dll.CodeAnalysisLog.xml
-C:\Users\evan\Desktop\Repos\WVA_Compulink_Integration\CompulinkIntegration.Tests\bin\Debug\CompulinkIntegration.Tests.dll.lastcodeanalysissucceeded

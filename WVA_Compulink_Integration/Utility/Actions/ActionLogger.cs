@@ -46,19 +46,18 @@ namespace WVA_Compulink_Integration.Utility.Actions
 
         private static string GetLogFileName()
         {
-            return $"{Paths.ActionLogDir}CDI_Action_Log_{DateTime.Today.ToString("dd-MM-yy")}.txt";
+            return $"{Paths.ActionLogDir}CDI_Action_Log_{DateTime.Today.ToString("MM-dd-yy")}.txt";
         }
 
         private static string GetFileContents(string actionLocation)
         {
             string time = DateTime.Now.ToString("hh:mm:ss");
-            return $"{UserData.Data.UserName} => {UserData.Data.Account} => {time} => {actionLocation}";
+            return $"{UserData.Data.ApiKey} => {UserData.Data.UserName} => {UserData.Data.Account} => {time} => {actionLocation}";
         }
 
         private static string GetFileContents(string actionLocation, string actionMessage)
         {
-            string time = DateTime.Now.ToString("hh:mm:ss");
-            return $"{UserData.Data.UserName} => {UserData.Data.Account} => {time} => {actionLocation} => {actionMessage}";
+            return GetFileContents(actionLocation) + $" => {actionMessage}";
         }
 
         private static void WriteToLogFile(string file, string contents)
@@ -75,7 +74,43 @@ namespace WVA_Compulink_Integration.Utility.Actions
 
 
         // -----------------------------------------------------------------------------------------------------
+        // --------------------------------- GETTING ACTION DATA -----------------------------------------------
+        // -----------------------------------------------------------------------------------------------------
+
+        public static List<string> GetData()
+        {
+            List<string> listActionData = new List<string>();
+
+            var files = Directory.EnumerateFiles(Paths.ActionLogDir, "CDI_Action_Log*").Where(x => !x.Contains(DateTime.Today.ToString("MM-dd-yy")));
+
+            // Exclude any files created today
+            //files = files.Where(x => !x.Contains(DateTime.Today.ToString("MM-dd-yy")));
+            
+            foreach (string file in files)
+            {
+                if (File.Exists(file))
+                {
+                    string content = File.ReadAllText(file);
+                    listActionData.Add(content);
+                }
+            }
+
+            return listActionData;
+        }
+
+        // -----------------------------------------------------------------------------------------------------
         // --------------------------------- SENDING ACTION DATA -----------------------------------------------
         // -----------------------------------------------------------------------------------------------------
+
+        public static bool ReportData(string data)
+        {
+            return true;
+        }
+
+        public static bool ReportData(IEnumerable<string> data)
+        {
+            return true;
+        }
+
     }
 }

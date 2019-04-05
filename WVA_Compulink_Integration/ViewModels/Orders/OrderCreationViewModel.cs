@@ -99,6 +99,9 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
 
         public static OrderResponse SaveOrder(OutOrderWrapper outOrderWrapper)
         {
+            if (outOrderWrapper?.OutOrder?.PatientOrder?.OrderName == null || outOrderWrapper?.OutOrder?.PatientOrder?.OrderName.Trim() == "")
+                return null;
+
             string dsn = UserData.Data.DSN;
             string endpoint = $"http://{dsn}/api/order/save/";
             string strResponse = API.Post(endpoint, outOrderWrapper);
