@@ -32,7 +32,7 @@ namespace WVA_Compulink_Integration.Views
     {
         public SettingsView()
         {
-            InitializeComponent();
+            InitializeComponent();          
             SetUp();
         }
 
@@ -79,9 +79,16 @@ namespace WVA_Compulink_Integration.Views
 
         private List<string> GetAvailableAccounts()
         {
-            string endpoint = $"http://{UserData.Data?.DSN}/api/user/get-acts";
-            string response = API.Get(endpoint, out string httpStatus);
-            return JsonConvert.DeserializeObject<List<string>>(response);
+            try
+            {
+                string endpoint = $"http://{UserData.Data?.DSN}/api/user/get-acts";
+                string response = API.Get(endpoint, out string httpStatus);
+                return JsonConvert.DeserializeObject<List<string>>(response);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         private void UpdateUserSettings()

@@ -41,8 +41,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
                 {
                     if (listPrescriptions[i].Product == null || listPrescriptions[i].Product.Trim() == "")
                     {
-                        // Find orders with null or blank products and try to match
-                        // them up to and order with the same patient name           
+                        //listPrescriptions[i] = listPrescriptions.Where(x => x.FirstName == listPrescriptions[i].FirstName && x.LastName == listPrescriptions[i].LastName).First();
                     }
                 }
             }
@@ -68,7 +67,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
             string dsn = UserData.Data.DSN;          
             string endpoint = $"http://{dsn}/api/order/exists/";
             string strOrder = API.Post(endpoint, orderName);
-            Order order = JsonConvert.DeserializeObject<Order>(strOrder);
+            var order = JsonConvert.DeserializeObject<Order>(strOrder);
 
             // Change shipping code to readable string value
             if (order != null)

@@ -152,6 +152,7 @@
     <Compile Include="Models\Validations\Validator.cs" />
     <Compile Include="Updates\UpdateOutput.cs" />
     <Compile Include="Updates\Updater.cs" />
+    <Compile Include="Utility\Actions\ActionData.cs" />
     <Compile Include="Utility\Actions\ActionLogger.cs" />
     <Compile Include="Utility\UI_Tools\DatagridTools.cs" />
     <Compile Include="ViewModels\Orders\CompulinkOrdersViewModel.cs" />

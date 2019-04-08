@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Error;
 using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Utility.Files;
@@ -52,7 +54,7 @@ namespace WVA_Compulink_Integration.Utility.Actions
         private static string GetFileContents(string actionLocation)
         {
             string time = DateTime.Now.ToString("hh:mm:ss");
-            return $"{UserData.Data.ApiKey} => {UserData.Data.UserName} => {UserData.Data.Account} => {time} => {actionLocation}";
+            return $"ApiKey={UserData.Data.ApiKey} => MachName={Environment.MachineName} => EnvUserName={Environment.UserName} => AppUserName={UserData.Data.UserName} => ActNum={UserData.Data.Account} => {time} => {actionLocation}";
         }
 
         private static string GetFileContents(string actionLocation, string actionMessage)
@@ -77,21 +79,18 @@ namespace WVA_Compulink_Integration.Utility.Actions
         // --------------------------------- GETTING ACTION DATA -----------------------------------------------
         // -----------------------------------------------------------------------------------------------------
 
-        public static List<string> GetData()
+        public static List<ActionData> GetData()
         {
-            List<string> listActionData = new List<string>();
+            List<ActionData> listActionData = new List<ActionData>();
 
             var files = Directory.EnumerateFiles(Paths.ActionLogDir, "CDI_Action_Log*").Where(x => !x.Contains(DateTime.Today.ToString("MM-dd-yy")));
-
-            // Exclude any files created today
-            //files = files.Where(x => !x.Contains(DateTime.Today.ToString("MM-dd-yy")));
             
             foreach (string file in files)
             {
                 if (File.Exists(file))
                 {
                     string content = File.ReadAllText(file);
-                    listActionData.Add(content);
+                    listActionData.Add(new ActionData(file, content));
                 }
             }
 
@@ -104,13 +103,29 @@ namespace WVA_Compulink_Integration.Utility.Actions
 
         public static bool ReportData(string data)
         {
-            return true;
+            try
+            {
+                string endpoint = Paths.WisVisErrors;
+
+                JsonError dataMessage = new JsonError()
+                {
+                    ActNum = UserData.Data.Account,
+                    Error = data.ToString(),
+                    Application = "CDI-DAL",
+                    AppVersion = AssemblyName.GetAssemblyName(Paths.MainAppEXE).Version.ToString()
+                };
+
+                API.Post(endpoint, dataMessage);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public static bool ReportData(IEnumerable<string> data)
-        {
-            return true;
-        }
+      
 
     }
 }

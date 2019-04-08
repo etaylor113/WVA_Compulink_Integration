@@ -56,5 +56,10 @@ namespace WVA_Compulink_Integration.Utility.Files
 
         // TEMP
         public static string ActionLogDir           =   $@"{PublicDocs}\WVA Compulink Integration\Temp\";
+
+        // WisVis domain
+        public static string WisVisBase = "https://orders.wisvis.com";
+        public static string WisVisOrders = $@"{WisVisBase}/orders";
+        public static string WisVisErrors = $@"https://ws2.wisvis.com/aws/scanner/error_handler.rb";
     }
 }

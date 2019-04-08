@@ -48,9 +48,6 @@ namespace WVA_Compulink_Integration.Views
                 // Set app version at bottom of view
                 AppVersionLabel.Content = $"Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion}";
 
-                // Send data collection of user activity for statistics and diagnosing user problems
-                ReportActionLogData();
-
                 // Set the main data context to the Compulink orders view if their account number is set
                 if (AccountNumAvailable())
                 {
@@ -94,10 +91,17 @@ namespace WVA_Compulink_Integration.Views
             }
         }
 
-        private async void ReportActionLogData()
+        private void ReportActionLogData()
         {
-            List<string> data = ActionLogger.GetData();
-            ActionLogger.ReportData(data);
+            List<ActionData> data = ActionLogger.GetData();
+            
+            foreach (ActionData d in data)
+            {
+                bool dataReported = ActionLogger.ReportData($"FileName={d.FileName} \n{d.Content}");
+
+                if (dataReported)
+                    File.Delete(d.FileName);
+            }
         }
 
         private async void TryLoadOrderView()
@@ -199,6 +203,9 @@ namespace WVA_Compulink_Integration.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            // Send data collection of user activity for statistics and diagnosing user problems
+            ReportActionLogData();
+
             string location = "WVA_Compulink_Integration.Views.MainWindow.Window_Loaded()";
             string actionMessage = "<App_Launch>";
             ActionLogger.Log(location, actionMessage);
