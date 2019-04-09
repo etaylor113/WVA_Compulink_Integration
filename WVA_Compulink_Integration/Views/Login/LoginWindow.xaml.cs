@@ -95,11 +95,6 @@ namespace WVA_Compulink_Integration.Views.Login
             PasswordTextBox.Clear();
         }
 
-        // ===========================================================================================================================
-        // Form events called from LoginWindow 
-        // ===========================================================================================================================
-    
-
         private void Login()
         {
             try
@@ -140,6 +135,32 @@ namespace WVA_Compulink_Integration.Views.Login
             }
         }
 
+        private bool PasswordChangedRecently()
+        {
+            if (File.Exists(Paths.PrevTimePassChangeFile))
+            {
+                string fileText = File.ReadAllText(Paths.PrevTimePassChangeFile);
+
+                if (fileText == null || fileText.Trim() == "")
+                    return false;
+                else
+                {
+                    var timeChanged = Convert.ToDateTime(fileText);
+                    var timeNow = DateTime.Now.AddMinutes(-15);
+
+                    return timeNow > timeChanged ? false : true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
+        // ===========================================================================================================================
+        // Form events called from LoginWindow 
+        // ===========================================================================================================================
+
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             Login();
@@ -154,16 +175,18 @@ namespace WVA_Compulink_Integration.Views.Login
         {
             try
             {
+                if (PasswordChangedRecently())
+                {
+                    new MessageWindow("You have changed your password recently. Try again shortly.").Show();
+                    return;
+                }
+
                 ForgotPasswordWindow forgotPasswordWindow = new ForgotPasswordWindow();
 
                 if (forgotPasswordWindow.IsActive)
-                {
                     forgotPasswordWindow.Topmost = true;
-                }
                 else
-                {
                     forgotPasswordWindow.Show();
-                }
             }
             catch (Exception x)
             {

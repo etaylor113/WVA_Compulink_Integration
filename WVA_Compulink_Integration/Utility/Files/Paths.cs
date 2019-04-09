@@ -8,6 +8,7 @@ namespace WVA_Compulink_Integration.Utility.Files
 {
     class Paths
     {
+        // ROOT LOCATIONS
         public static string ProgramFiles
         {
             get
@@ -24,11 +25,10 @@ namespace WVA_Compulink_Integration.Utility.Files
         public static string LocalAppData           =   Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         public static string PublicDocs             =   Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments);
         public static string Desktop                =   Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+        // PROGRAM X86 || X64
         public static string MainAppEXE             =   $@"{ProgramFiles}\WVA Compulink Integration\WVA_Compulink_Integration.exe";
         public static string LauncherAppEXE         =   $@"{ProgramFiles}\WVA Compulink Integration\WVA_CDI_Updater.exe";
-
-        public static string DownloadLauncherUrl    =   @"https://" + $"ws2.wisvis.com/aws/compulinkIntegration/CDI/WVA_CDI_Launcher.msi";
-        public static string DownloadDbUrl          =   @"https://" + $"ws2.wisvis.com/aws/compulinkIntegration/CDI/ProductPrediction.sqlite";
 
         public static string ResourcesDir           =   $@"{ProgramFiles}\WVA Compulink Server Integration\Resources\";
         public static string ShortcutIcon           =   $@"{ResourcesDir}\logo_plain_vector_72_white_TMD_icon.ico";
@@ -54,12 +54,14 @@ namespace WVA_Compulink_Integration.Utility.Files
         public static string UserSettingsDir        =   $@"{AppData}\WVA Compulink Integration\UserSettings\";
         public static string UserSettingsFile       =   $@"{AppData}\WVA Compulink Integration\UserSettings\Settings.json";
 
-        // TEMP
-        public static string ActionLogDir           =   $@"{PublicDocs}\WVA Compulink Integration\Temp\";
+        // PREVIOUS TIME PASSWORD CHANGED FILE LOCATION
+        public static string PrevTimePassChangeFile =   $@"{PublicDocs}\WVA Compulink Integration\Temp\PrevTimePassChange.txt";
 
-        // WisVis domain
+        // WEB
         public static string WisVisBase = "https://orders.wisvis.com";
         public static string WisVisOrders = $@"{WisVisBase}/orders";
         public static string WisVisErrors = $@"https://ws2.wisvis.com/aws/scanner/error_handler.rb";
+        public static string DownloadLauncherUrl = @"https://" + $"ws2.wisvis.com/aws/compulinkIntegration/CDI/WVA_CDI_Launcher.msi";
+        public static string DownloadDbUrl = @"https://" + $"ws2.wisvis.com/aws/compulinkIntegration/CDI/ProductPrediction.sqlite";
     }
 }

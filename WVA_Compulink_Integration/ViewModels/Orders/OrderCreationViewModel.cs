@@ -41,7 +41,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
                 {
                     if (listPrescriptions[i].Product == null || listPrescriptions[i].Product.Trim() == "")
                     {
-                        //listPrescriptions[i] = listPrescriptions.Where(x => x.FirstName == listPrescriptions[i].FirstName && x.LastName == listPrescriptions[i].LastName).First();
+                        Prescription p = listPrescriptions.Where(x => x.FirstName == listPrescriptions[i].FirstName && x.LastName == listPrescriptions[i].LastName).First();
                     }
                 }
             }

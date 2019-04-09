@@ -84,9 +84,18 @@ namespace WVA_Compulink_Integration.Views.Login
             string strResponse = API.Post(endpoint, changePassUser);
 
             if (strResponse == null || strResponse.ToString().Trim() == "")
-                throw new NullReferenceException("response from endpoint was null or empty");
+                throw new NullReferenceException("Response from endpoint was null or empty");
             else
                 return JsonConvert.DeserializeObject<Response>(strResponse);
+        }
+
+        private void LogTimePassChanged()
+        {
+            if (!Directory.Exists(Paths.TempDir))
+                Directory.CreateDirectory(Paths.TempDir);
+
+            string timeNow = DateTime.Now.ToString();
+            File.WriteAllText(Paths.PrevTimePassChangeFile, timeNow);
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -119,7 +128,8 @@ namespace WVA_Compulink_Integration.Views.Login
                 Response response = ChangePassword();
 
                 if (response?.Status == "SUCCESS")
-                {                     
+                {                   
+                    LogTimePassChanged();
                     new MessageWindow("\t\tPassword updated!").Show();
                     Close();
                 }
