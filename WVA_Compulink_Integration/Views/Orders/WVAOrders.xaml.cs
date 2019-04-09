@@ -160,59 +160,9 @@ namespace WVA_Compulink_Integration.Views.Orders
             return returnList;
         }
 
-
-        // Update order status for each order in list
-        private List<Order> UpdateOrderStatus(List<Order> orders)
-        {
-            foreach (Order order in orders)
-            {
-                if (order.WvaStoreID == null || order.WvaStoreID.Trim() == "" || order.Status == "open")
-                    continue;
-
-                RequestWrapper request = new RequestWrapper()
-                {
-                    Request = new StatusRequest()
-                    {
-                        ApiKey = UserData.Data.ApiKey,
-                        CustomerId = UserData.Data.Account,
-                        WvaStoreNumber = order.WvaStoreID
-                    }
-                };
-
-                string statusEndpoint = "https://orders-qa.wisvis.com/order_status";
-                string strStatusResponse = API.Post(statusEndpoint, request);
-
-                if (strStatusResponse == null || strStatusResponse.Trim() == "")
-                    continue;
-
-                var statusResponse = JsonConvert.DeserializeObject<StatusResponse>(strStatusResponse);
-
-                order.Message = statusResponse.Message;
-                order.ProcessedFlag = statusResponse.ProcessedFlag;
-
-                if (statusResponse.Items == null || statusResponse.Items?.Count < 1)
-                    continue;
-
-                for (int i = 0; i < statusResponse.Items.Count; i++)
-                {
-                    order.Items[i].DeletedFlag = statusResponse.DeletedFlag;
-                    order.Items[i].QuantityBackordered = statusResponse.Items[i].QuantityBackordered;
-                    order.Items[i].QuantityCancelled = statusResponse.Items[i].QuantityCancelled;
-                    order.Items[i].QuantityShipped = statusResponse.Items[i].QuantityShipped;
-                    order.Items[i].Status = statusResponse.Items[i].Status;
-                    order.Items[i].ItemStatus = statusResponse.Items[i].ItemStatus;
-                    order.Items[i].ShippingDate = statusResponse.Items[i].ShippingDate;
-                    order.Items[i].ShippingCarrier = statusResponse.Items[i].ShippingCarrier;
-                    order.Items[i].TrackingUrl = statusResponse.Items[i].TrackingUrl;
-                    order.Items[i].TrackingNumber = statusResponse.Items[i].TrackingNumber;
-                }
-            }
-            return orders;
-        }
-
         private List<Order> GetFilteredOrders()
         {
-            return UpdateOrderStatus(RemoveOldOrders(GetWVAOrders()));
+            return RemoveOldOrders(GetWVAOrders());
         }
 
         private List<Order> SetUpOrdersDataGrid()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,8 +14,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WVA_Compulink_Integration._API;
 using WVA_Compulink_Integration.Error;
+using WVA_Compulink_Integration.Memory;
 using WVA_Compulink_Integration.Models.Order.Out;
+using WVA_Compulink_Integration.Models.OrderStatus.FromApi;
+using WVA_Compulink_Integration.Models.OrderStatus.ToApi;
 using WVA_Compulink_Integration.Models.Prescription;
 using WVA_Compulink_Integration.Utility.Actions;
 using WVA_Compulink_Integration.ViewModels.Orders;
@@ -39,6 +44,9 @@ namespace WVA_Compulink_Integration.Views.Orders
             try
             {
                 var o = ViewOrderDetailsViewModel.SelectedOrder;
+
+                // Update order status 
+                o = UpdateOrderStatus(o);
 
                 // Header
                 OrderNameLabel.Content = o.OrderName;
@@ -122,24 +130,10 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
-                // Reset context menu 
                 WVA_OrdersContextMenu.Items.Clear();
 
                 if (SelectedRow < 0)
                     return;
-
-                // <START> FOR TESTING ONLY!!!
-                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].DeletedFlag = "y";
-                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityBackordered = 1;
-                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityCancelled = 1;
-                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].QuantityShipped = 4;
-                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].Status = "Shipped";
-                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ItemStatus = "AS466SDF654";
-                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingDate = "04/03/19";
-                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].ShippingCarrier = "UPS";
-                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingUrl = "https://Google.com";
-                ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].TrackingNumber = "654687463546";
-                // <END>
 
                 if (ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].DeletedFlag != null && ViewOrderDetailsViewModel.SelectedOrder.Items[SelectedRow].DeletedFlag.ToLower() == "y")
                     AddItemToGridContextMenu("-- DELETED ORDER! --");
@@ -189,6 +183,54 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 AppError.ReportOrWrite(ex);
             }
+        }
+
+        // Update order status for each order in list
+        private Order UpdateOrderStatus(Order order)
+        {
+
+            if (order.WvaStoreID == null || order.WvaStoreID.Trim() == "" || order.Status == "open")
+                return order;
+
+            RequestWrapper request = new RequestWrapper()
+            {
+                Request = new StatusRequest()
+                {
+                    ApiKey = UserData.Data.ApiKey,
+                    CustomerId = UserData.Data.Account,
+                    WvaStoreNumber = order.WvaStoreID
+                }
+            };
+
+            string statusEndpoint = "https://orders-qa.wisvis.com/order_status";
+            string strStatusResponse = API.Post(statusEndpoint, request);
+
+            if (strStatusResponse == null || strStatusResponse.Trim() == "")
+                return order;
+
+            var statusResponse = JsonConvert.DeserializeObject<StatusResponse>(strStatusResponse);
+
+            order.Message = statusResponse.Message;
+            order.ProcessedFlag = statusResponse.ProcessedFlag;
+
+            if (statusResponse.Items == null || statusResponse.Items?.Count < 1)
+                return order;
+
+                for (int i = 0; i < statusResponse.Items.Count; i++)
+                {
+                    order.Items[i].DeletedFlag = statusResponse.DeletedFlag;
+                    order.Items[i].QuantityBackordered = statusResponse.Items[i].QuantityBackordered;
+                    order.Items[i].QuantityCancelled = statusResponse.Items[i].QuantityCancelled;
+                    order.Items[i].QuantityShipped = statusResponse.Items[i].QuantityShipped;
+                    order.Items[i].Status = statusResponse.Items[i].Status;
+                    order.Items[i].ItemStatus = statusResponse.Items[i].ItemStatus;
+                    order.Items[i].ShippingDate = statusResponse.Items[i].ShippingDate;
+                    order.Items[i].ShippingCarrier = statusResponse.Items[i].ShippingCarrier;
+                    order.Items[i].TrackingUrl = statusResponse.Items[i].TrackingUrl;
+                    order.Items[i].TrackingNumber = statusResponse.Items[i].TrackingNumber;
+                }
+            
+            return order;
         }
 
         private void WVA_OrdersContextMenu_Click(object sender, RoutedEventArgs e)

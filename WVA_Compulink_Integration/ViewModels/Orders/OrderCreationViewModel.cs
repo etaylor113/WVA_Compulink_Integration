@@ -10,6 +10,7 @@ using WVA_Compulink_Integration.Models.Response;
 using WVA_Compulink_Integration.Models.Order.Out;
 using WVA_Compulink_Integration.Models.Patient;
 using WVA_Compulink_Integration.Models.Prescription;
+using WVA_Compulink_Integration.Error;
 
 namespace WVA_Compulink_Integration.ViewModels.Orders
 {
@@ -26,27 +27,32 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
 
         public OrderCreationViewModel(List<Prescription> listPrescriptions, string orderName)
         {
-            Order = null;
-            OrderName = orderName;
+            try
+            {
+                Order = null;
+                OrderName = orderName;
 
-            // Deletes any orders without a product name if user has this setting enabled
-            if (UserData.Data?.Settings != null && UserData.Data.Settings.DeleteBlankCompulinkOrders)
-            {
-                listPrescriptions.RemoveAll(p => p.Product == null);
-                listPrescriptions.RemoveAll(p => p.Product.Trim() == "");
-            }
-            else
-            {
-                for (int i = 0; i < listPrescriptions.Count; i++)
+                // Deletes any orders with a blank product name if user has this setting enabled
+                if (UserData.Data?.Settings != null && UserData.Data.Settings.DeleteBlankCompulinkOrders)
                 {
-                    if (listPrescriptions[i].Product == null || listPrescriptions[i].Product.Trim() == "")
+                    listPrescriptions.RemoveAll(p => p.Product == null);
+                    listPrescriptions.RemoveAll(p => p.Product.Trim() == "");
+                }
+                else
+                {
+                    for (int i = 0; i < listPrescriptions.Count; i++)
                     {
-                        Prescription p = listPrescriptions.Where(x => x.FirstName == listPrescriptions[i].FirstName && x.LastName == listPrescriptions[i].LastName).First();
+                        if (listPrescriptions[i].Product == null || listPrescriptions[i].Product.Trim() == "")
+                            listPrescriptions[i] = listPrescriptions.Where(x => x.FirstName == listPrescriptions[i].FirstName && x.LastName == listPrescriptions[i].LastName).First();
                     }
                 }
-            }
 
-            Prescriptions = listPrescriptions;
+                Prescriptions = listPrescriptions;
+            }
+            catch (Exception ex)
+            {
+                AppError.ReportOrWrite(ex);
+            }
         }
 
         public OrderCreationViewModel(Order order, string orderName)
