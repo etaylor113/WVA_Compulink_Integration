@@ -31,6 +31,7 @@ using WVA_Compulink_Integration.MatchFinder.ProductPredictions;
 using System.Threading;
 using System.ComponentModel;
 using WVA_Compulink_Integration.Utility.Actions;
+using System.Globalization;
 
 namespace WVA_Compulink_Integration.Views.Orders
 {
@@ -772,6 +773,60 @@ namespace WVA_Compulink_Integration.Views.Orders
             return true;
         }
 
+        private bool IsPossibleDuplicateOrder()
+        {
+            try
+            {
+                int countDupes = GetNumDuplicateOrders();
+
+                return countDupes > 0 ? true : false;
+            }
+            catch
+            {
+                return false;
+            }
+           
+        }
+
+        private int GetNumDuplicateOrders()
+        {
+            try
+            {
+                string dsn = UserData.Data.DSN;
+                string endpoint = $"http://{dsn}/api/order/get-orders/" + $"{UserData.Data.Account}";
+                string strOrders = API.Get(endpoint, out string httpStatus);
+
+                if (strOrders == null || strOrders == "")
+                    throw new NullReferenceException();
+
+                List<Order> listOrders = JsonConvert.DeserializeObject<List<Order>>(strOrders);
+                Order order = GetCompleteOrder().OutOrder.PatientOrder;
+                var tempList = new List<Order>();
+                DateTime cutOffTime = DateTime.Now.AddDays(-1);
+
+                foreach (Item item in order.Items)
+                {
+                    foreach (Order o in listOrders)
+                    {
+
+                        DateTime orderCreatedDate = order.CreatedDate != null ? DateTime.ParseExact(o.CreatedDate, "yyyy-MM-dd-HH:mm:ss", CultureInfo.InvariantCulture) : DateTime.Now; 
+
+                        foreach (Item i in o.Items)
+                        {
+                            if (i.FirstName + i.LastName == item.FirstName + item.LastName && o.OrderName != order.OrderName && !tempList.Contains(o) && orderCreatedDate >= cutOffTime)
+                                tempList.Add(o);
+                        }
+                    }      
+                }
+
+                return tempList.Count;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
         private void PostInvalidItem(string param)
         {
             MessageWindow messageWindow = new MessageWindow($"A parameter '{param}' in the grid is not valid.");
@@ -1328,10 +1383,23 @@ namespace WVA_Compulink_Integration.Views.Orders
                 string actionMessage = $"<Submit_Order_Start>";
                 ActionLogger.Log(location, actionMessage);
 
-                if (ItemsAreValid())
-                    CreateOrder();
+                // Prevent user from creating duplicate orders by accident
+                if (IsPossibleDuplicateOrder())
+                {
+                    MessageBoxResult result = MessageBox.Show("An order with this patient has been created recently. Are you sure you want to add this patient to the order?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-                actionMessage = $"<Submit_Order_End> <Order.Name={OrderNameTextBox.Text}>";
+                    if (result.ToString() != "Yes")
+                        return;
+                }
+
+                if (ItemsAreValid())
+                {
+                    CreateOrder();
+                    actionMessage = $"<Submit_Order_End> <Order.Name={OrderNameTextBox.Text}> <Items valid>";
+                }
+                else
+                    actionMessage = $"<Submit_Order_End> <Order.Name={OrderNameTextBox.Text}> <Items not valid>";
+
                 ActionLogger.Log(location, actionMessage);
             }
             catch (Exception x)
