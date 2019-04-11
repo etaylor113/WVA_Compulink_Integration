@@ -102,7 +102,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -167,7 +167,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -181,7 +181,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -247,7 +247,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 

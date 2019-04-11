@@ -33,7 +33,7 @@ namespace WVA_Compulink_Integration.Utility.Actions
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -84,7 +84,7 @@ namespace WVA_Compulink_Integration.Utility.Actions
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 

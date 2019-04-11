@@ -18,7 +18,7 @@ namespace WVA_Compulink_Integration.Error
 {
     class AppError
     {      
-        public static void ReportOrWrite(Exception e)
+        public static void ReportOrLog(Exception e)
         {
             JsonError error = new JsonError()
             {
@@ -29,7 +29,7 @@ namespace WVA_Compulink_Integration.Error
             };
 
             if (!ErrorReported(error))
-                ReportOrWrite(error.Error);
+                Log(error.Error);
         }
 
         private static bool ErrorReported(JsonError error)
@@ -53,7 +53,7 @@ namespace WVA_Compulink_Integration.Error
             }
         }
 
-        private static void ReportOrWrite(string exceptionMessage)
+        public static void Log(string exceptionMessage)
         {
             try
             {

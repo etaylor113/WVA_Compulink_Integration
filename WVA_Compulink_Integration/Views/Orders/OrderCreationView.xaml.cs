@@ -66,7 +66,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -95,7 +95,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                     numEr++;
 
                     if (numEr >= 5)
-                        AppError.ReportOrWrite(ex);
+                        AppError.ReportOrLog(ex);
                 }
                 finally
                 {
@@ -326,7 +326,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }           
         }
 
@@ -625,7 +625,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }  
         
@@ -960,7 +960,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
                 return null;
             }
         }
@@ -1060,7 +1060,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
                 return null;
             }           
         }
@@ -1080,7 +1080,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }           
         }
 
@@ -1156,7 +1156,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             catch (Exception x)
             {
                 new MessageWindow("Order creation failed. Please see error log for details.").Show();
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
 
@@ -1281,7 +1281,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
                 Mouse.OverrideCursor = Cursors.Arrow;
             }
         }
@@ -1300,7 +1300,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
 
@@ -1313,7 +1313,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }          
         }
 
@@ -1330,7 +1330,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -1344,7 +1344,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }           
         }
 
@@ -1371,7 +1371,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -1405,7 +1405,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             catch (Exception x)
             {
                 new MessageWindow("An error has occurred Please see error log for details.").Show();
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
 
@@ -1430,7 +1430,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }           
         }
 
@@ -1454,7 +1454,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -1475,7 +1475,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 

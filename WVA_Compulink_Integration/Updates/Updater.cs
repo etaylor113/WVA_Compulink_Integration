@@ -38,7 +38,7 @@ namespace WVA_Compulink_Integration.Updates
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 

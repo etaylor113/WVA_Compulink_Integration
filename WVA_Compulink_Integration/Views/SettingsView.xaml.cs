@@ -46,7 +46,7 @@ namespace WVA_Compulink_Integration.Views
             catch (Exception x)
             {
                 NotifyLabel.Visibility = Visibility.Visible;
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }         
         }
 
@@ -107,7 +107,7 @@ namespace WVA_Compulink_Integration.Views
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -128,7 +128,7 @@ namespace WVA_Compulink_Integration.Views
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -148,7 +148,7 @@ namespace WVA_Compulink_Integration.Views
             catch (Exception x)
             {
                 NotifyLabel.Visibility = Visibility.Visible;
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
 

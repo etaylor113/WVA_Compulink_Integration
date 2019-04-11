@@ -51,7 +51,7 @@ namespace WVA_Compulink_Integration.Views.Error
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
 

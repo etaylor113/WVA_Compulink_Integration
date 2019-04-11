@@ -40,9 +40,9 @@ namespace WVA_Compulink_Integration.Utility.Files
         public static string ApiKeyDir              =   $@"{PublicDocs}\WVA Compulink Integration\ApiKey\";
         public static string ApiKeyFile             =   $@"{PublicDocs}\WVA Compulink Integration\ApiKey\ApiKey.txt";
 
-        public static string TempDir                =   $@"{PublicDocs}\WVA Compulink Integration\Temp";
-        public static string DownloadMainAppName    =   $@"{TempDir}\WVA_CDI_Setup.msi";
-        public static string DownloadLauncherName   =   $@"{TempDir}\WVA_CDI_Launcher.msi";
+        public static string TempDir                =   $@"{PublicDocs}\WVA Compulink Integration\Temp\";
+        public static string DownloadMainAppName    =   $@"{TempDir}WVA_CDI_Setup.msi";
+        public static string DownloadLauncherName   =   $@"{TempDir}WVA_CDI_Launcher.msi";
 
         public static string ProductDatabaseDir     =   $@"{PublicDocs}\WVA Compulink Integration\Data";
         public static string ProductDatabaseFile    =   $@"{ProductDatabaseDir}\ProductPrediction.sqlite";

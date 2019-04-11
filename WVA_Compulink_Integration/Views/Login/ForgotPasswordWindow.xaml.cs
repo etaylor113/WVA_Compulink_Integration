@@ -43,7 +43,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }           
         }
 
@@ -145,7 +145,7 @@ namespace WVA_Compulink_Integration.Views.Login
             catch (Exception x)
             {
                 ShowError();
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             } 
         }
 
@@ -176,7 +176,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }       
         }
 

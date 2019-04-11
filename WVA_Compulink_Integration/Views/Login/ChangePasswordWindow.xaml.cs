@@ -66,7 +66,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
                 return false;
             }
 }
@@ -138,7 +138,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
                 MessageLabel.Visibility = Visibility.Visible;
                 MessageLabel.Text = "An error has occurred. Password not updated. If this problem persists, please contact IT.";
                 Height = 350;

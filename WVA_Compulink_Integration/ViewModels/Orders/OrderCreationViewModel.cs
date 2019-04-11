@@ -51,7 +51,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -75,7 +75,7 @@ namespace WVA_Compulink_Integration.ViewModels.Orders
             string strOrder = API.Post(endpoint, orderName);
             var order = JsonConvert.DeserializeObject<Order>(strOrder);
 
-            // Change shipping code to readable string value
+            // Change shipping code into a readable string value
             if (order != null)
                 order.ShippingMethod = GetShippingString(order.ShippingMethod);
 

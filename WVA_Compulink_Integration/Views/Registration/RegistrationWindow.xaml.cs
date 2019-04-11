@@ -36,7 +36,7 @@ namespace WVA_Compulink_Integration.Views.Registration
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
 
@@ -102,7 +102,7 @@ namespace WVA_Compulink_Integration.Views.Registration
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
                 return false;
             }
         }
@@ -177,7 +177,7 @@ namespace WVA_Compulink_Integration.Views.Registration
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
                 MessageSetup("An error has occurred. If the problem persists, please contact IT.");
             }
         }
@@ -195,7 +195,7 @@ namespace WVA_Compulink_Integration.Views.Registration
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
        
@@ -240,7 +240,7 @@ namespace WVA_Compulink_Integration.Views.Registration
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
 
@@ -255,7 +255,7 @@ namespace WVA_Compulink_Integration.Views.Registration
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
 
@@ -270,7 +270,7 @@ namespace WVA_Compulink_Integration.Views.Registration
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
 
@@ -285,7 +285,7 @@ namespace WVA_Compulink_Integration.Views.Registration
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
     }

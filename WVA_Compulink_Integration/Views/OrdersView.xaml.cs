@@ -109,7 +109,6 @@ namespace WVA_Compulink_Integration.Views
         {
             // Update header to show user they are in 'WVA Orders' view
             TabLabel.Content = "WVA Orders";
-
             Color blue = (Color)ColorConverter.ConvertFromString("#FF327EC3");
             SolidColorBrush blueBrush = new SolidColorBrush(blue);
             Rect_2.Fill = blueBrush;

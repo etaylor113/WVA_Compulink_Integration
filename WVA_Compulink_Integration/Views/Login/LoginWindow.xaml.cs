@@ -38,7 +38,28 @@ namespace WVA_Compulink_Integration.Views.Login
         private void SetUp()
         {          
             UsernameTextBox.Focus();
+            DelTimePassChangedFile();
         }
+
+        private void DelTimePassChangedFile()
+        {
+            try
+            {
+                if (File.Exists(Paths.PrevTimePassChangeFile))
+                {
+                    DateTime passChangedDate = Convert.ToDateTime(File.ReadAllText(Paths.PrevTimePassChangeFile));
+                    DateTime deleteTime = DateTime.Now.AddDays(-1);
+
+                    if (passChangedDate <= deleteTime)
+                        File.Delete(Paths.PrevTimePassChangeFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                AppError.Log(ex.ToString());
+            }
+        }   
+
      
         private User LoginUser()
         {
@@ -59,7 +80,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
                 return null;
             }
         }
@@ -83,7 +104,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
                 return null;
             }
         }
@@ -129,7 +150,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
                 NotifyLabel.Visibility = Visibility.Visible;
                 NotifyLabel.Text = "An error has occurred. If the problem persists, please contact IT.";
             }
@@ -190,7 +211,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
 
@@ -202,7 +223,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
 
@@ -233,7 +254,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
 
@@ -248,7 +269,7 @@ namespace WVA_Compulink_Integration.Views.Login
             }
             catch (Exception x)
             {
-                AppError.ReportOrWrite(x);
+                AppError.ReportOrLog(x);
             }
         }
     }

@@ -31,7 +31,7 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -53,7 +53,7 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -81,7 +81,7 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
                 return null;
             }
         }
@@ -113,7 +113,7 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
                 return false;
             }
         }
@@ -138,7 +138,7 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
                 return false;
             }
         }
@@ -175,7 +175,7 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
                 return 0;
             }
         }
@@ -194,7 +194,7 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -212,7 +212,7 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -232,7 +232,7 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -258,7 +258,7 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -270,7 +270,7 @@ namespace WVA_Compulink_Integration.MatchFinder.ProductPredictions
             }
             catch (Exception ex)
             {
-                AppError.ReportOrWrite(ex);
+                AppError.ReportOrLog(ex);
                 return null;
             }
         }
