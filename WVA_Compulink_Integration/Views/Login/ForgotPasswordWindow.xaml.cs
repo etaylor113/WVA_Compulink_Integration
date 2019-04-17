@@ -99,16 +99,23 @@ namespace WVA_Compulink_Integration.Views.Login
 
         private Response ResetEmail()
         {
-            string endpoint = $"http://{DSN}/api/user/reset-email-check";
-            EmailValidationCode emailValidation = new EmailValidationCode()
+            try
             {
-                Email = UserEmail,
-                EmailCode = CodeTextBox.Text.Trim(),
-                ApiKey = API_Key
-            };
+                string endpoint = $"http://{DSN}/api/user/reset-email-check";
+                EmailValidationCode emailValidation = new EmailValidationCode()
+                {
+                    Email = UserEmail,
+                    EmailCode = CodeTextBox.Text.Trim(),
+                    ApiKey = API_Key
+                };
 
-            string strResponse = API.Post(endpoint, emailValidation);
-            return JsonConvert.DeserializeObject<Response>(strResponse);
+                string strResponse = API.Post(endpoint, emailValidation);
+                return JsonConvert.DeserializeObject<Response>(strResponse);
+            }
+            catch 
+            {
+                return null;
+            }
         }
 
         private void SendEmailButton_Click(object sender, RoutedEventArgs e)
@@ -163,7 +170,12 @@ namespace WVA_Compulink_Integration.Views.Login
 
                 Response response = ResetEmail();
 
-                if (response.Status == "SUCCESS")
+                if (response == null)
+                {
+                    MessageLabel.Visibility = Visibility.Visible;
+                    MessageLabel.Content = "An error has occurred!";
+                }
+                else if (response.Status == "SUCCESS")
                 {
                     new ChangePasswordWindow(UserNameTextBox.Text.Trim()).Show();
                     Close();

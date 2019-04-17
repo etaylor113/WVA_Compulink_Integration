@@ -188,7 +188,6 @@ namespace WVA_Compulink_Integration.Views.Orders
         // Update order status for each order in list
         private Order UpdateOrderStatus(Order order)
         {
-
             if (order.WvaStoreID == null || order.WvaStoreID.Trim() == "" || order.Status == "open")
                 return order;
 
@@ -202,7 +201,7 @@ namespace WVA_Compulink_Integration.Views.Orders
                 }
             };
 
-            string statusEndpoint = "https://orders-qa.wisvis.com/order_status";
+            string statusEndpoint = "https://orders.wisvis.com/order_status";
             string strStatusResponse = API.Post(statusEndpoint, request);
 
             if (strStatusResponse == null || strStatusResponse.Trim() == "")
