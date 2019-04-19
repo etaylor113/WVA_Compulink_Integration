@@ -808,13 +808,14 @@ namespace WVA_Compulink_Integration.Views.Orders
                 {
                     foreach (Order o in listOrders)
                     {
-
-                        DateTime orderCreatedDate = order.CreatedDate != null ? DateTime.ParseExact(o.CreatedDate, "yyyy-MM-dd-HH:mm:ss", CultureInfo.InvariantCulture) : DateTime.Now; 
+                        DateTime orderCreatedDate = o.CreatedDate != null ? DateTime.ParseExact(o.CreatedDate, "yyyy-MM-dd-HH:mm:ss", CultureInfo.InvariantCulture) : DateTime.Now; 
 
                         foreach (Item i in o.Items)
                         {
                             if (i.FirstName + i.LastName == item.FirstName + item.LastName && o.OrderName != order.OrderName && !tempList.Contains(o) && orderCreatedDate >= cutOffTime)
+                            {
                                 tempList.Add(o);
+                            }
                         }
                     }      
                 }

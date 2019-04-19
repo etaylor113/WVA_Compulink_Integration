@@ -176,7 +176,7 @@
                 </StackPanel>
 
                 <TextBlock Name="NotifyLabel"
-                           Text="Error getting account numbers! See error log for details."
+                           Text="An error has occurred setting your account number!"
                            TextWrapping="Wrap"
                            Margin="0,10,0,0"
                            Width="350"

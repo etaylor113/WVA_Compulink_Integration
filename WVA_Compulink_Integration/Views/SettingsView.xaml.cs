@@ -32,48 +32,64 @@ namespace WVA_Compulink_Integration.Views
     {
         public SettingsView()
         {
-            InitializeComponent();          
-            SetUp();
+            InitializeComponent();
+            SetUpUI();
+            SetUpWvaAccountNumber();
         }
 
-        private void SetUp()
+        private void SetUpUI()
         {
             try
             {
-                DeleteBlankCompulinkOrdersCheckBox.IsChecked = UserData.Data.Settings.DeleteBlankCompulinkOrders;
-                SetUpWvaAccountNumber();
+                DeleteBlankCompulinkOrdersCheckBox.IsChecked = UserData.Data?.Settings?.DeleteBlankCompulinkOrders;
+
+                // Subscribe to AccountTextBox event delegate
+                IsVisibleChanged += new DependencyPropertyChangedEventHandler(AvailableActsComboBox_IsVisibleChanged);
             }
-            catch (Exception x)
+            catch
             {
-                NotifyLabel.Visibility = Visibility.Visible;
-                AppError.ReportOrLog(x);
-            }         
+                DeleteBlankCompulinkOrdersCheckBox.IsChecked = false;
+            }
         }
 
         private void SetUpWvaAccountNumber()
         {
-            // Subscribe to AccountTextBox event delegate
-            IsVisibleChanged += new DependencyPropertyChangedEventHandler(AvailableActsComboBox_IsVisibleChanged);
-
-            // Populate AvailableActComboBox with user's accounts
-            List<string> availableActs = GetAvailableAccounts();
-
-            // Check for nulls 
-            if (availableActs == null || availableActs.ToString().Trim() == "" || availableActs?.Count < 1)
-                return;
-
-            // Add accounts to combo box
-            foreach (string account in availableActs)
-                AvailableActsComboBox.Items.Add(account);
-
-            // Pull account number from file if its there
-            string actNum = File.ReadAllText(Paths.ActNumFile).Trim();
-
-            // Select their account number if it's been set already in the drop down
-            for (int i = 0; i < availableActs.Count; i++)
+            try
             {
-                if (availableActs[i] == actNum)
-                    AvailableActsComboBox.SelectedIndex = i;
+                // Populate AvailableActComboBox with user's accounts
+                List<string> availableActs = GetAvailableAccounts();
+
+                // Check for nulls 
+                if (availableActs == null || availableActs.ToString().Trim() == "" || availableActs?.Count < 1)
+                    throw new NullReferenceException("No available account numbers detected.");
+
+                // Add accounts to combo box
+                foreach (string account in availableActs)
+                    AvailableActsComboBox.Items.Add(account);
+
+                // Pull account number from file if its there
+                string actNum = File.ReadAllText(Paths.ActNumFile).Trim();
+
+                // Select their account number if it's been set already in the drop down
+                for (int i = 0; i < availableActs.Count; i++)
+                {
+                    if (availableActs[i] == actNum)
+                        AvailableActsComboBox.SelectedIndex = i;
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                if (!Directory.Exists(Paths.ActNumDir))
+                    Directory.CreateDirectory(Paths.ActNumDir);
+
+                if (!File.Exists(Paths.ActNumFile))
+                    File.Create(Paths.ActNumFile);
+
+                SetUpWvaAccountNumber();
+            }
+            catch (Exception ex)
+            {
+                AppError.ReportOrLog(ex);
             }
         }
 
@@ -85,16 +101,20 @@ namespace WVA_Compulink_Integration.Views
                 string response = API.Get(endpoint, out string httpStatus);
                 return JsonConvert.DeserializeObject<List<string>>(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
         }
 
-        private void UpdateUserSettings()
+        private void UpdateUserSettings(bool deleteBlankCompulinkOrders)
         {
             try
             {
+                // Updates user settings in memory
+                UserData.Data.Settings.DeleteBlankCompulinkOrders = deleteBlankCompulinkOrders;
+
+                // Updates user settings in settings file
                 string userSettings = JsonConvert.SerializeObject(UserData.Data?.Settings);
 
                 if (!Directory.Exists(Paths.UserSettingsDir))
@@ -154,14 +174,12 @@ namespace WVA_Compulink_Integration.Views
 
         private void DeleteBlankCompulinkOrdersCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            UserData.Data.Settings.DeleteBlankCompulinkOrders = true;
-            UpdateUserSettings();
+            UpdateUserSettings(deleteBlankCompulinkOrders: true);
         }
 
         private void DeleteBlankCompulinkOrdersCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            UserData.Data.Settings.DeleteBlankCompulinkOrders = false;
-            UpdateUserSettings();
+            UpdateUserSettings(deleteBlankCompulinkOrders: false);
         }
     }
 }

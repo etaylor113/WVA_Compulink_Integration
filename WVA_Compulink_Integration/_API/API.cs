@@ -27,6 +27,7 @@ namespace WVA_Compulink_Integration._API
                 request.ContentLength = byteArray.Length;
                 request.ContentType = @"application/json";
                 request.Method = "POST";
+                request.Timeout = 30000;
 
                 using (Stream dataStream = request.GetRequestStream())
                 {
@@ -42,12 +43,13 @@ namespace WVA_Compulink_Integration._API
                 }
 
                 return targetResponse;
-            }
+            }          
             catch (Exception x)
             {
                 AppError.ReportOrLog(x);
                 return null;
             }
+            
         }
 
         static public string Post(string endpoint, string jsonString)

@@ -274,21 +274,20 @@
             </DataGrid.ContextMenu>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Width="*" Binding="{Binding Path=Patient}"    Header="Patient"      MinWidth="100" />
-                <DataGridTextColumn Width="*" Binding="{Binding Path=Eye}"        Header="Eye"          MinWidth="40" MaxWidth="40" />
-                <DataGridTextColumn Width="200" Binding="{Binding Path=Product}"  Header="Product" />
-                <DataGridTextColumn Width="40" Binding="{Binding Path=Quantity}"  Header="Qty"          MinWidth="30"/>
-                <DataGridTextColumn Width="*" Binding="{Binding Path=BaseCurve}"  Header="BaseCurve"    MinWidth="70" />
-                <DataGridTextColumn Width="*" Binding="{Binding Path=Diameter}"   Header="Diameter"     MinWidth="60"/>
-                <DataGridTextColumn Width="*" Binding="{Binding Path=Sphere}"     Header="Sphere"       MinWidth="40"/>
-                <DataGridTextColumn Width="*" Binding="{Binding Path=Cylinder}"   Header="Cylinder"     MinWidth="60"/>
-                <DataGridTextColumn Width="*" Binding="{Binding Path=Axis}"       Header="Axis"/>
-                <DataGridTextColumn Width="*" Binding="{Binding Path=Add}"        Header="Add"/>
-                <DataGridTextColumn Width="*" Binding="{Binding Path=Color}"      Header="Color"/>
-                <DataGridTextColumn Width="*" Binding="{Binding Path=Multifocal}" Header="MF"/>
+                <DataGridTextColumn Width="*"   Binding="{Binding Path=Patient}"    Header="Patient"      MinWidth="100" />
+                <DataGridTextColumn Width="*"   Binding="{Binding Path=Eye}"        Header="Eye"          MinWidth="40" MaxWidth="40" />
+                <DataGridTextColumn Width="200" Binding="{Binding Path=Product}"    Header="Product" />
+                <DataGridTextColumn Width="40"  Binding="{Binding Path=Quantity}"   Header="Qty"          MinWidth="30"/>
+                <DataGridTextColumn Width="*"   Binding="{Binding Path=BaseCurve}"  Header="BaseCurve"    MinWidth="70" />
+                <DataGridTextColumn Width="*"   Binding="{Binding Path=Diameter}"   Header="Diameter"     MinWidth="60"/>
+                <DataGridTextColumn Width="*"   Binding="{Binding Path=Sphere}"     Header="Sphere"       MinWidth="40"/>
+                <DataGridTextColumn Width="*"   Binding="{Binding Path=Cylinder}"   Header="Cylinder"     MinWidth="60"/>
+                <DataGridTextColumn Width="*"   Binding="{Binding Path=Axis}"       Header="Axis"/>
+                <DataGridTextColumn Width="*"   Binding="{Binding Path=Add}"        Header="Add"/>
+                <DataGridTextColumn Width="*"   Binding="{Binding Path=Color}"      Header="Color"/>
+                <DataGridTextColumn Width="*"   Binding="{Binding Path=Multifocal}" Header="MF"/>
             </DataGrid.Columns>
         </DataGrid>
-
 
     </Grid>
 </UserControl>
