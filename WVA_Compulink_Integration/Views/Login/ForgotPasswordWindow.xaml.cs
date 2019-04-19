@@ -38,32 +38,12 @@ namespace WVA_Compulink_Integration.Views.Login
 
             try
             {
-                API_Key = File.ReadAllText(Paths.ApiKeyFile).Trim();
+                API_Key = File.ReadAllText(Paths.ApiKeyFile).Trim() ?? throw new NullReferenceException();
+                DSN = File.ReadAllText(Paths.DSNFile).Trim() ?? throw new NullReferenceException();
             }
-            catch (Exception)
+            catch (Exception x)
             {
-                if (!Directory.Exists(Paths.ApiKeyDir))
-                    Directory.CreateDirectory(Paths.ApiKeyDir);
-
-                if (!File.Exists(Paths.ApiKeyFile))
-                    File.Create(Paths.ApiKeyFile);
-
-                API_Key = File.ReadAllText(Paths.ApiKeyFile).Trim();
-            }
-
-            try
-            {
-                DSN = File.ReadAllText(Paths.DSNFile).Trim();
-            }
-            catch (Exception)
-            {
-                if (!Directory.Exists(Paths.ApiKeyDir))
-                    Directory.CreateDirectory(Paths.ApiKeyDir);
-
-                if (!File.Exists(Paths.ApiKeyFile))
-                    File.Create(Paths.ApiKeyFile);
-
-                API_Key = File.ReadAllText(Paths.ApiKeyFile).Trim();
+                AppError.ReportOrLog(x);
             }           
         }
 
@@ -87,47 +67,34 @@ namespace WVA_Compulink_Integration.Views.Login
 
         private User GetUserEmail()
         {
-            try
+            string getEmailEndpoint = $"http://{DSN}/api/User/GetEmail";
+            User user = new User()
             {
-                string getEmailEndpoint = $"http://{DSN}/api/User/GetEmail";
-                User user = new User()
-                {
-                    UserName = UserNameTextBox.Text
-                };
+                UserName = UserNameTextBox.Text
+            };
 
-                string strEmail = API.Post(getEmailEndpoint, user);
+            string strEmail = API.Post(getEmailEndpoint, user);
 
-                if (strEmail == null || strEmail.ToString().Trim() == "")
-                    throw new Exception("Null or blank response from endpoint.");
+            if (strEmail == null || strEmail.ToString().Trim() == "")
+                throw new Exception("Null or blank response from endpoint.");
 
-                return JsonConvert.DeserializeObject<User>(strEmail);
-            }
-            catch
-            {
-                return null;
-            }
+            return JsonConvert.DeserializeObject<User>(strEmail);           
         }
 
         private Response SendEmail()
         {
-            try
-            {
-                // Send the email               
-                string endpoint = $"http://{DSN}/api/user/reset-email";
+            // Send the email               
+            string endpoint = $"http://{DSN}/api/user/reset-email";
 
-                EmailValidationSend emailValidation = new EmailValidationSend()
-                {
-                    Email = UserEmail,
-                    ApiKey = API_Key
-                };
-
-                string strResponse = API.Post(endpoint, emailValidation);
-                return JsonConvert.DeserializeObject<Response>(strResponse);
-            }
-            catch
+            EmailValidationSend emailValidation = new EmailValidationSend()
             {
-                return null;
-            }
+                Email = UserEmail,
+                ApiKey = API_Key
+            };
+
+            string strResponse = API.Post(endpoint, emailValidation);
+
+            return JsonConvert.DeserializeObject<Response>(strResponse);
         }
 
         private Response ResetEmail()
@@ -165,7 +132,6 @@ namespace WVA_Compulink_Integration.Views.Login
                     return;
                 }
 
-                // Get users email
                 User userResponse = GetUserEmail();
 
                 if (userResponse?.Email != null || userResponse?.Email.Trim() != "")                
@@ -174,9 +140,6 @@ namespace WVA_Compulink_Integration.Views.Login
                     throw new Exception($"Unable to get email for user: {UserNameTextBox.Text}.");
 
                 Response response = SendEmail();
-
-                if (response != null)
-                    throw new NullReferenceException("Bad response from endpoint");
 
                 if (response?.Status == "SUCCESS")
                 {
@@ -205,7 +168,6 @@ namespace WVA_Compulink_Integration.Views.Login
                     return;
                 }
 
-                // Reset user's email
                 Response response = ResetEmail();
 
                 if (response == null)

@@ -32,22 +32,8 @@ namespace WVA_Compulink_Integration.Views.Login
 
         public ChangePasswordWindow(string userName)
         {
-            try
-            {
-                DSN = File.ReadAllText(Paths.DSNFile).Trim();
-                UserName = userName;
-            }
-            catch (FileNotFoundException)
-            {
-                if (!Directory.Exists(Paths.DSNDir))
-                    Directory.CreateDirectory(Paths.DSNDir);
-
-                if (!File.Exists(Paths.DSNFile))
-                    File.Create(Paths.DSNFile);
-
-                DSN = File.ReadAllText(Paths.DSNFile).Trim();
-            }
-
+            DSN = File.ReadAllText(Paths.DSNFile).Trim();
+            UserName = userName;
             InitializeComponent();          
         }
 
