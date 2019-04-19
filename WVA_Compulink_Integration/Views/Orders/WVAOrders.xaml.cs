@@ -312,13 +312,12 @@ namespace WVA_Compulink_Integration.Views.Orders
 
             foreach (var order in listOrders)
             {
-                string location = "WVA_Compulink_Integration.Orders.WVAOrders.DeleteOrderButton_Click()";
+                string location = GetType().FullName + nameof(DeleteOrderButton_Click);
                 string actionMessage = $"<Delete_Order_Start>";
                 ActionLogger.Log(location, actionMessage);
 
                 OrderCreationViewModel.DeleteOrder(order.OrderName);
 
-                location = "WVA_Compulink_Integration.Orders.WVAOrders.DeleteOrderButton_Click()";
                 actionMessage = $"<Delete_Order_Start> <Order.Name={order.OrderName}>";
                 ActionLogger.Log(location, actionMessage);
             }
@@ -347,13 +346,13 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            string location = e.Source.ToString() + "UserControl_Loaded()";
+            string location = GetType().FullName + nameof(UserControl_Loaded);
             ActionLogger.Log(location);
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            string location = e.Source.ToString() + "UserControl_Unloaded()";
+            string location = GetType().FullName + nameof(UserControl_Unloaded);
             ActionLogger.Log(location);
         }
     }

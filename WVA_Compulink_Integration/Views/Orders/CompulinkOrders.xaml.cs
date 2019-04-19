@@ -345,7 +345,7 @@ namespace WVA_Compulink_Integration.Views.Orders
             }
             finally
             {
-                string location = "WVA_Compulink_Integration.Views.Orders.CompulinkOrders.AddToOrderButton_Click()";
+                string location = GetType().FullName + nameof(AddToOrderButton_Click);
                 string actionMessage = $"<OrderName=<{WvaOrdersComboBox.Text}>";
                 ActionLogger.Log(location, actionMessage);
             }
@@ -353,13 +353,13 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            string location = e.Source.ToString() + "UserControl_Loaded()";
+            string location = GetType().FullName + nameof(UserControl_Loaded);
             ActionLogger.Log(location);
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            string location = e.Source.ToString() + "UserControl_Unloaded()";
+            string location = GetType().FullName + nameof(UserControl_Unloaded);
             ActionLogger.Log(location);
         }
     }

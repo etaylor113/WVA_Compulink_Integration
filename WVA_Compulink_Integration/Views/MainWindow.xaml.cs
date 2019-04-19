@@ -191,7 +191,7 @@ namespace WVA_Compulink_Integration.Views
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {            
-            string location =  "WVA_Compulink_Integration.Views.MainWindow.Window_Closing()";
+            string location = GetType().FullName + nameof(Window_Closing);
             string actionMessage = "<Start_Launcher_Update>";
             ActionLogger.Log(location, actionMessage);
 
@@ -206,14 +206,14 @@ namespace WVA_Compulink_Integration.Views
             // Send data collection of user activity for statistics and diagnosing user problems
             ReportActionLogData();
 
-            string location = "WVA_Compulink_Integration.Views.MainWindow.Window_Loaded()";
+            string location = GetType().FullName + nameof(Window_Loaded);
             string actionMessage = "<App_Launch>";
             ActionLogger.Log(location, actionMessage);
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            string location = "WVA_Compulink_Integration.Views.MainWindow.Window_Closed()";
+            string location = GetType().FullName + nameof(Window_Closed);
             string actionMessage = " <App_Exit>\n";
             ActionLogger.Log(location, actionMessage);
         }

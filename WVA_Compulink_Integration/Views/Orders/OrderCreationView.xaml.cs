@@ -1113,10 +1113,14 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void CreateOrder()
         {
+            string location = GetType().FullName + nameof(CreateOrder);
+            string actionMessage = "";
+
             try
             {
                 // Get the completed order object
                 OutOrderWrapper outOrderWrapper = GetCompleteOrder();
+                Order o = outOrderWrapper.OutOrder.PatientOrder;
 
                 if (outOrderWrapper == null)
                 {
@@ -1140,6 +1144,9 @@ namespace WVA_Compulink_Integration.Views.Orders
                     else
                         message = "\t\tOrder created!";
 
+                    // Post to action log the order information
+                    actionMessage = $"<Order.Name={o.OrderName}> <Order.NumItems={o.Items.Count}> <Order.WvaStoreID={response.Data?.Wva_order_id}>";
+                    // Show response window
                     new MessageWindow(message).Show();
 
                     // Change view to WVA Orders view
@@ -1158,6 +1165,10 @@ namespace WVA_Compulink_Integration.Views.Orders
             {
                 new MessageWindow("Order creation failed. Please see error log for details.").Show();
                 AppError.ReportOrLog(x);
+            }
+            finally
+            {
+                ActionLogger.Log(location, actionMessage);
             }
         }
 
@@ -1351,7 +1362,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
         private void DeleteOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            string location = "";
+            string location = GetType().FullName + nameof(DeleteOrderButton_Click);
             string actionMessage = "";
 
             try
@@ -1360,13 +1371,13 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 if (result.ToString() == "Yes")
                 {
-                    location = "WVA_Compulink_Integration.Orders.OrderCreationView.DeleteOrderButton_Click()";
+                    location = GetType().FullName + nameof(DeleteOrderButton_Click);
                     actionMessage = $"<Delete_Order_Start>";
                     ActionLogger.Log(location, actionMessage);
 
                     string orderName = DeleteOrder();
 
-                    actionMessage = $"<Delete_Order_End>, <Order.Name={orderName}>";
+                    actionMessage = $"<Delete_Order_End> <Order.Name={orderName}>";
                     ActionLogger.Log(location, actionMessage);
                 }
             }
@@ -1380,7 +1391,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
-                string location = "WVA_Compulink_Integration.Orders.OrderCreationView.SubmitOrderButton_Click()";
+                string location = GetType().FullName + nameof(SubmitOrderButton_Click);
                 string actionMessage = $"<Submit_Order_Start>";
                 ActionLogger.Log(location, actionMessage);
 
@@ -1396,10 +1407,10 @@ namespace WVA_Compulink_Integration.Views.Orders
                 if (ItemsAreValid())
                 {
                     CreateOrder();
-                    actionMessage = $"<Submit_Order_End> <Order.Name={OrderNameTextBox.Text}> <Items valid>";
+                    actionMessage = $"<Submit_Order_End> <Items valid>";
                 }
                 else
-                    actionMessage = $"<Submit_Order_End> <Order.Name={OrderNameTextBox.Text}> <Items not valid>";
+                    actionMessage = $"<Submit_Order_End> <Items not valid>";
 
                 ActionLogger.Log(location, actionMessage);
             }
@@ -1415,7 +1426,7 @@ namespace WVA_Compulink_Integration.Views.Orders
         {
             try
             {
-                string location = "WVA_Compulink_Integration.Orders.OrderCreationView.SaveOrderButton_Click()";
+                string location = GetType().FullName + nameof(SaveOrderButton_Click);
                 string actionMessage = $"<Save_Order_Start>";
                 ActionLogger.Log(location, actionMessage);
 
@@ -1442,11 +1453,11 @@ namespace WVA_Compulink_Integration.Views.Orders
                 OutOrderWrapper outOrderWrapper = GetCompleteOrder();
                 OrderCreationViewModel.SaveOrder(outOrderWrapper);
 
-                string location = e.Source.ToString() + "UserControl_Unloaded()";
+                string location = GetType().FullName + nameof(UserControl_Unloaded);
                 string actionMessage = null;
 
                 if (OrderCreationViewModel.Order != null && OrderCreationViewModel.Order?.OrderName.Trim() != "")
-                    actionMessage = $"<Order.ID={OrderCreationViewModel.Order?.ID}>, <Order.Name={OrderCreationViewModel.Order?.OrderName}>";
+                    actionMessage = $"<Order.ID={OrderCreationViewModel.Order?.ID}> <Order.Name={OrderCreationViewModel.Order?.OrderName}>";
 
                 if (actionMessage == null)
                     ActionLogger.Log(location);
@@ -1463,11 +1474,11 @@ namespace WVA_Compulink_Integration.Views.Orders
             try
             {
                 //AutosaveOrder();
-                string location = e.Source.ToString() + "UserControl_Loaded()";
+                string location = GetType().FullName + nameof(UserControl_Loaded);
                 string actionMessage = null;
 
                 if (OrderCreationViewModel.Order != null)
-                    actionMessage = $"<Order.ID={OrderCreationViewModel.Order?.ID}>, <Order.Name={OrderCreationViewModel.Order?.OrderName}>";
+                    actionMessage = $"<Order.ID={OrderCreationViewModel.Order?.ID}> <Order.Name={OrderCreationViewModel.Order?.OrderName}>";
 
                 if (actionMessage == null)
                     ActionLogger.Log(location);
