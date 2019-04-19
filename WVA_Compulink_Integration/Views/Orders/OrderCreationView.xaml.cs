@@ -822,7 +822,7 @@ namespace WVA_Compulink_Integration.Views.Orders
 
                 return tempList.Count;
             }
-            catch (Exception ex)
+            catch
             {
                 return 0;
             }

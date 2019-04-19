@@ -32,7 +32,19 @@ namespace WVA_Compulink_Integration.Views.Login
 
         public ChangePasswordWindow(string userName)
         {
-            DSN = File.ReadAllText(Paths.DSNFile).Trim();
+            try
+            {
+                DSN = File.ReadAllText(Paths.DSNFile).Trim();
+            }
+            catch
+            {
+                if (!Directory.Exists(Paths.DSNDir))
+                    Directory.CreateDirectory(Paths.DSNDir);
+
+                if (!File.Exists(Paths.DSNFile))
+                    File.Create(Paths.DSNFile);
+            }
+
             UserName = userName;
             InitializeComponent();          
         }
@@ -69,7 +81,7 @@ namespace WVA_Compulink_Integration.Views.Login
                 AppError.ReportOrLog(ex);
                 return false;
             }
-}
+        }
 
         private Response ChangePassword()
         {
@@ -126,6 +138,9 @@ namespace WVA_Compulink_Integration.Views.Login
 
                 // Make request to change password
                 Response response = ChangePassword();
+
+                if (response == null)
+                    throw new Exception("Null response from endpoint while changing password!");
 
                 if (response?.Status == "SUCCESS")
                 {                   

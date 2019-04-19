@@ -59,7 +59,6 @@ namespace WVA_Compulink_Integration.Views.Login
                 AppError.Log(ex.ToString());
             }
         }   
-
      
         private User LoginUser()
         {
@@ -125,6 +124,9 @@ namespace WVA_Compulink_Integration.Views.Login
 
                 // Verify user's credentials through the api and return verifiedUser object. 
                 User loginUserResponse = LoginUser();
+
+                if (loginUserResponse == null)
+                    throw new Exception("Null response from endpoint while logging in user!");
 
                 // Check login credentials                 
                 if (loginUserResponse.Status == "ERROR" || loginUserResponse.Status == "FAIL")
